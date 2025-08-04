@@ -1,0 +1,31 @@
+# backend/Dockerfile
+FROM node:18-alpine
+
+# Cria um user não-root (opcional, mas recomendado)
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+WORKDIR /app
+
+# Copia só o package.json e package-lock.json para cache otimizado
+COPY package*.json ./
+COPY prisma ./prisma/
+
+# Instala dependências
+RUN npm install --production
+
+# Copia o restante do código
+COPY . .
+
+# Gera o Prisma Client
+RUN npx prisma generate
+
+# Builda a aplicação
+RUN npm run build
+
+# Usa o usuário não-root
+USER appuser
+
+EXPOSE 3000
+
+# Comando para iniciar
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run start:prod"]
