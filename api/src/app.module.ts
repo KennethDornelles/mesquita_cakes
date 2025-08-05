@@ -12,6 +12,7 @@ import { AddressModule } from './modules/address/address.module';
 import { CartItemModule } from './modules/cart-item/cart-item.module';
 import { OrderModule } from './modules/order/order.module';
 import { OrderItemModule } from './modules/order-item/order-item.module';
+import { PaymentModule } from './modules/payment/payment.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { OrderItemModule } from './modules/order-item/order-item.module';
     CartItemModule,
     OrderModule,
     OrderItemModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

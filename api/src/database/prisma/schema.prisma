@@ -150,6 +150,7 @@ model Order {
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @updatedAt @map("updated_at")
   items         OrderItem[]
+  payments      Payment[]
   address       Address       @relation(fields: [addressId], references: [id])
   user          User          @relation(fields: [userId], references: [id])
 
@@ -166,6 +167,32 @@ model OrderItem {
   product   Product @relation(fields: [productId], references: [id])
 
   @@map("order_items")
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String        @map("order_id")
+  method        PaymentMethod
+  status        PaymentStatus @default(PENDING)
+  amount        Decimal       @db.Decimal(10, 2)
+  transactionId String?       @map("transaction_id")
+  pixCode       String?       @map("pix_code")
+  pixQrCode     String?       @map("pix_qr_code")
+  expiresAt     DateTime?     @map("expires_at")
+  paidAt        DateTime?     @map("paid_at")
+  failureReason String?       @map("failure_reason")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  DEBIT_CARD
+  CASH
 }
 
 enum Role {
@@ -185,7 +212,9 @@ enum OrderStatus {
 
 enum PaymentStatus {
   PENDING
+  PROCESSING
   PAID
   FAILED
+  CANCELLED
   REFUNDED
 }
