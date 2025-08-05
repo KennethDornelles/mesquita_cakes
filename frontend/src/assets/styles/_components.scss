@@ -1,0 +1,572 @@
+// ========================================
+// MESQUITA CAKES DESIGN SYSTEM - COMPONENTS
+// ========================================
+
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'animations' as *;
+
+// Logo Component
+// ========================================
+
+.logo {
+  @include center-content;
+  font-family: $font-primary;
+  
+  &__image {
+    width: 60px;
+    height: 60px;
+    margin-right: $spacing-3;
+  }
+  
+  &__text {
+    @include heading-style('lg');
+    background: linear-gradient(135deg, $primary-500 0%, $secondary-500 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  &--small {
+    .logo__image {
+      width: 40px;
+      height: 40px;
+      margin-right: $spacing-2;
+    }
+    
+    .logo__text {
+      @include heading-style('base');
+    }
+  }
+}
+
+// Button Components
+// ========================================
+
+.btn {
+  @include button-base;
+  @include button-size('md');
+  
+  &--primary {
+    @include button-primary;
+  }
+  
+  &--secondary {
+    @include button-secondary;
+  }
+  
+  &--outline {
+    @include button-outline;
+  }
+  
+  &--ghost {
+    @include button-ghost;
+  }
+  
+  &--sm {
+    @include button-size('sm');
+  }
+  
+  &--lg {
+    @include button-size('lg');
+  }
+  
+  &--sweet {
+    background: linear-gradient(135deg, $accent-strawberry 0%, $accent-macaron 100%);
+    color: white;
+    box-shadow: $shadow-heart;
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '✨';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      animation: sparkle 2s ease-in-out infinite;
+    }
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, #e65b8a 0%, #eb5ca0 100%);
+    }
+  }
+  
+  &--cake {
+    background: linear-gradient(135deg, $accent-cream 0%, $primary-100 100%);
+    color: $primary-700;
+    border: 2px solid $primary-300;
+    
+    &::after {
+      content: '🎂';
+      margin-left: $spacing-2;
+    }
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, $primary-50 0%, $primary-200 100%);
+    }
+  }
+}
+
+// Card Components
+// ========================================
+
+.card {
+  @include card-base;
+  
+  &--sweet {
+    @include card-sweet;
+  }
+  
+  &--hover {
+    @include card-hover;
+  }
+  
+  &--product {
+    @include card-sweet;
+    @include card-hover;
+    position: relative;
+    overflow: hidden;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ec4899"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+      background-size: contain;
+      opacity: 0.6;
+    }
+  }
+  
+  &__header {
+    padding: $spacing-6;
+    padding-bottom: $spacing-4;
+  }
+  
+  &__body {
+    padding: 0 $spacing-6 $spacing-6;
+  }
+  
+  &__footer {
+    padding: $spacing-4 $spacing-6;
+    border-top: 1px solid $neutral-200;
+    background: $neutral-50;
+  }
+  
+  &__image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: $radius-xl $radius-xl 0 0;
+  }
+  
+  &__title {
+    @include heading-style('base');
+    margin-bottom: $spacing-2;
+  }
+  
+  &__description {
+    @include body-text('sm');
+    color: $neutral-600;
+    margin-bottom: $spacing-4;
+  }
+  
+  &__price {
+    @include heading-style('sm');
+    color: $secondary-600;
+    font-family: $font-secondary;
+  }
+}
+
+// Form Components
+// ========================================
+
+.form-group {
+  margin-bottom: $spacing-6;
+  
+  &__label {
+    @include body-text('sm', $font-weight-semibold);
+    color: $neutral-700;
+    margin-bottom: $spacing-2;
+    display: block;
+  }
+  
+  &__input {
+    @include input-base;
+    
+    &--error {
+      @include input-error;
+    }
+    
+    &--success {
+      @include input-success;
+    }
+  }
+  
+  &__textarea {
+    @include input-base;
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  &__select {
+    @include input-base;
+    cursor: pointer;
+    
+    option {
+      padding: $spacing-2;
+    }
+  }
+  
+  &__error {
+    @include body-text('xs');
+    color: #ef4444;
+    margin-top: $spacing-1;
+  }
+  
+  &__help {
+    @include body-text('xs');
+    color: $neutral-500;
+    margin-top: $spacing-1;
+  }
+}
+
+.checkbox-group {
+  @include flex-column;
+  gap: $spacing-3;
+  
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: $primary-500;
+    }
+    
+    label {
+      @include body-text('sm');
+      cursor: pointer;
+    }
+  }
+}
+
+// Badge Components
+// ========================================
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-3;
+  border-radius: $radius-full;
+  font-family: $font-secondary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  
+  &--primary {
+    background: $primary-100;
+    color: $primary-700;
+  }
+  
+  &--secondary {
+    background: $secondary-100;
+    color: $secondary-700;
+  }
+  
+  &--success {
+    background: #dcfce7;
+    color: #166534;
+  }
+  
+  &--warning {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  
+  &--error {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  
+  &--sweet {
+    background: linear-gradient(135deg, $accent-macaron 0%, $accent-strawberry 100%);
+    color: white;
+    box-shadow: $shadow-sm;
+  }
+}
+
+// Navigation Components
+// ========================================
+
+.navbar {
+  background: white;
+  box-shadow: $shadow-sm;
+  padding: $spacing-4 0;
+  position: sticky;
+  top: 0;
+  z-index: $z-index-sticky;
+  
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $spacing-6;
+    @include flex-between;
+  }
+  
+  &__nav {
+    display: flex;
+    gap: $spacing-8;
+    
+    @media (max-width: $breakpoint-md) {
+      display: none;
+    }
+  }
+  
+  &__link {
+    @include body-text('base', $font-weight-medium);
+    text-decoration: none;
+    color: $neutral-700;
+    transition: color $duration-200 $ease-out;
+    position: relative;
+    
+    &:hover {
+      color: $primary-600;
+    }
+    
+    &--active {
+      color: $primary-600;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: $primary-500;
+        border-radius: $radius-full;
+      }
+    }
+  }
+  
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+  }
+}
+
+// Modal Components
+// ========================================
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: $z-index-modal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+  
+  &__content {
+    position: relative;
+    background: white;
+    border-radius: $radius-2xl;
+    box-shadow: $shadow-2xl;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: fadeInScale $duration-300 $ease-out;
+  }
+  
+  &__header {
+    padding: $spacing-6;
+    border-bottom: 1px solid $neutral-200;
+    @include flex-between;
+  }
+  
+  &__title {
+    @include heading-style('base');
+    margin: 0;
+  }
+  
+  &__close {
+    background: none;
+    border: none;
+    font-size: $font-size-xl;
+    cursor: pointer;
+    color: $neutral-500;
+    padding: $spacing-2;
+    
+    &:hover {
+      color: $neutral-700;
+    }
+  }
+  
+  &__body {
+    padding: $spacing-6;
+  }
+  
+  &__footer {
+    padding: $spacing-6;
+    border-top: 1px solid $neutral-200;
+    @include flex-between;
+    gap: $spacing-4;
+  }
+}
+
+// Alert Components
+// ========================================
+
+.alert {
+  padding: $spacing-4;
+  border-radius: $radius-lg;
+  border: 1px solid;
+  margin-bottom: $spacing-4;
+  
+  &__content {
+    display: flex;
+    gap: $spacing-3;
+  }
+  
+  &__icon {
+    font-size: $font-size-lg;
+    flex-shrink: 0;
+  }
+  
+  &__text {
+    @include body-text('sm');
+    flex: 1;
+  }
+  
+  &--success {
+    background: #f0fdf4;
+    border-color: #22c55e;
+    color: #166534;
+    
+    .alert__icon::before {
+      content: '✅';
+    }
+  }
+  
+  &--warning {
+    background: #fffbeb;
+    border-color: #f59e0b;
+    color: #92400e;
+    
+    .alert__icon::before {
+      content: '⚠️';
+    }
+  }
+  
+  &--error {
+    background: #fef2f2;
+    border-color: #ef4444;
+    color: #991b1b;
+    
+    .alert__icon::before {
+      content: '❌';
+    }
+  }
+  
+  &--info {
+    background: $primary-50;
+    border-color: $primary-300;
+    color: $primary-700;
+    
+    .alert__icon::before {
+      content: 'ℹ️';
+    }
+  }
+}
+
+// Loading Components
+// ========================================
+
+.loading {
+  @include center-content;
+  padding: $spacing-8;
+  
+  &__spinner {
+    @extend .loading-spinner;
+    margin-right: $spacing-3;
+  }
+  
+  &__text {
+    @include body-text('base');
+    color: $neutral-600;
+  }
+  
+  &--cake {
+    @include center-content;
+    flex-direction: column;
+    gap: $spacing-4;
+    
+    .loading__icon {
+      font-size: 48px;
+      animation: cakeRotate 2s linear infinite;
+    }
+  }
+}
+
+// Utility Classes
+// ========================================
+
+.sr-only {
+  @include visually-hidden;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.flex-center {
+  @include center-content;
+}
+
+.flex-between {
+  @include flex-between;
+}
+
+.flex-column {
+  @include flex-column;
+}
+
+.dots-bg {
+  @include dots-pattern;
+}
+
+.hearts-bg {
+  @include hearts-pattern;
+}
+
+.sweet-border {
+  @include cake-border;
+}
