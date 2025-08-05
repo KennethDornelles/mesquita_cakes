@@ -4,6 +4,7 @@ import { UpdateCategoryInput } from './dto/update-category.input';
 
 @Injectable()
 export class CategoryService {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create(createCategoryInput: CreateCategoryInput) {
     return 'This action adds a new category';
   }
@@ -16,6 +17,7 @@ export class CategoryService {
     return `This action returns a #${id} category`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateCategoryInput: UpdateCategoryInput) {
     return `This action updates a #${id} category`;
   }

@@ -4,6 +4,7 @@ import { UpdateIngredientInput } from './dto/update-ingredient.input';
 
 @Injectable()
 export class IngredientService {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create(createIngredientInput: CreateIngredientInput) {
     return 'This action adds a new ingredient';
   }
@@ -16,6 +17,7 @@ export class IngredientService {
     return `This action returns a #${id} ingredient`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateIngredientInput: UpdateIngredientInput) {
     return `This action updates a #${id} ingredient`;
   }

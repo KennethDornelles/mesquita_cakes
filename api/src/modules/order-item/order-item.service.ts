@@ -4,6 +4,7 @@ import { UpdateOrderItemInput } from './dto/update-order-item.input';
 
 @Injectable()
 export class OrderItemService {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create(createOrderItemInput: CreateOrderItemInput) {
     return 'This action adds a new orderItem';
   }
@@ -16,6 +17,7 @@ export class OrderItemService {
     return `This action returns a #${id} orderItem`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateOrderItemInput: UpdateOrderItemInput) {
     return `This action updates a #${id} orderItem`;
   }

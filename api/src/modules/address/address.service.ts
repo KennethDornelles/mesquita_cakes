@@ -4,6 +4,7 @@ import { UpdateAddressInput } from './dto/update-address.input';
 
 @Injectable()
 export class AddressService {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create(createAddressInput: CreateAddressInput) {
     return 'This action adds a new address';
   }
@@ -16,6 +17,7 @@ export class AddressService {
     return `This action returns a #${id} address`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateAddressInput: UpdateAddressInput) {
     return `This action updates a #${id} address`;
   }

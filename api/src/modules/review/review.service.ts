@@ -4,6 +4,7 @@ import { UpdateReviewInput } from './dto/update-review.input';
 
 @Injectable()
 export class ReviewService {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create(createReviewInput: CreateReviewInput) {
     return 'This action adds a new review';
   }
@@ -16,6 +17,7 @@ export class ReviewService {
     return `This action returns a #${id} review`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateReviewInput: UpdateReviewInput) {
     return `This action updates a #${id} review`;
   }

@@ -4,6 +4,7 @@ import { UpdateCartItemInput } from './dto/update-cart-item.input';
 
 @Injectable()
 export class CartItemService {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create(createCartItemInput: CreateCartItemInput) {
     return 'This action adds a new cartItem';
   }
@@ -16,6 +17,7 @@ export class CartItemService {
     return `This action returns a #${id} cartItem`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateCartItemInput: UpdateCartItemInput) {
     return `This action updates a #${id} cartItem`;
   }
