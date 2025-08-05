@@ -6,10 +6,15 @@ import { UpdateProductIngredientInput } from './dto/update-product-ingredient.in
 
 @Resolver(() => ProductIngredient)
 export class ProductIngredientResolver {
-  constructor(private readonly productIngredientService: ProductIngredientService) {}
+  constructor(
+    private readonly productIngredientService: ProductIngredientService,
+  ) {}
 
   @Mutation(() => ProductIngredient)
-  createProductIngredient(@Args('createProductIngredientInput') createProductIngredientInput: CreateProductIngredientInput) {
+  createProductIngredient(
+    @Args('createProductIngredientInput')
+    createProductIngredientInput: CreateProductIngredientInput,
+  ) {
     return this.productIngredientService.create(createProductIngredientInput);
   }
 
@@ -24,8 +29,14 @@ export class ProductIngredientResolver {
   }
 
   @Mutation(() => ProductIngredient)
-  updateProductIngredient(@Args('updateProductIngredientInput') updateProductIngredientInput: UpdateProductIngredientInput) {
-    return this.productIngredientService.update(updateProductIngredientInput.id, updateProductIngredientInput);
+  updateProductIngredient(
+    @Args('updateProductIngredientInput')
+    updateProductIngredientInput: UpdateProductIngredientInput,
+  ) {
+    return this.productIngredientService.update(
+      updateProductIngredientInput.id,
+      updateProductIngredientInput,
+    );
   }
 
   @Mutation(() => ProductIngredient)

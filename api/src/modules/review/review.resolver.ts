@@ -9,7 +9,9 @@ export class ReviewResolver {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Mutation(() => Review)
-  createReview(@Args('createReviewInput') createReviewInput: CreateReviewInput) {
+  createReview(
+    @Args('createReviewInput') createReviewInput: CreateReviewInput,
+  ) {
     return this.reviewService.create(createReviewInput);
   }
 
@@ -24,7 +26,9 @@ export class ReviewResolver {
   }
 
   @Mutation(() => Review)
-  updateReview(@Args('updateReviewInput') updateReviewInput: UpdateReviewInput) {
+  updateReview(
+    @Args('updateReviewInput') updateReviewInput: UpdateReviewInput,
+  ) {
     return this.reviewService.update(updateReviewInput.id, updateReviewInput);
   }
 

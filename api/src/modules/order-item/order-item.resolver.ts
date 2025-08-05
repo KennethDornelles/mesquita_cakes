@@ -9,7 +9,9 @@ export class OrderItemResolver {
   constructor(private readonly orderItemService: OrderItemService) {}
 
   @Mutation(() => OrderItem)
-  createOrderItem(@Args('createOrderItemInput') createOrderItemInput: CreateOrderItemInput) {
+  createOrderItem(
+    @Args('createOrderItemInput') createOrderItemInput: CreateOrderItemInput,
+  ) {
     return this.orderItemService.create(createOrderItemInput);
   }
 
@@ -24,8 +26,13 @@ export class OrderItemResolver {
   }
 
   @Mutation(() => OrderItem)
-  updateOrderItem(@Args('updateOrderItemInput') updateOrderItemInput: UpdateOrderItemInput) {
-    return this.orderItemService.update(updateOrderItemInput.id, updateOrderItemInput);
+  updateOrderItem(
+    @Args('updateOrderItemInput') updateOrderItemInput: UpdateOrderItemInput,
+  ) {
+    return this.orderItemService.update(
+      updateOrderItemInput.id,
+      updateOrderItemInput,
+    );
   }
 
   @Mutation(() => OrderItem)

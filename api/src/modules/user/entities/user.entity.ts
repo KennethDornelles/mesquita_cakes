@@ -1,7 +1,32 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Role } from '../../../enums';
 
 @ObjectType()
 export class User {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field(() => ID)
+  id: string;
+
+  @Field()
+  email: string;
+
+  @Field()
+  name: string;
+
+  // Password não é exposto no GraphQL por segurança
+  password: string;
+
+  @Field({ nullable: true })
+  phone?: string | null;
+
+  @Field({ nullable: true })
+  avatar?: string | null;
+
+  @Field(() => Role)
+  role: Role;
+
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
 }

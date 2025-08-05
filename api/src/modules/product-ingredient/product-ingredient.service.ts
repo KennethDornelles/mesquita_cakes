@@ -16,7 +16,10 @@ export class ProductIngredientService {
     return `This action returns a #${id} productIngredient`;
   }
 
-  update(id: number, updateProductIngredientInput: UpdateProductIngredientInput) {
+  update(
+    id: number,
+    updateProductIngredientInput: UpdateProductIngredientInput,
+  ) {
     return `This action updates a #${id} productIngredient`;
   }
 

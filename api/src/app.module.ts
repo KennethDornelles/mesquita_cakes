@@ -13,7 +13,18 @@ import { OrderModule } from './modules/order/order.module';
 import { OrderItemModule } from './modules/order-item/order-item.module';
 
 @Module({
-  imports: [UserModule, CategoryModule, ProductModule, IngredientModule, ProductIngredientModule, ReviewModule, AddressModule, CartItemModule, OrderModule, OrderItemModule],
+  imports: [
+    UserModule,
+    CategoryModule,
+    ProductModule,
+    IngredientModule,
+    ProductIngredientModule,
+    ReviewModule,
+    AddressModule,
+    CartItemModule,
+    OrderModule,
+    OrderItemModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
