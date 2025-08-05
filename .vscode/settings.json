@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "project",
         "backend",
-        "PRODUCT"
+        "PRODUCT",
+        "Order"
     ]
 }
