@@ -1,10 +1,18 @@
-import { CreateProductIngredientInput } from './create-product-ingredient.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field, ID } from '@nestjs/graphql';
+import { IsOptional, IsString } from 'class-validator';
 
 @InputType()
-export class UpdateProductIngredientInput extends PartialType(
-  CreateProductIngredientInput,
-) {
-  @Field(() => Int)
-  id: number;
+export class UpdateProductIngredientInput {
+  @Field(() => ID)
+  id: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  productId?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  ingredientId?: string;
 }
