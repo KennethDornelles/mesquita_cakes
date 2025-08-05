@@ -1,28 +1,32 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
+import { Product } from '../../product/entities/product.entity';
 
 @ObjectType()
 export class Category {
-  @Field(() => ID)
+  @Field(() => String)
   id: string;
 
-  @Field()
+  @Field(() => String, { description: 'Category name' })
   name: string;
 
-  @Field()
+  @Field(() => String, { description: 'URL-friendly slug' })
   slug: string;
 
-  @Field({ nullable: true })
-  description?: string | null;
+  @Field(() => String, { nullable: true, description: 'Category description' })
+  description?: string;
 
-  @Field({ nullable: true })
-  image?: string | null;
+  @Field(() => String, { nullable: true, description: 'Category image URL' })
+  image?: string;
 
-  @Field()
+  @Field(() => Boolean, { description: 'Whether category is active' })
   active: boolean;
 
-  @Field()
+  @Field(() => Date)
   createdAt: Date;
 
-  @Field()
+  @Field(() => Date)
   updatedAt: Date;
+
+  @Field(() => [Product], { description: 'Products in this category' })
+  products: Product[];
 }
