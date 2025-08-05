@@ -1,26 +1,149 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
+import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductService {
-  create(createProductInput: CreateProductInput) {
-    return 'This action adds a new product';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createProductInput: CreateProductInput): Promise<Product> {
+    const product = await this.prisma.product.create({
+      data: createProductInput,
+      include: {
+        category: true,
+      },
+    });
+
+    return this.mapPrismaProductToGraphQLProduct(product);
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findAll(): Promise<Product[]> {
+    const products = await this.prisma.product.findMany({
+      include: {
+        category: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return products.map((product) =>
+      this.mapPrismaProductToGraphQLProduct(product),
+    );
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string): Promise<Product | null> {
+    const product = await this.prisma.product.findUnique({
+      where: { id },
+      include: {
+        category: true,
+      },
+    });
+
+    return product ? this.mapPrismaProductToGraphQLProduct(product) : null;
   }
 
-  update(id: number, updateProductInput: UpdateProductInput) {
-    return `This action updates a #${id} product`;
+  async findBySlug(slug: string): Promise<Product | null> {
+    const product = await this.prisma.product.findUnique({
+      where: { slug },
+      include: {
+        category: true,
+      },
+    });
+
+    return product ? this.mapPrismaProductToGraphQLProduct(product) : null;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async findByCategory(categoryId: string): Promise<Product[]> {
+    const products = await this.prisma.product.findMany({
+      where: { categoryId },
+      include: {
+        category: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return products.map((product) =>
+      this.mapPrismaProductToGraphQLProduct(product),
+    );
+  }
+
+  async findFeatured(): Promise<Product[]> {
+    const products = await this.prisma.product.findMany({
+      where: { featured: true, active: true },
+      include: {
+        category: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return products.map((product) =>
+      this.mapPrismaProductToGraphQLProduct(product),
+    );
+  }
+
+  async update(
+    id: string,
+    updateProductInput: UpdateProductInput,
+  ): Promise<Product> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _, ...updateData } = updateProductInput;
+
+    try {
+      const product = await this.prisma.product.update({
+        where: { id },
+        data: updateData,
+        include: {
+          category: true,
+        },
+      });
+
+      return this.mapPrismaProductToGraphQLProduct(product);
+    } catch {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+  }
+
+  async remove(id: string): Promise<Product> {
+    try {
+      const product = await this.prisma.product.delete({
+        where: { id },
+        include: {
+          category: true,
+        },
+      });
+
+      return this.mapPrismaProductToGraphQLProduct(product);
+    } catch {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+  }
+
+  async updateStock(id: string, quantity: number): Promise<Product> {
+    try {
+      const product = await this.prisma.product.update({
+        where: { id },
+        data: {
+          stock: {
+            increment: quantity,
+          },
+        },
+        include: {
+          category: true,
+        },
+      });
+
+      return this.mapPrismaProductToGraphQLProduct(product);
+    } catch {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+  }
+
+  private mapPrismaProductToGraphQLProduct(prismaProduct: any): Product {
+    return {
+      ...prismaProduct,
+      price: parseFloat(prismaProduct.price),
+      weight: prismaProduct.weight ? parseFloat(prismaProduct.weight) : null,
+    };
   }
 }
