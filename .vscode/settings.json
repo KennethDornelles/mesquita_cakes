@@ -1,5 +1,8 @@
 {
     "conventionalCommits.scopes": [
-        "project"
+        "project",
+        "backend",
+        "PRODUCT",
+        "Order"
     ]
 }

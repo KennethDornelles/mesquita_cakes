@@ -1,0 +1,220 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String
+  password  String
+  phone     String?
+  avatar    String?
+  role      Role       @default(CUSTOMER)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  addresses Address[]
+  cart      CartItem[]
+  orders    Order[]
+  reviews   Review[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  image       String?
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          String              @id @default(cuid())
+  name        String
+  slug        String              @unique
+  description String
+  price       Decimal             @db.Decimal(10, 2)
+  image       String?
+  images      String[]
+  stock       Int                 @default(0)
+  weight      Decimal?            @db.Decimal(8, 3)
+  calories    Int?
+  active      Boolean             @default(true)
+  featured    Boolean             @default(false)
+  categoryId  String              @map("category_id")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+  allergens   String[]
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  ingredients ProductIngredient[]
+  category    Category            @relation(fields: [categoryId], references: [id])
+  reviews     Review[]
+
+  @@index([name])
+  @@index([categoryId])
+  @@index([featured])
+  @@map("products")
+}
+
+model Ingredient {
+  id       String              @id @default(cuid())
+  name     String              @unique
+  products ProductIngredient[]
+
+  @@map("ingredients")
+}
+
+model ProductIngredient {
+  id           String     @id @default(cuid())
+  productId    String
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  product      Product    @relation(fields: [productId], references: [id])
+
+  @@unique([productId, ingredientId])
+  @@map("product_ingredients")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int      @db.SmallInt
+  comment   String?
+  userId    String   @map("user_id")
+  productId String   @map("product_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("reviews")
+}
+
+model Address {
+  id           String  @id @default(cuid())
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String
+  zipCode      String  @map("zip_code")
+  isDefault    Boolean @default(false) @map("is_default")
+  userId       String  @map("user_id")
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders       Order[]
+
+  @@map("addresses")
+}
+
+model CartItem {
+  id            String   @id @default(cuid())
+  quantity      Int
+  priceSnapshot Decimal? @db.Decimal(10, 2)
+  userId        String   @map("user_id")
+  productId     String   @map("product_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("cart_items")
+}
+
+model Order {
+  id            String        @id @default(cuid())
+  orderNumber   String        @unique @map("order_number")
+  status        OrderStatus   @default(PENDING)
+  total         Decimal       @db.Decimal(10, 2)
+  subtotal      Decimal       @db.Decimal(10, 2)
+  deliveryFee   Decimal       @default(0) @map("delivery_fee") @db.Decimal(10, 2)
+  paymentMethod String        @map("payment_method")
+  paymentStatus PaymentStatus @default(PENDING) @map("payment_status")
+  notes         String?
+  deliveryDate  DateTime?     @map("delivery_date")
+  userId        String        @map("user_id")
+  addressId     String        @map("address_id")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  items         OrderItem[]
+  payments      Payment[]
+  address       Address       @relation(fields: [addressId], references: [id])
+  user          User          @relation(fields: [userId], references: [id])
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+  orderId   String  @map("order_id")
+  productId String  @map("product_id")
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String        @map("order_id")
+  method        PaymentMethod
+  status        PaymentStatus @default(PENDING)
+  amount        Decimal       @db.Decimal(10, 2)
+  transactionId String?       @map("transaction_id")
+  pixCode       String?       @map("pix_code")
+  pixQrCode     String?       @map("pix_qr_code")
+  expiresAt     DateTime?     @map("expires_at")
+  paidAt        DateTime?     @map("paid_at")
+  failureReason String?       @map("failure_reason")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  DEBIT_CARD
+  CASH
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  DELIVERING
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
