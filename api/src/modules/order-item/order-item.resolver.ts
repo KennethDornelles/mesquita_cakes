@@ -76,14 +76,14 @@ export class OrderItemResolver {
 
   // Field Resolvers
   @ResolveField(() => Order)
-  async order(@Parent() orderItem: OrderItem) {
+  order(@Parent() orderItem: OrderItem) {
     return this.prisma.order.findUnique({
       where: { id: orderItem.orderId },
     });
   }
 
   @ResolveField(() => Product)
-  async product(@Parent() orderItem: OrderItem) {
+  product(@Parent() orderItem: OrderItem) {
     return this.prisma.product.findUnique({
       where: { id: orderItem.productId },
     });

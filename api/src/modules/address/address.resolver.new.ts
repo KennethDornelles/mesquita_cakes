@@ -94,7 +94,7 @@ export class AddressResolver {
 
   // Field Resolvers
   @ResolveField(() => User)
-  async user(@Parent() address: Address) {
+  user(@Parent() address: Address) {
     return this.prisma.user.findUnique({
       where: { id: address.userId },
     });

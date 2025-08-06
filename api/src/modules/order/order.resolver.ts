@@ -88,21 +88,21 @@ export class OrderResolver {
 
   // Field Resolvers
   @ResolveField(() => User)
-  async user(@Parent() order: Order) {
+  user(@Parent() order: Order) {
     return this.prisma.user.findUnique({
       where: { id: order.userId },
     });
   }
 
   @ResolveField(() => Address)
-  async address(@Parent() order: Order) {
+  address(@Parent() order: Order) {
     return this.prisma.address.findUnique({
       where: { id: order.addressId },
     });
   }
 
   @ResolveField(() => [OrderItem])
-  async items(@Parent() order: Order) {
+  items(@Parent() order: Order) {
     return this.prisma.orderItem.findMany({
       where: { orderId: order.id },
       include: {
