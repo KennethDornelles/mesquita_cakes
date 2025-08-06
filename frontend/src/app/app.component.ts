@@ -1,12 +1,35 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './components/header.component';
+import { FooterComponent } from './components/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  template: `
+    <div class="app-layout">
+      <app-header></app-header>
+      
+      <main class="main-content">
+        <router-outlet></router-outlet>
+      </main>
+      
+      <app-footer></app-footer>
+    </div>
+  `,
+  styles: [`
+    .app-layout {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .main-content {
+      flex: 1;
+      margin-top: 80px; /* Account for fixed header */
+    }
+  `]
 })
 export class AppComponent {
-  title = 'frontend';
+  title = 'Mesquita Cakes';
 }
