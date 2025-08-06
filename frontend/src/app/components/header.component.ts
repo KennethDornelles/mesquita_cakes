@@ -20,7 +20,10 @@ import { CartService } from '../services/cart.service';
             <div class="navbar-brand">
               <a routerLink="/home" class="logo-link">
                 <div class="logo">
-                  <img src="logo.jpg" alt="Mesquita Cakes" class="logo-image">
+                  <img src="/logo.jpg" 
+                       alt="Mesquita Cakes" 
+                       class="logo-image"
+                       (error)="onLogoError($event)">
                   <span class="logo-text">Mesquita Cakes</span>
                 </div>
               </a>
@@ -647,6 +650,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  onLogoError(event: any) {
+    console.log('🔥 Logo failed to load, hiding image');
+    event.target.style.display = 'none';
+  }
+
   getUserInitials(name: string): string {
     return name
       .split(' ')
@@ -657,6 +665,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleMenu() {
+    console.log('🔥 Toggle menu clicked!');
     this.menuOpen = !this.menuOpen;
     
     // Prevent body scroll when menu is open
@@ -668,38 +677,46 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   closeMenu() {
+    console.log('🔥 Close menu called!');
     this.menuOpen = false;
     document.body.style.overflow = '';
   }
 
   toggleUserMenu() {
+    console.log('🔥 Toggle user menu clicked!');
     this.userMenuOpen = !this.userMenuOpen;
   }
 
   closeUserMenu() {
+    console.log('🔥 Close user menu called!');
     this.userMenuOpen = false;
   }
 
   goToLogin() {
+    console.log('🔥 Navigate to login clicked!');
     this.router.navigate(['/auth']);
   }
 
   goToProfile() {
+    console.log('🔥 Navigate to profile clicked!');
     this.closeUserMenu();
     this.router.navigate(['/perfil']);
   }
 
   goToOrders() {
+    console.log('🔥 Navigate to orders clicked!');
     this.closeUserMenu();
     this.router.navigate(['/meus-pedidos']);
   }
 
   goToAdmin() {
+    console.log('🔥 Navigate to admin clicked!');
     this.closeUserMenu();
     this.router.navigate(['/admin']);
   }
 
   logout() {
+    console.log('🔥 Logout clicked!');
     this.closeUserMenu();
     this.authService.logout().subscribe(() => {
       this.router.navigate(['/home']);
@@ -707,10 +724,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleCart() {
+    console.log('🔥 Navigate to cart clicked!');
     this.router.navigate(['/carrinho']);
   }
 
   openWhatsApp() {
+    console.log('🔥 WhatsApp button clicked!');
     const message = encodeURIComponent('Olá! Gostaria de fazer um pedido na Mesquita Cakes 🎂');
     const whatsappUrl = `https://wa.me/5511999999999?text=${message}`;
     window.open(whatsappUrl, '_blank');
