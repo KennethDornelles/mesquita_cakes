@@ -2,9 +2,11 @@ import {
   Injectable,
   ForbiddenException,
   ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { PixCheckoutResponse } from './dto/pix-checkout.dto';
+import { Payment } from './entities/payment.entity';
 
 @Injectable()
 export class PaymentService {
@@ -88,6 +90,112 @@ export class PaymentService {
     });
 
     return true;
+  }
+
+  async findAll(): Promise<Payment[]> {
+    const payments = await this.prisma.payment.findMany({
+      include: {
+        order: {
+          include: {
+            user: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return payments.map((payment) => this.mapPrismaToPayment(payment));
+  }
+
+  async findOne(id: string): Promise<Payment> {
+    const payment = await this.prisma.payment.findUnique({
+      where: { id },
+      include: {
+        order: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    if (!payment) {
+      throw new NotFoundException(`Payment with ID ${id} not found`);
+    }
+
+    return this.mapPrismaToPayment(payment);
+  }
+
+  async findByOrder(orderId: string, userId: string): Promise<Payment[]> {
+    // Verificar se o usuário tem permissão para ver pagamentos deste pedido
+    const order = await this.prisma.order.findFirst({
+      where: {
+        id: orderId,
+        userId,
+      },
+    });
+
+    if (!order) {
+      throw new ForbiddenException('Pedido não encontrado ou sem permissão');
+    }
+
+    const payments = await this.prisma.payment.findMany({
+      where: { orderId },
+      include: {
+        order: {
+          include: {
+            user: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return payments.map((payment) => this.mapPrismaToPayment(payment));
+  }
+
+  async findByUser(userId: string): Promise<Payment[]> {
+    const payments = await this.prisma.payment.findMany({
+      where: {
+        order: {
+          userId,
+        },
+      },
+      include: {
+        order: {
+          include: {
+            user: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return payments.map((payment) => this.mapPrismaToPayment(payment));
+  }
+
+  private mapPrismaToPayment(prismaPayment: any): Payment {
+    return {
+      id: prismaPayment.id,
+      orderId: prismaPayment.orderId,
+      method: prismaPayment.method,
+      status: prismaPayment.status,
+      amount: Number(prismaPayment.amount),
+      transactionId: prismaPayment.transactionId,
+      pixCode: prismaPayment.pixCode,
+      pixQrCode: prismaPayment.pixQrCode,
+      expiresAt: prismaPayment.expiresAt,
+      paidAt: prismaPayment.paidAt,
+      failureReason: prismaPayment.failureReason,
+      createdAt: prismaPayment.createdAt,
+      updatedAt: prismaPayment.updatedAt,
+    };
   }
 
   private generatePixCode(amount: number, orderId: string): string {

@@ -15,18 +15,18 @@ export class User {
   // Password não é exposto no GraphQL por segurança
   password: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   phone?: string | null;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   avatar?: string | null;
 
   @Field(() => Role)
   role: Role;
 
-  @Field()
+  @Field(() => Date)
   createdAt: Date;
 
-  @Field()
+  @Field(() => Date)
   updatedAt: Date;
 }

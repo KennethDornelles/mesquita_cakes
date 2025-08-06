@@ -3,18 +3,34 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { Product } from './entities/product.entity';
+import { AuditService } from '../audit/audit.service';
 
 @Injectable()
 export class ProductService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditService: AuditService,
+  ) {}
 
-  async create(createProductInput: CreateProductInput): Promise<Product> {
+  async create(
+    createProductInput: CreateProductInput,
+    userId?: string,
+  ): Promise<Product> {
     const product = await this.prisma.product.create({
       data: createProductInput,
       include: {
         category: true,
       },
     });
+
+    // Log de auditoria para criação de produto
+    if (userId) {
+      this.auditService.logCreate(userId, 'product', product.id, {
+        productName: product.name,
+        category: product.categoryId,
+        price: product.price,
+      });
+    }
 
     return this.mapPrismaProductToGraphQLProduct(product);
   }

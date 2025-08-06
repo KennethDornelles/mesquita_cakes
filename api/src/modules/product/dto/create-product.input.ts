@@ -34,7 +34,7 @@ export class CreateProductInput {
   @IsPositive()
   price: number;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   @IsString()
   image?: string;

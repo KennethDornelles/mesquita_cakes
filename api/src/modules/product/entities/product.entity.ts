@@ -18,7 +18,7 @@ export class Product {
   @Field(() => Float)
   price: number;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   image?: string | null;
 
   @Field(() => [String], { nullable: true })
@@ -45,10 +45,10 @@ export class Product {
   @Field(() => [String], { nullable: true })
   allergens?: string[];
 
-  @Field()
+  @Field(() => Date)
   createdAt: Date;
 
-  @Field()
+  @Field(() => Date)
   updatedAt: Date;
 
   // Relacionamentos
