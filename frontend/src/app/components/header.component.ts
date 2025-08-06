@@ -30,8 +30,8 @@ import { CartService } from '../services/cart.service';
             <nav class="navbar-menu" [class.active]="menuOpen">
               <a routerLink="/home" class="nav-link" routerLinkActive="active" (click)="closeMenu()">Home</a>
               <a routerLink="/cardapio" class="nav-link" routerLinkActive="active" (click)="closeMenu()">Cardápio</a>
-              <a href="#sobre" class="nav-link" (click)="closeMenu()">Sobre</a>
-              <a href="#contato" class="nav-link" (click)="closeMenu()">Contato</a>
+              <a routerLink="/sobre" class="nav-link" routerLinkActive="active" (click)="closeMenu()">Sobre</a>
+              <a routerLink="/contato" class="nav-link" routerLinkActive="active" (click)="closeMenu()">Contato</a>
             </nav>
             
             <!-- Action Buttons -->
@@ -679,7 +679,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   goToOrders() {
     this.closeUserMenu();
-    this.router.navigate(['/pedidos']);
+    this.router.navigate(['/meus-pedidos']);
   }
 
   goToAdmin() {

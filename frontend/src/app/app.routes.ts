@@ -40,5 +40,23 @@ export const routes: Routes = [
     path: 'pedido-confirmado', 
     loadComponent: () => import('./pages/order-confirmation.component').then(m => m.OrderConfirmationComponent)
   },
+  // Customer Area Routes
+  { 
+    path: 'perfil', 
+    loadComponent: () => import('./pages/profile.component').then(m => m.ProfileComponent)
+  },
+  { 
+    path: 'meus-pedidos', 
+    loadComponent: () => import('./pages/order-history.component').then(m => m.OrderHistoryComponent)
+  },
+  // Information Pages
+  { 
+    path: 'contato', 
+    loadComponent: () => import('./pages/contact.component').then(m => m.ContactComponent)
+  },
+  { 
+    path: 'sobre', 
+    loadComponent: () => import('./pages/about.component').then(m => m.AboutComponent)
+  },
   { path: '**', redirectTo: '/home' }
 ];
