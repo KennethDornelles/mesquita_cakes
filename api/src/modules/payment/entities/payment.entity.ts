@@ -1,4 +1,5 @@
 import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
+import { PaymentStatus } from '../../../enums';
 
 export enum PaymentMethod {
   PIX = 'PIX',
@@ -7,23 +8,9 @@ export enum PaymentMethod {
   CASH = 'CASH',
 }
 
-export enum PaymentStatus {
-  PENDING = 'PENDING',
-  PROCESSING = 'PROCESSING',
-  PAID = 'PAID',
-  FAILED = 'FAILED',
-  CANCELLED = 'CANCELLED',
-  REFUNDED = 'REFUNDED',
-}
-
 registerEnumType(PaymentMethod, {
   name: 'PaymentMethod',
   description: 'Available payment methods',
-});
-
-registerEnumType(PaymentStatus, {
-  name: 'PaymentStatus',
-  description: 'Payment status options',
 });
 
 @ObjectType()
