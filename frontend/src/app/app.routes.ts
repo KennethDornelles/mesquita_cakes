@@ -28,5 +28,17 @@ export const routes: Routes = [
     redirectTo: '/auth',
     pathMatch: 'full'
   },
+  { 
+    path: 'carrinho', 
+    loadComponent: () => import('./pages/cart.component').then(m => m.CartComponent)
+  },
+  { 
+    path: 'checkout', 
+    loadComponent: () => import('./pages/checkout.component').then(m => m.CheckoutComponent)
+  },
+  { 
+    path: 'pedido-confirmado', 
+    loadComponent: () => import('./pages/order-confirmation.component').then(m => m.OrderConfirmationComponent)
+  },
   { path: '**', redirectTo: '/home' }
 ];

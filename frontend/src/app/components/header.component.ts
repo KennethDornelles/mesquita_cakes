@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService, User } from '../services/auth.service';
+import { CartService } from '../services/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -605,11 +606,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   
   menuOpen = false;
   userMenuOpen = false;
-  cartItemCount = 0; // This should come from a cart service
+  cartItemCount = 0;
   currentUser: User | null = null;
 
   constructor(
     private authService: AuthService,
+    private cartService: CartService,
     private router: Router
   ) {}
 
@@ -618,6 +620,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
         this.currentUser = user;
+      });
+
+    // Subscribe to cart changes
+    this.cartService.getCartSummary()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(summary => {
+        this.cartItemCount = summary.itemCount;
       });
   }
 
@@ -686,8 +695,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleCart() {
-    console.log('Toggle cart');
-    // TODO: Implement cart toggle
+    this.router.navigate(['/carrinho']);
   }
 
   openWhatsApp() {
