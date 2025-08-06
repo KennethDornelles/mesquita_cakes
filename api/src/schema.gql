@@ -291,6 +291,30 @@ enum OrderStatus {
   READY
 }
 
+type Payment {
+  amount: Float!
+  createdAt: DateTime!
+  expiresAt: DateTime
+  failureReason: String
+  id: String!
+  method: PaymentMethod!
+  orderId: String!
+  paidAt: DateTime
+  pixCode: String
+  pixQrCode: String
+  status: PaymentStatus!
+  transactionId: String
+  updatedAt: DateTime!
+}
+
+"""Available payment methods"""
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
+  DEBIT_CARD
+  PIX
+}
+
 """Status do pagamento"""
 enum PaymentStatus {
   FAILED
@@ -354,12 +378,16 @@ type Query {
   myAddresses: [Address!]!
   myCart: [CartItem!]!
   myOrders: [Order!]!
+  myPayments: [Payment!]!
   order(id: ID!): Order!
   orderItem(id: ID!): OrderItem!
   orderItems: [OrderItem!]!
   orderItemsByOrder(orderId: ID!): [OrderItem!]!
   orders: [Order!]!
   ordersByStatus(status: OrderStatus!): [Order!]!
+  payment(id: ID!): Payment!
+  payments: [Payment!]!
+  paymentsByOrder(orderId: String!): [Payment!]!
   product(id: ID!): Product!
   productBySlug(slug: String!): Product
   productIngredient(id: ID!): ProductIngredient!

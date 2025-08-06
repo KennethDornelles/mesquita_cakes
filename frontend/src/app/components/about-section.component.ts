@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-about-section',
@@ -68,7 +69,10 @@ import { Component } from '@angular/core';
             </div>
             
             <div class="about-actions mt-8">
-              <button class="btn btn--outline-white btn--lg hover-lift">
+              <button 
+                class="btn btn--outline-white btn--lg hover-lift"
+                (click)="goToAbout()"
+                style="pointer-events: auto !important; z-index: 1000; position: relative;">
                 Nossa História 📖
               </button>
             </div>
@@ -319,4 +323,10 @@ import { Component } from '@angular/core';
   `]
 })
 export class AboutSectionComponent {
+  constructor(private router: Router) {}
+
+  goToAbout() {
+    console.log('🔥 Nossa História clicked!');
+    this.router.navigate(['/sobre']);
+  }
 }

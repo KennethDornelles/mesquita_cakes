@@ -7,6 +7,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home.component').then(m => m.HomeComponent)
   },
   { 
+    path: 'test-cep', 
+    loadComponent: () => import('./components/cep-test.component').then(m => m.CepTestComponent)
+  },
+  { 
     path: 'cardapio', 
     loadComponent: () => import('./pages/catalog.component').then(m => m.CatalogComponent)
   },

@@ -1,46 +1,59 @@
 // ========================================
 // MESQUITA CAKES DESIGN SYSTEM - VARIABLES
+// ATUALIZADO: Com sugestões do cliente (Fonte Organic + Ajustes de cores)
 // ========================================
 
-// Color Palette - Baseado na identidade visual
+// Color Palette - Atualizado com feedback do cliente
 // ========================================
 
-// Primary Colors (Rosa)
-$primary-50: #fdf2f8;
-$primary-100: #fce7f3;
-$primary-200: #fbcfe8;
-$primary-300: #f9a8d4;
-$primary-400: #f472b6;
-$primary-500: #ec4899; // Cor principal do bolo
-$primary-600: #db2777;
-$primary-700: #be185d;
-$primary-800: #9d174d;
-$primary-900: #831843;
+// Primary Colors (Rosa - tons mais suaves e orgânicos)
+$primary-50: #fef7f7;
+$primary-100: #fdeaea;
+$primary-200: #fbdada;
+$primary-300: #f7b5b5;
+$primary-400: #f28a8a;
+$primary-500: #ec6b6b; // Rosa mais suave e orgânico
+$primary-600: #e04545;
+$primary-700: #c73333;
+$primary-800: #a52929;
+$primary-900: #862727;
 
-// Secondary Colors (Verde Menta)
-$secondary-50: #f0fdfa;
-$secondary-100: #ccfbf1;
-$secondary-200: #99f6e4;
-$secondary-300: #5eead4;
-$secondary-400: #2dd4bf;
-$secondary-500: #14b8a6; // Cor da fita
-$secondary-600: #0d9488;
-$secondary-700: #0f766e;
-$secondary-800: #115e59;
-$secondary-900: #134e4a;
+// Secondary Colors (Verde mais natural e orgânico)
+$secondary-50: #f0fdf5;
+$secondary-100: #dcfce8;
+$secondary-200: #bbf7d1;
+$secondary-300: #86efac;
+$secondary-400: #4ade80;
+$secondary-500: #22c55e; // Verde mais vibrante e natural
+$secondary-600: #16a34a;
+$secondary-700: #15803d;
+$secondary-800: #166534;
+$secondary-900: #14532d;
 
-// Accent Colors (Tons de apoio)
-$accent-cream: #fef7ed; // Cor do creme do bolo
-$accent-strawberry: #ff6b9d; // Cor do morango
-$accent-macaron: #ff8cc8; // Cor dos macarons
-$accent-heart: #ff69b4; // Cor dos corações
-$accent-brown: #8b4513; // Detalhes marrons
+// Accent Colors (Tons mais naturais baseados em ingredientes orgânicos)
+$accent-cream: #fffbf0; // Creme mais puro
+$accent-vanilla: #fdf4e3; // Baunilha natural
+$accent-honey: #f59e0b; // Mel dourado
+$accent-berry: #ec4899; // Frutas vermelhas
+$accent-mint: #10b981; // Menta fresca
+$accent-cocoa: #78350f; // Cacau natural
 
-// Neutral Colors
-$neutral-50: #fafaf9;
-$neutral-100: #f5f5f4;
-$neutral-200: #e7e5e4;
-$neutral-300: #d6d3d1;
+// Text Colors (Melhor legibilidade)
+$text-primary: #2d1b1b; // Marrom escuro para texto principal
+$text-secondary: #4a3737; // Marrom médio para texto secundário
+$text-muted: #6b5757; // Marrom claro para texto menos importante
+$text-accent: #c53030; // Vermelho forte para destaques
+$text-success: #065f46; // Verde escuro para sucesso
+$text-warning: #92400e; // Laranja escuro para avisos
+$text-error: #991b1b; // Vermelho escuro para erros
+$text-link: #1e40af; // Azul escuro para links
+$text-link-hover: #1e3a8a; // Azul mais escuro para hover
+
+// Neutral Colors (Tons mais quentes e naturais)
+$neutral-50: #fefefe;
+$neutral-100: #fcfcfc;
+$neutral-200: #f5f5f4;
+$neutral-300: #e7e5e4;
 $neutral-400: #a8a29e;
 $neutral-500: #78716c;
 $neutral-600: #57534e;
@@ -48,30 +61,32 @@ $neutral-700: #44403c;
 $neutral-800: #292524;
 $neutral-900: #1c1917;
 
-// Background Colors (do padrão de bolinhas)
-$bg-primary: #e8b4cb; // Fundo rosa claro
-$bg-dots: #ffffff; // Bolinhas brancas
-$bg-pattern: radial-gradient(circle, $bg-dots 1px, transparent 1px);
+// Background Colors (padrão mais orgânico)
+$bg-primary: #fef7f7; // Fundo rosa muito suave
+$bg-secondary: #f0fdf5; // Fundo verde muito suave
+$bg-accent: #fffbf0; // Fundo creme
+$bg-pattern: radial-gradient(circle, rgba(34, 197, 94, 0.1) 1px, transparent 1px);
 
-// Typography
+// Typography - Baseado no padrão Mercado Libre/E-commerce
 // ========================================
 
-// Font Families
-$font-primary: 'Fredoka One', 'Comic Sans MS', cursive; // Para títulos e logo
-$font-secondary: 'Quicksand', 'Helvetica Neue', sans-serif; // Para texto geral
-$font-accent: 'Dancing Script', cursive; // Para textos especiais
+// Font Families - Inter como alternativa profissional ao Proxima Nova
+$font-primary: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+$font-secondary: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+$font-accent: 'Dancing Script', 'Brush Script MT', cursive; // Mantém orgânico só para logo/destaques
+$font-script: 'Dancing Script', 'Brush Script MT', cursive; // Backup para textos cursivos especiais
 
-// Font Sizes
-$font-size-xs: 0.75rem;   // 12px
-$font-size-sm: 0.875rem;  // 14px
-$font-size-base: 1rem;    // 16px
-$font-size-lg: 1.125rem;  // 18px
-$font-size-xl: 1.25rem;   // 20px
-$font-size-2xl: 1.5rem;   // 24px
-$font-size-3xl: 1.875rem; // 30px
-$font-size-4xl: 2.25rem;  // 36px
-$font-size-5xl: 3rem;     // 48px
-$font-size-6xl: 3.75rem;  // 60px
+// Font Sizes - Baseados no padrão Mercado Livre
+$font-size-xs: 0.75rem;   // 12px - Para labels pequenos
+$font-size-sm: 0.875rem;  // 14px - Para textos secundários
+$font-size-base: 1rem;    // 16px - Base padrão web
+$font-size-lg: 1.125rem;  // 18px - Para textos importantes
+$font-size-xl: 1.25rem;   // 20px - Para títulos menores
+$font-size-2xl: 1.5rem;   // 24px - Para títulos médios
+$font-size-3xl: 1.875rem; // 30px - Para títulos grandes
+$font-size-4xl: 2.25rem;  // 36px - Para títulos principais
+$font-size-5xl: 3rem;     // 48px - Para displays
+$font-size-6xl: 3.75rem;  // 60px - Para hero sections
 
 // Font Weights
 $font-weight-light: 300;
@@ -81,12 +96,20 @@ $font-weight-semibold: 600;
 $font-weight-bold: 700;
 $font-weight-extrabold: 800;
 
-// Line Heights
-$line-height-tight: 1.25;
-$line-height-snug: 1.375;
-$line-height-normal: 1.5;
-$line-height-relaxed: 1.625;
-$line-height-loose: 2;
+// Line Heights - Padrão Mercado Livre
+$line-height-tight: 1.25;  // Para títulos
+$line-height-snug: 1.375;  // Para subtítulos
+$line-height-normal: 1.5;  // Para textos gerais
+$line-height-relaxed: 1.625; // Para textos longos
+$line-height-loose: 2;     // Para espaçamento extra
+
+// Font Sizes Específicos para Contextos - Padrão E-commerce
+$font-size-footer: $font-size-xs;       // 12px para footer
+$font-size-nav: $font-size-base;        // 16px para navegação
+$font-size-card-title: $font-size-lg;   // 18px para títulos de cards
+$font-size-card-text: $font-size-sm;    // 14px para texto de cards
+$font-size-button: $font-size-sm;       // 14px para botões
+$font-size-price: $font-size-xl;        // 20px para preços
 
 // Spacing
 // ========================================

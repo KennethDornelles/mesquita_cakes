@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProductService, Product, Category } from '../services/product.service';
+import { CartService } from '../services/cart.service';
 import { HeroSectionComponent } from '../components/hero-section.component';
 import { CategoryGridComponent } from '../components/category-grid.component';
 import { FeaturedProductsComponent } from '../components/featured-products.component';
@@ -22,7 +24,7 @@ import { CallToActionComponent } from '../components/call-to-action.component';
     <div class="home-page">
       <!-- Hero Section -->
       <app-hero-section
-        (viewMenuClick)="scrollToProducts()"
+        (viewMenuClick)="navigateToMenu()"
         (contactClick)="openWhatsApp()">
       </app-hero-section>
       
@@ -34,7 +36,7 @@ import { CallToActionComponent } from '../components/call-to-action.component';
       </app-category-grid>
       
       <!-- Featured Products Section -->
-      <div #productsSection>
+      <div id="produtos" #productsSection>
         <app-featured-products
           [products]="featuredProducts"
           title="Produtos em Destaque"
@@ -128,7 +130,11 @@ export class HomeComponent implements OnInit {
   popularProducts: Product[] = [];
   loading = false;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private cartService: CartService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadData();
@@ -150,6 +156,7 @@ export class HomeComponent implements OnInit {
     // Load featured products
     this.productService.getFeaturedProducts().subscribe({
       next: (products) => {
+        console.log('🔥 Featured products loaded:', products);
         this.featuredProducts = products;
       },
       error: (error) => {
@@ -160,6 +167,7 @@ export class HomeComponent implements OnInit {
     // Load popular products
     this.productService.getPopularProducts().subscribe({
       next: (products: Product[]) => {
+        console.log('🔥 Popular products loaded:', products);
         this.popularProducts = products;
         this.loading = false;
       },
@@ -178,11 +186,26 @@ export class HomeComponent implements OnInit {
   }
 
   onAddToCart(product: Product) {
-    console.log('Adding to cart:', product);
-    // TODO: Implement cart service
-    // Example: this.cartService.addItem(product);
+    console.log('🔥 Home - Adding to cart:', product);
     
-    // Show temporary feedback
+    // Criar item do carrinho com customização básica
+    const cartItem = {
+      productId: product.id,
+      productName: product.name,
+      productImage: product.image,
+      productCategory: product.category,
+      basePrice: product.price,
+      quantity: 1,
+      customization: {
+        // Customização básica - pode ser expandida futuramente
+        specialInstructions: ''
+      }
+    };
+    
+    // Adicionar ao carrinho usando o CartService
+    this.cartService.addItem(cartItem);
+    
+    // Mostrar feedback visual
     this.showAddToCartFeedback(product.name);
   }
 
@@ -215,20 +238,21 @@ export class HomeComponent implements OnInit {
   }
 
   scrollToProducts() {
-    const element = document.querySelector('[data-section="products"]') as HTMLElement;
+    console.log('🔥 Scroll to products clicked!');
+    const element = document.getElementById('produtos');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
   navigateToMenu() {
-    console.log('Navigate to menu page');
-    // TODO: Implement navigation to menu page
-    // Example: this.router.navigate(['/cardapio']);
+    console.log('🔥 Navigate to menu clicked!');
+    this.router.navigate(['/cardapio']);
   }
 
   openWhatsApp() {
-    const message = encodeURIComponent('Olá! Gostaria de fazer um pedido na Mesquita Cakes 🎂');
+    console.log('🔥 WhatsApp home button clicked!');
+    const message = encodeURIComponent('Olá! Gostaria de conhecer mais sobre os bolos da Mesquita Cakes 🎂');
     const whatsappUrl = `https://wa.me/5511999999999?text=${message}`;
     window.open(whatsappUrl, '_blank');
   }

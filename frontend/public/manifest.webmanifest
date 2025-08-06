@@ -1,9 +1,12 @@
 {
-  "name": "frontend",
-  "short_name": "frontend",
+  "name": "Mesquita Cakes - Bolos Artesanais",
+  "short_name": "Mesquita Cakes",
+  "description": "Bolos artesanais feitos com amor e carinho. Transformamos momentos especiais em experiências ainda mais doces.",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
+  "theme_color": "#ec6b6b",
+  "background_color": "#fef7f7",
   "icons": [
     {
       "src": "icons/icon-72x72.png",

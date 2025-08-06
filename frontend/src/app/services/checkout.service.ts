@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
+import { AddressService } from './address.service';
 
 export interface Address {
   id?: string;
@@ -103,7 +104,7 @@ export class CheckoutService {
     }
   ];
 
-  constructor() {}
+  constructor(private addressService: AddressService) {}
 
   // Estado do checkout
   getCheckoutState(): Observable<any> {
@@ -117,23 +118,7 @@ export class CheckoutService {
 
   // Validação de CEP
   validateZipCode(zipCode: string): Observable<any> {
-    const cleanZipCode = zipCode.replace(/\D/g, '');
-    
-    if (cleanZipCode.length !== 8) {
-      return of({ valid: false, error: 'CEP deve ter 8 dígitos' });
-    }
-
-    // Simular chamada para API ViaCEP
-    return of({
-      valid: true,
-      address: {
-        street: 'Rua das Flores',
-        neighborhood: 'Centro',
-        city: 'São Paulo',
-        state: 'SP',
-        zipCode: cleanZipCode
-      }
-    }).pipe(delay(1000));
+    return this.addressService.getAddressByCep(zipCode);
   }
 
   // Métodos de pagamento
@@ -141,29 +126,9 @@ export class CheckoutService {
     return of(this.paymentMethods);
   }
 
-  // Cálculo de taxa de entrega baseado no CEP
-  calculateDeliveryFee(zipCode: string, weight: number): Observable<{ fee: number; estimate: string }> {
-    const cleanZipCode = zipCode.replace(/\D/g, '');
-    
-    // Simular cálculo baseado na região
-    let fee = 0;
-    let estimate = '';
-    
-    if (cleanZipCode.startsWith('01') || cleanZipCode.startsWith('02')) {
-      // São Paulo capital - entrega gratuita
-      fee = 0;
-      estimate = '1-2 horas';
-    } else if (cleanZipCode.startsWith('0')) {
-      // Grande São Paulo
-      fee = weight > 2 ? 12.99 : 8.99;
-      estimate = '2-4 horas';
-    } else {
-      // Outras regiões
-      fee = weight > 2 ? 19.99 : 14.99;
-      estimate = '1-2 dias úteis';
-    }
-    
-    return of({ fee, estimate }).pipe(delay(500));
+    // Cálculo de taxa de entrega baseado no CEP
+  calculateDeliveryFee(zipCode: string, weight: number = 1): Observable<{ fee: number; estimate: string }> {
+    return this.addressService.calculateDeliveryFee(zipCode, weight);
   }
 
   // Validação de cartão de crédito

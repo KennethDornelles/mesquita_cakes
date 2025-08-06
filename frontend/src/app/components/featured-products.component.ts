@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../services/product.service';
 
@@ -58,7 +58,8 @@ import { Product } from '../services/product.service';
                   <button 
                     class="btn btn--primary btn--sm hover-lift"
                     [disabled]="!product.inStock"
-                    (click)="onAddToCart(product)">
+                    (click)="onAddToCart(product)"
+                    style="pointer-events: auto !important; z-index: 1000; position: relative;">
                     {{ product.inStock ? 'Comprar 🛒' : 'Indisponível' }}
                   </button>
                 </div>
@@ -71,7 +72,8 @@ import { Product } from '../services/product.service';
           <div class="section-cta text-center mt-12">
             <button 
               class="btn btn--outline btn--lg hover-lift"
-              (click)="onViewMoreClick()">
+              (click)="onViewMoreClick()"
+              style="pointer-events: auto !important; z-index: 1000; position: relative;">
               Ver Mais Produtos 👀
             </button>
           </div>
@@ -245,7 +247,7 @@ import { Product } from '../services/product.service';
     }
   `]
 })
-export class FeaturedProductsComponent {
+export class FeaturedProductsComponent implements OnInit {
   @Input() products: Product[] = [];
   @Input() title: string = 'Produtos em Destaque';
   @Input() subtitle: string = 'Os sabores mais amados pelos nossos clientes';
@@ -253,6 +255,12 @@ export class FeaturedProductsComponent {
   
   @Output() addToCart = new EventEmitter<Product>();
   @Output() viewMoreClick = new EventEmitter<void>();
+
+  ngOnInit() {
+    console.log('🔥 FeaturedProductsComponent initialized!');
+    console.log('🔥 Title:', this.title);
+    console.log('🔥 Products received:', this.products);
+  }
 
   getStars(rating: number): number[] {
     return Array(Math.floor(rating)).fill(0);
@@ -272,12 +280,14 @@ export class FeaturedProductsComponent {
   }
 
   onAddToCart(product: Product) {
+    console.log('🔥 Featured products - Add to cart clicked:', product);
     if (product.inStock) {
       this.addToCart.emit(product);
     }
   }
 
   onViewMoreClick() {
+    console.log('🔥 Featured products - View more clicked!');
     this.viewMoreClick.emit();
   }
 }

@@ -1,5 +1,6 @@
 // ========================================
 // MESQUITA CAKES DESIGN SYSTEM - MAIN
+// ATUALIZADO: Design orgânico com fonte Organic
 // ========================================
 
 // Importar todos os módulos do design system (deve vir antes de qualquer outra regra)
@@ -8,10 +9,13 @@
 @use 'animations' as *;
 @use 'components' as *;
 
-// Importar Google Fonts
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Quicksand:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap');
+// Importar Google Fonts - Atualizadas para estilo orgânico
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap');
 
-// Reset e Base Styles
+// Reset e Base Styles - Estilo Orgânico
 // ========================================
 
 * {
@@ -27,31 +31,72 @@ html {
 
 body {
   font-family: $font-secondary;
-  line-height: $line-height-normal;
-  color: $neutral-700;
-  background-color: $neutral-50;
+  line-height: $line-height-relaxed; // Mais espaçado para leitura orgânica
+  color: $text-primary; // Melhor legibilidade
+  background: linear-gradient(135deg, $bg-primary 0%, $bg-accent 50%, $bg-secondary 100%);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  // Padrão sutil orgânico
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(34, 197, 94, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(236, 107, 107, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+  }
 }
 
-// Typography Base
+// Typography Base - Estilo Orgânico
 // ========================================
 
 h1, h2, h3, h4, h5, h6 {
   @include heading-style;
   margin-bottom: $spacing-4;
+  font-family: $font-accent;
+  color: $text-accent; // Cor mais contrastante para títulos
+  font-style: italic;
+  letter-spacing: 0.5px;
+  
+  // Adicionar pequeno ícone orgânico aos títulos
+  &::after {
+    content: "🌿";
+    font-size: 0.7em;
+    margin-left: $spacing-2;
+    opacity: 0.6;
+    font-style: normal;
+  }
 }
 
 h1 {
   @include heading-style('3xl');
+  
+  &::after {
+    content: "🌱";
+  }
 }
 
 h2 {
   @include heading-style('2xl');
+  
+  &::after {
+    content: "🍃";
+  }
 }
 
 h3 {
   @include heading-style('xl');
+  
+  &::after {
+    content: "🌿";
+  }
 }
 
 h4 {
@@ -72,17 +117,18 @@ p {
 }
 
 a {
-  color: $primary-600;
+  color: $text-link; // Azul mais legível
   text-decoration: none;
   transition: color $duration-200 $ease-out;
+  font-weight: $font-weight-medium; // Texto mais forte
   
   &:hover {
-    color: $primary-700;
+    color: $text-link-hover;
     text-decoration: underline;
   }
   
   &:focus {
-    outline: 2px solid $primary-500;
+    outline: 2px solid $text-link;
     outline-offset: 2px;
     border-radius: $radius-sm;
   }
@@ -310,20 +356,27 @@ a {
 }
 
 .bg-gradient-sweet {
-  background: linear-gradient(135deg, $accent-strawberry 0%, $accent-macaron 100%);
+  background: linear-gradient(135deg, $accent-berry 0%, $accent-berry 100%);
   color: white;
 }
 
 // Text Utilities
 // ========================================
 
-.text-primary { color: $primary-600; }
-.text-secondary { color: $secondary-600; }
-.text-neutral { color: $neutral-600; }
-.text-success { color: #10b981; }
-.text-warning { color: #f59e0b; }
-.text-error { color: #ef4444; }
+.text-primary { color: $text-primary; }
+.text-secondary { color: $text-secondary; }
+.text-muted { color: $text-muted; }
+.text-accent { color: $text-accent; }
+.text-success { color: $text-success; }
+.text-warning { color: $text-warning; }
+.text-error { color: $text-error; }
+.text-link { color: $text-link; }
 .text-white { color: white; }
+
+// Cores específicas para melhor legibilidade
+.text-readable { color: $text-primary; }
+.text-readable-light { color: $text-secondary; }
+.text-readable-muted { color: $text-muted; }
 
 .text-xs { font-size: $font-size-xs; }
 .text-sm { font-size: $font-size-sm; }
@@ -442,6 +495,145 @@ a {
   .hidden-desktop {
     display: none;
   }
+}
+
+// Accessibility & Readability Utilities
+// ========================================
+
+.text-high-contrast {
+  color: $text-primary !important;
+  font-weight: $font-weight-semibold;
+}
+
+.text-readable-strong {
+  color: $text-primary;
+  font-weight: $font-weight-bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); // Sutil sombra para melhor legibilidade
+}
+
+.text-price {
+  color: $text-accent;
+  font-weight: $font-weight-bold;
+  font-size: 1.1em;
+}
+
+.bg-readable {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: $spacing-2 $spacing-4;
+  border-radius: $radius-md;
+}
+
+// Melhorar contraste em fundos claros
+.on-light-bg {
+  .text-primary { color: $text-primary; }
+  .text-secondary { color: $text-secondary; }
+  .text-muted { color: $text-muted; }
+}
+
+// Font Size Overrides para Melhor Legibilidade
+// ========================================
+
+// Footer e elementos pequenos
+footer, .footer {
+  font-size: $font-size-footer !important; // 12px
+  line-height: $line-height-normal !important;
+  
+  * {
+    font-size: inherit !important;
+  }
+}
+
+// Navegação
+nav, .nav, .navbar {
+  font-size: $font-size-nav !important; // 16px
+  
+  a, .nav-link {
+    font-size: inherit !important;
+    font-weight: $font-weight-medium !important;
+  }
+}
+
+// Cards
+.card {
+  .card-title, &__title {
+    font-size: $font-size-card-title !important; // 18px
+    line-height: $line-height-snug !important;
+  }
+  
+  .card-text, &__description, &__text {
+    font-size: $font-size-card-text !important; // 14px
+    line-height: $line-height-normal !important;
+  }
+}
+
+// Preços
+.price, .card-price, .card__price, [class*="price"] {
+  font-size: $font-size-price !important; // 20px
+  font-weight: $font-weight-bold !important;
+}
+
+// Botões
+.btn, button {
+  font-size: $font-size-button !important; // 14px
+  line-height: $line-height-snug !important;
+}
+
+// Textos pequenos que precisam ser legíveis
+.small, small, .text-small {
+  font-size: $font-size-xs !important; // 12px padrão e-commerce
+  line-height: $line-height-normal !important;
+}
+
+// Links devem ser mais legíveis
+a:not(.btn) {
+  font-size: inherit;
+  font-weight: $font-weight-medium !important;
+  
+  &.small-link {
+    font-size: $font-size-xs !important;
+  }
+}
+
+// Formulários
+input, textarea, select, .form-control {
+  font-size: $font-size-base !important; // 16px para evitar zoom no iOS
+  font-family: $font-secondary !important;
+}
+
+label, .form-label {
+  font-size: $font-size-sm !important; // 14px
+  font-weight: $font-weight-semibold !important;
+}
+
+// Breadcrumbs e elementos de navegação secundária
+.breadcrumb, .breadcrumb-item {
+  font-size: $font-size-xs !important;
+}
+
+// Classes utilitárias para ajustar tamanhos específicos
+.font-size-readable {
+  font-size: $font-size-base !important; // 16px base padrão
+  line-height: $line-height-normal !important;
+}
+
+.font-size-readable-small {
+  font-size: $font-size-sm !important; // 14px para textos menores
+  line-height: $line-height-normal !important;
+}
+
+.font-size-readable-large {
+  font-size: $font-size-lg !important; // 18px para destaques
+  line-height: $line-height-snug !important;
+}
+
+// Ajustes responsivos para telas menores
+@media (max-width: $breakpoint-md) {
+  body {
+    font-size: $font-size-base; // 16px base em mobile
+  }
+  
+  .text-xs { font-size: $font-size-xs !important; } // 12px em mobile
+  .text-sm { font-size: $font-size-sm !important; } // 14px em mobile
 }
 
 // Print Styles

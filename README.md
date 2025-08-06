@@ -144,7 +144,7 @@ npm run test:cov         # Coverage report
 ```
 
 ### Testes PIX
-Ver documentação completa: [`TESTES_PIX.md`](./api/TESTES_PIX.md)
+Ver documentação completa: [`docs/backend/TESTES_PIX.md`](docs/backend/TESTES_PIX.md)
 
 ### Frontend
 ```bash
@@ -194,10 +194,26 @@ API_URL=https://seu-backend.up.railway.app/graphql
 
 ## 📚 Documentação
 
-### 📖 **Documentação Técnica**
-- [`DOCUMENTACAO_TECNICA.md`](./api/DOCUMENTACAO_TECNICA.md) - Arquitetura detalhada
-- [`TESTES_PIX.md`](./api/TESTES_PIX.md) - Guia completo de testes
-- [`CORS_CONFIGURACAO.md`](./api/CORS_CONFIGURACAO.md) - Configuração CORS
+### 📖 Documentação Completa
+Toda a documentação do projeto foi organizada na pasta [`/docs`](docs/):
+
+- **[📋 Índice de Navegação](docs/INDICE_NAVEGACAO.md)** - Acesso rápido a todas as documentações
+- **[📚 README Completo](docs/README.md)** - Visão geral da documentação
+
+### 🎯 Acesso Rápido por Área
+
+| Área | Documentação Principal | Descrição |
+|------|----------------------|-----------|
+| 🎨 **Design** | [Design System](docs/design/DESIGN_SYSTEM.md) | Sistema de design e componentes |
+| 🖥️ **Frontend** | [Status Frontend](docs/frontend/STATUS_FRONTEND.md) | Estado atual e funcionalidades |
+| ⚙️ **Backend** | [Documentação Técnica](docs/backend/DOCUMENTACAO_TECNICA.md) | API, configuração e deploy |
+| 💳 **PIX** | [Testes PIX](docs/backend/TESTES_PIX.md) | Integração de pagamento |
+| 🎭 **Logo** | [Atualização Logo](docs/design/ATUALIZACAO_LOGO.md) | Gestão da identidade visual |
+
+### 🚀 Para Novos Desenvolvedores
+1. Comece com o [Índice de Navegação](docs/INDICE_NAVEGACAO.md)
+2. Configure o ambiente seguindo a [Documentação Técnica](docs/backend/DOCUMENTACAO_TECNICA.md)
+3. Entenda o design através do [Design System](docs/design/DESIGN_SYSTEM.md)
 
 ### 🎨 **Design System**
 - [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md) - Especificação do design
