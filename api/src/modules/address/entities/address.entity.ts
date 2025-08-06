@@ -11,7 +11,7 @@ export class Address {
   @Field()
   number: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   complement?: string;
 
   @Field()

@@ -1,0 +1,545 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AddIngredientToProductInput {
+  ingredientIds: [String!]!
+  productId: String!
+}
+
+type Address {
+  city: String!
+  complement: String
+  id: ID!
+  isDefault: Boolean!
+  neighborhood: String!
+  number: String!
+  state: String!
+  street: String!
+  user: User!
+  userId: String!
+  zipCode: String!
+}
+
+type AuthResponse {
+  access_token: String!
+  user: User!
+}
+
+type CartClearResult {
+  count: Int!
+}
+
+type CartItem {
+  createdAt: DateTime!
+  id: String!
+
+  """Price snapshot when added to cart"""
+  priceSnapshot: Float
+
+  """Product in cart"""
+  product: Product!
+  productId: String!
+
+  """Quantity of items in cart"""
+  quantity: Int!
+
+  """Total price for this cart item"""
+  totalPrice: Float!
+  updatedAt: DateTime!
+
+  """User who owns this cart item"""
+  user: User!
+  userId: String!
+}
+
+type CartSummary {
+  itemCount: Int!
+  items: [CartItem!]!
+  totalItems: Int!
+  totalPrice: Float!
+}
+
+type Category {
+  """Whether category is active"""
+  active: Boolean!
+  createdAt: DateTime!
+
+  """Category description"""
+  description: String
+  id: String!
+
+  """Category image URL"""
+  image: String
+
+  """Category name"""
+  name: String!
+
+  """Products in this category"""
+  products: [Product!]!
+
+  """URL-friendly slug"""
+  slug: String!
+  updatedAt: DateTime!
+}
+
+input CreateAddressInput {
+  city: String!
+  complement: String
+  isDefault: Boolean = false
+  neighborhood: String!
+  number: String!
+  state: String!
+  street: String!
+  zipCode: String!
+}
+
+input CreateCartItemInput {
+  """Product ID to add to cart"""
+  productId: String!
+
+  """Quantity to add to cart"""
+  quantity: Int!
+}
+
+input CreateCategoryInput {
+  """Whether category is active"""
+  active: Boolean
+
+  """Category description"""
+  description: String
+
+  """Category image URL"""
+  image: String
+
+  """Category name"""
+  name: String!
+
+  """URL-friendly slug"""
+  slug: String!
+}
+
+input CreateIngredientInput {
+  name: String!
+}
+
+input CreateOrderInput {
+  addressId: String!
+  deliveryDate: String
+  items: [CreateOrderItemForOrderInput!]!
+  notes: String
+  paymentMethod: String!
+}
+
+input CreateOrderItemForOrderInput {
+  price: Float!
+  productId: String!
+  quantity: Float!
+}
+
+input CreateOrderItemInput {
+  orderId: String!
+  price: Float!
+  productId: String!
+  quantity: Float!
+}
+
+input CreateProductIngredientInput {
+  ingredientId: String!
+  productId: String!
+}
+
+input CreateProductInput {
+  active: Boolean = true
+  allergens: [String!]
+  calories: Int
+  categoryId: String!
+  description: String!
+  featured: Boolean = false
+  image: String
+  images: [String!]
+  name: String!
+  price: Float!
+  slug: String!
+  stock: Int = 0
+  weight: Float
+}
+
+input CreateReviewInput {
+  """Optional comment"""
+  comment: String
+
+  """Product ID to review"""
+  productId: String!
+
+  """Rating from 1 to 5"""
+  rating: Int!
+}
+
+input CreateUserInput {
+  avatar: String
+  email: String!
+  name: String!
+  password: String!
+  phone: String
+  role: Role
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input FindByCepInput {
+  cep: String!
+}
+
+type Ingredient {
+  id: ID!
+  name: String!
+  products: [ProductIngredient!]!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  addIngredientsToProduct(addIngredientToProductInput: AddIngredientToProductInput!): [ProductIngredient!]!
+  addToCart(createCartItemInput: CreateCartItemInput!): CartItem!
+  cancelOrder(id: ID!): Order!
+  clearCart: CartClearResult!
+  createAddress(createAddressInput: CreateAddressInput!): Address!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  createIngredient(createIngredientInput: CreateIngredientInput!): Ingredient!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  createOrderItem(createOrderItemInput: CreateOrderItemInput!): OrderItem!
+  createPixCheckout(orderId: String!): PixCheckoutResponse!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  createProductIngredient(createProductIngredientInput: CreateProductIngredientInput!): ProductIngredient!
+  createReview(createReviewInput: CreateReviewInput!): Review!
+  createUser(createUserInput: CreateUserInput!): User!
+  login(loginInput: LoginInput!): AuthResponse!
+  refreshToken: AuthResponse!
+  register(registerInput: RegisterInput!): AuthResponse!
+  removeAddress(id: ID!): Address!
+  removeCategory(id: String!): Category!
+  removeFromCart(id: String!): CartItem!
+  removeIngredient(id: String!): Ingredient!
+  removeIngredientFromProduct(removeIngredientFromProductInput: RemoveIngredientFromProductInput!): ProductIngredient!
+  removeOrderItem(id: ID!): OrderItem!
+  removeProduct(id: ID!): Product!
+  removeProductIngredient(id: ID!): ProductIngredient!
+  removeProductIngredientByRelation(ingredientId: ID!, productId: ID!): ProductIngredient!
+  removeReview(id: String!): Review!
+  removeUser(id: ID!): User!
+  setAddressAsDefault(id: ID!): Address!
+  simulatePixPayment(orderId: String!): Boolean!
+  toggleCategoryActive(id: String!): Category!
+  updateAddress(updateAddressInput: UpdateAddressInput!): Address!
+  updateCartItem(updateCartItemInput: UpdateCartItemInput!): CartItem!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  updateIngredient(updateIngredientInput: UpdateIngredientInput!): Ingredient!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  updateOrderItem(updateOrderItemInput: UpdateOrderItemInput!): OrderItem!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  updateProductIngredient(updateProductIngredientInput: UpdateProductIngredientInput!): ProductIngredient!
+  updateProductStock(id: ID!, quantity: Float!): Product!
+  updateReview(updateReviewInput: UpdateReviewInput!): Review!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Order {
+  address: Address!
+  addressId: String!
+  createdAt: DateTime!
+  deliveryDate: DateTime
+  deliveryFee: Float!
+  id: ID!
+  items: [OrderItem!]!
+  notes: String
+  orderNumber: String!
+  paymentMethod: String!
+  paymentStatus: PaymentStatus!
+  status: OrderStatus!
+  subtotal: Float!
+  total: Float!
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+type OrderItem {
+  id: ID!
+  order: Order!
+  orderId: String!
+  price: Float!
+  product: Product!
+  productId: String!
+  quantity: Float!
+}
+
+"""Status do pedido"""
+enum OrderStatus {
+  CANCELLED
+  CONFIRMED
+  DELIVERED
+  DELIVERING
+  PENDING
+  PREPARING
+  READY
+}
+
+"""Status do pagamento"""
+enum PaymentStatus {
+  FAILED
+  PAID
+  PENDING
+  REFUNDED
+}
+
+type PixCheckoutResponse {
+  amount: Float!
+  expiresInMinutes: Int!
+  instructions: String!
+  paymentId: String!
+  pixCode: String!
+  pixQrCode: String!
+}
+
+type Product {
+  active: Boolean!
+  allergens: [String!]
+  calories: Int
+  category: Category
+  categoryId: String!
+  createdAt: DateTime!
+  description: String!
+  featured: Boolean!
+  id: ID!
+  image: String
+  images: [String!]
+  name: String!
+  price: Float!
+  slug: String!
+  stock: Int!
+  updatedAt: DateTime!
+  weight: Float
+}
+
+type ProductIngredient {
+  id: ID!
+  ingredient: Ingredient!
+  ingredientId: String!
+  product: Product!
+  productId: String!
+}
+
+type Query {
+  activeCategories: [Category!]!
+  address(id: ID!): Address!
+  addresses: [Address!]!
+  cartItem(id: String!): CartItem!
+  cartSummary: CartSummary!
+  categories: [Category!]!
+  category(id: String!): Category!
+  categoryBySlug(slug: String!): Category!
+  featuredProducts: [Product!]!
+  getAddressByCep(findByCepInput: FindByCepInput!): ViaCepResponse!
+  ingredient(id: String!): Ingredient!
+  ingredientByName(name: String!): Ingredient
+  ingredients: [Ingredient!]!
+  me: User!
+  myAddresses: [Address!]!
+  myCart: [CartItem!]!
+  myOrders: [Order!]!
+  order(id: ID!): Order!
+  orderItem(id: ID!): OrderItem!
+  orderItems: [OrderItem!]!
+  orderItemsByOrder(orderId: ID!): [OrderItem!]!
+  orders: [Order!]!
+  ordersByStatus(status: OrderStatus!): [Order!]!
+  product(id: ID!): Product!
+  productBySlug(slug: String!): Product
+  productIngredient(id: ID!): ProductIngredient!
+  productIngredients: [ProductIngredient!]!
+  productIngredientsByIngredient(ingredientId: ID!): [ProductIngredient!]!
+  productIngredientsByProduct(productId: ID!): [ProductIngredient!]!
+  products: [Product!]!
+  productsByCategory(categoryId: ID!): [Product!]!
+  review(id: String!): Review!
+  reviews: [Review!]!
+  reviewsByProduct(productId: String!): [Review!]!
+  reviewsByUser: [Review!]!
+  searchCategories(searchTerm: String!): [Category!]!
+  searchIngredients(searchTerm: String!): [Ingredient!]!
+  user(id: ID!): User!
+  userByEmail(email: String!): User
+  users: [User!]!
+}
+
+input RegisterInput {
+  avatar: String
+  email: String!
+  name: String!
+  password: String!
+  phone: String
+  role: Role = CUSTOMER
+}
+
+input RemoveIngredientFromProductInput {
+  ingredientId: String!
+  productId: String!
+}
+
+type Review {
+  """Optional comment"""
+  comment: String
+  createdAt: DateTime!
+  id: String!
+
+  """Product being reviewed"""
+  product: Product!
+  productId: String!
+
+  """Rating from 1 to 5"""
+  rating: Int!
+  updatedAt: DateTime!
+
+  """User who made the review"""
+  user: User!
+  userId: String!
+}
+
+"""User role enum"""
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+input UpdateAddressInput {
+  city: String
+  complement: String
+  id: ID!
+  isDefault: Boolean
+  neighborhood: String
+  number: String
+  state: String
+  street: String
+  zipCode: String
+}
+
+input UpdateCartItemInput {
+  id: String!
+
+  """New quantity for cart item"""
+  quantity: Int!
+}
+
+input UpdateCategoryInput {
+  """Whether category is active"""
+  active: Boolean
+
+  """Category description"""
+  description: String
+  id: String!
+
+  """Category image URL"""
+  image: String
+
+  """Category name"""
+  name: String
+
+  """URL-friendly slug"""
+  slug: String
+}
+
+input UpdateIngredientInput {
+  id: ID!
+  name: String
+}
+
+input UpdateOrderInput {
+  deliveryDate: String
+  id: ID!
+  notes: String
+  paymentStatus: PaymentStatus
+  status: OrderStatus
+}
+
+input UpdateOrderItemInput {
+  id: ID!
+  price: Float
+  quantity: Float
+}
+
+input UpdateProductIngredientInput {
+  id: ID!
+  ingredientId: String
+  productId: String
+}
+
+input UpdateProductInput {
+  active: Boolean = true
+  allergens: [String!]
+  calories: Int
+  categoryId: String
+  description: String
+  featured: Boolean = false
+  id: ID!
+  image: String
+  images: [String!]
+  name: String
+  price: Float
+  slug: String
+  stock: Int = 0
+  weight: Float
+}
+
+input UpdateReviewInput {
+  """Optional comment"""
+  comment: String
+  id: String!
+
+  """Product ID to review"""
+  productId: String
+
+  """Rating from 1 to 5"""
+  rating: Int
+}
+
+input UpdateUserInput {
+  avatar: String
+  email: String
+  id: ID!
+  name: String
+  password: String
+  phone: String
+  role: Role
+}
+
+type User {
+  avatar: String
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  name: String!
+  phone: String
+  role: Role!
+  updatedAt: DateTime!
+}
+
+type ViaCepResponse {
+  bairro: String!
+  cep: String!
+  complemento: String!
+  ddd: String!
+  erro: Boolean
+  gia: String!
+  ibge: String!
+  localidade: String!
+  logradouro: String!
+  siafi: String!
+  uf: String!
+}

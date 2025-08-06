@@ -11,10 +11,9 @@ import {
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { OrderStatus, PaymentStatus } from '../../../enums';
 
 @InputType()
-export class CreateOrderItemInput {
+export class CreateOrderItemForOrderInput {
   @Field()
   @IsNotEmpty()
   @IsString()
@@ -54,9 +53,9 @@ export class CreateOrderInput {
   @IsDateString()
   deliveryDate?: string;
 
-  @Field(() => [CreateOrderItemInput])
+  @Field(() => [CreateOrderItemForOrderInput])
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => CreateOrderItemInput)
-  items: CreateOrderItemInput[];
+  @Type(() => CreateOrderItemForOrderInput)
+  items: CreateOrderItemForOrderInput[];
 }

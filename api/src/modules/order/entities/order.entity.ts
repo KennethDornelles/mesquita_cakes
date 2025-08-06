@@ -44,10 +44,10 @@ export class Order {
   @Field(() => PaymentStatus)
   paymentStatus: PaymentStatus;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   notes?: string;
 
-  @Field({ nullable: true })
+  @Field(() => Date, { nullable: true })
   deliveryDate?: Date;
 
   @Field()
@@ -56,10 +56,10 @@ export class Order {
   @Field()
   addressId: string;
 
-  @Field()
+  @Field(() => Date)
   createdAt: Date;
 
-  @Field()
+  @Field(() => Date)
   updatedAt: Date;
 
   // Relacionamentos - serão resolvidos via field resolvers

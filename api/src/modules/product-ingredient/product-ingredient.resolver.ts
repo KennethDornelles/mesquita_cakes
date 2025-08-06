@@ -127,14 +127,14 @@ export class ProductIngredientResolver {
 
   // Field Resolvers
   @ResolveField(() => Product)
-  async product(@Parent() productIngredient: ProductIngredient) {
+  product(@Parent() productIngredient: ProductIngredient) {
     return this.prisma.product.findUnique({
       where: { id: productIngredient.productId },
     });
   }
 
   @ResolveField(() => Ingredient)
-  async ingredient(@Parent() productIngredient: ProductIngredient) {
+  ingredient(@Parent() productIngredient: ProductIngredient) {
     return this.prisma.ingredient.findUnique({
       where: { id: productIngredient.ingredientId },
     });
