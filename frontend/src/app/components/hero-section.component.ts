@@ -266,10 +266,12 @@ export class HeroSectionComponent {
   @Output() contactClick = new EventEmitter<void>();
 
   onViewMenu() {
+    console.log('🔥 Hero section - View menu clicked!');
     this.viewMenuClick.emit();
   }
 
   onContact() {
+    console.log('🔥 Hero section - Contact clicked!');
     this.contactClick.emit();
   }
 }

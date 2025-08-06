@@ -417,7 +417,9 @@ export class ProductService {
   }
 
   getFeaturedProducts(): Observable<Product[]> {
+    console.log('🔍 Getting featured products...');
     const featured = this.products.filter(p => p.featured);
+    console.log('🔍 Featured products found:', featured);
     return of(featured);
   }
 

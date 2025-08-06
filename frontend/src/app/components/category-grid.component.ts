@@ -182,10 +182,12 @@ export class CategoryGridComponent {
   }
 
   onCategoryClick(category: Category) {
+    console.log('🔥 Category clicked:', category);
     this.categoryClick.emit(category);
   }
 
   onViewAllClick() {
+    console.log('🔥 View all products clicked!');
     this.viewAllClick.emit();
   }
 }
