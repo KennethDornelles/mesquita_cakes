@@ -442,4 +442,9 @@ export class ProductService {
     );
     return of(results);
   }
+
+  getProductById(id: number): Observable<Product | null> {
+    const product = this.products.find(p => p.id === id);
+    return of(product || null);
+  }
 }

@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AuthService, User } from '../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -32,6 +35,71 @@ import { RouterModule } from '@angular/router';
             
             <!-- Action Buttons -->
             <div class="navbar-actions">
+              <!-- User Menu (when logged in) -->
+              <div *ngIf="currentUser" class="user-menu">
+                <button class="user-btn" (click)="toggleUserMenu()">
+                  <div class="user-avatar">
+                    <span>{{ getUserInitials(currentUser.name) }}</span>
+                  </div>
+                  <span class="user-name">{{ currentUser.name.split(' ')[0] }}</span>
+                  <svg class="dropdown-icon" [class.open]="userMenuOpen" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 10l5 5 5-5z"/>
+                  </svg>
+                </button>
+                
+                <!-- User Dropdown -->
+                <div class="user-dropdown" [class.active]="userMenuOpen">
+                  <div class="user-info">
+                    <div class="user-avatar-large">
+                      <span>{{ getUserInitials(currentUser.name) }}</span>
+                    </div>
+                    <div class="user-details">
+                      <h4>{{ currentUser.name }}</h4>
+                      <p>{{ currentUser.email }}</p>
+                      <span class="user-role" [class.admin]="currentUser.role === 'ADMIN'">
+                        {{ currentUser.role === 'ADMIN' ? 'Administrador' : 'Cliente' }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div class="dropdown-menu">
+                    <button class="dropdown-item" (click)="goToProfile()">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                      </svg>
+                      Meu Perfil
+                    </button>
+                    <button class="dropdown-item" (click)="goToOrders()">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                      </svg>
+                      Meus Pedidos
+                    </button>
+                    <button *ngIf="currentUser.role === 'ADMIN'" class="dropdown-item" (click)="goToAdmin()">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                      </svg>
+                      Painel Admin
+                    </button>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <button class="dropdown-item logout-btn" (click)="logout()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                    </svg>
+                    Sair
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Login Button (when not logged in) -->
+              <button *ngIf="!currentUser" class="login-btn btn btn--outline btn--sm" (click)="goToLogin()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v12z"/>
+                </svg>
+                Entrar
+              </button>
+              
               <!-- Cart Button -->
               <button class="cart-btn" (click)="toggleCart()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -64,6 +132,9 @@ import { RouterModule } from '@angular/router';
       
       <!-- Mobile Menu Overlay -->
       <div class="mobile-overlay" [class.active]="menuOpen" (click)="closeMenu()"></div>
+      
+      <!-- User Menu Overlay -->
+      <div class="user-overlay" [class.active]="userMenuOpen" (click)="closeUserMenu()"></div>
     </header>
   `,
   styles: [`
@@ -312,11 +383,257 @@ import { RouterModule } from '@angular/router';
       background: rgba(255, 255, 255, 0.98);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
+
+    /* User Authentication Styles */
+    .login-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .user-menu {
+      position: relative;
+    }
+
+    .user-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .user-btn:hover {
+      border-color: #ec4899;
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+    }
+
+    .user-avatar {
+      width: 2rem;
+      height: 2rem;
+      background: linear-gradient(135deg, #ec4899, #be185d);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .user-name {
+      font-weight: 600;
+      color: #374151;
+      font-size: 0.875rem;
+    }
+
+    .dropdown-icon {
+      transition: transform 0.2s ease;
+      color: #6b7280;
+    }
+
+    .dropdown-icon.open {
+      transform: rotate(180deg);
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 1rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      min-width: 280px;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+    }
+
+    .user-dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .user-info {
+      padding: 1.5rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .user-avatar-large {
+      width: 3rem;
+      height: 3rem;
+      background: linear-gradient(135deg, #ec4899, #be185d);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .user-details h4 {
+      margin: 0 0 0.25rem 0;
+      font-weight: 600;
+      color: #111827;
+      font-size: 1rem;
+    }
+
+    .user-details p {
+      margin: 0 0 0.5rem 0;
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+
+    .user-role {
+      background: #f3f4f6;
+      color: #374151;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .user-role.admin {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: #e5e7eb;
+      margin: 0 1rem;
+    }
+
+    .dropdown-menu {
+      padding: 0.75rem 0;
+    }
+
+    .dropdown-item {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #374151;
+      font-size: 0.875rem;
+      transition: background-color 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+      background: #f9fafb;
+    }
+
+    .dropdown-item svg {
+      color: #6b7280;
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    .logout-btn {
+      color: #dc2626;
+    }
+
+    .logout-btn:hover {
+      background: #fef2f2;
+    }
+
+    .logout-btn svg {
+      color: #dc2626;
+    }
+
+    .user-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: transparent;
+      z-index: 999;
+      display: none;
+    }
+
+    .user-overlay.active {
+      display: block;
+    }
+
+    /* Mobile Adjustments for User Menu */
+    @media (max-width: 768px) {
+      .user-btn {
+        padding: 0.5rem;
+        gap: 0.5rem;
+      }
+
+      .user-name {
+        display: none;
+      }
+
+      .user-dropdown {
+        right: -1rem;
+        min-width: 260px;
+      }
+
+      .login-btn {
+        padding: 0.5rem;
+        gap: 0.25rem;
+      }
+
+      .login-btn span {
+        display: none;
+      }
+    }
   `]
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  
   menuOpen = false;
+  userMenuOpen = false;
   cartItemCount = 0; // This should come from a cart service
+  currentUser: User | null = null;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.authService.currentUser$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => {
+        this.currentUser = user;
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  getUserInitials(name: string): string {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
+  }
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
@@ -332,6 +649,40 @@ export class HeaderComponent {
   closeMenu() {
     this.menuOpen = false;
     document.body.style.overflow = '';
+  }
+
+  toggleUserMenu() {
+    this.userMenuOpen = !this.userMenuOpen;
+  }
+
+  closeUserMenu() {
+    this.userMenuOpen = false;
+  }
+
+  goToLogin() {
+    this.router.navigate(['/auth']);
+  }
+
+  goToProfile() {
+    this.closeUserMenu();
+    this.router.navigate(['/perfil']);
+  }
+
+  goToOrders() {
+    this.closeUserMenu();
+    this.router.navigate(['/pedidos']);
+  }
+
+  goToAdmin() {
+    this.closeUserMenu();
+    this.router.navigate(['/admin']);
+  }
+
+  logout() {
+    this.closeUserMenu();
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/home']);
+    });
   }
 
   toggleCart() {
