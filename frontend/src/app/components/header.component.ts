@@ -20,7 +20,7 @@ import { CartService } from '../services/cart.service';
             <div class="navbar-brand">
               <a routerLink="/home" class="logo-link">
                 <div class="logo">
-                  <span class="logo-emoji">🎂</span>
+                  <img src="logo.jpg" alt="Mesquita Cakes" class="logo-image">
                   <span class="logo-text">Mesquita Cakes</span>
                 </div>
               </a>
@@ -180,6 +180,18 @@ import { CartService } from '../services/cart.service';
     .logo-emoji {
       font-size: 2rem;
       filter: drop-shadow(0 2px 4px rgba(236, 72, 153, 0.3));
+    }
+
+    .logo-image {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      filter: drop-shadow(0 2px 4px rgba(236, 72, 153, 0.3));
+      transition: transform 0.3s ease;
+    }
+
+    .logo-image:hover {
+      transform: scale(1.1);
     }
 
     .logo-text {

@@ -10,8 +10,8 @@
 @mixin heading-style($size: 'base', $weight: $font-weight-bold) {
   font-family: $font-primary;
   font-weight: $weight;
-  line-height: $line-height-tight;
-  color: $primary-700;
+  line-height: $line-height-tight; // Já ajustado para 1.3
+  color: $text-accent; // Cor mais legível para títulos
   
   @if $size == 'xs' {
     font-size: $font-size-lg;
@@ -33,8 +33,8 @@
 @mixin body-text($size: 'base', $weight: $font-weight-normal) {
   font-family: $font-secondary;
   font-weight: $weight;
-  line-height: $line-height-normal;
-  color: $neutral-700;
+  line-height: $line-height-normal; // Já ajustado para 1.6
+  color: $text-primary; // Cor mais legível
   
   @if $size == 'xs' {
     font-size: $font-size-xs;
@@ -213,7 +213,7 @@
 // Background Pattern Mixins
 // ========================================
 
-@mixin dots-pattern($color: $bg-dots, $size: 2px, $spacing: 20px) {
+@mixin dots-pattern($color: $accent-mint, $size: 2px, $spacing: 20px) {
   background-color: $bg-primary;
   background-image: radial-gradient(circle, $color $size, transparent $size);
   background-size: $spacing $spacing;
@@ -222,7 +222,7 @@
 @mixin hearts-pattern {
   background-color: $primary-50;
   background-image: 
-    radial-gradient(circle at 25% 25%, $accent-heart 2px, transparent 2px),
+    radial-gradient(circle at 25% 25%, $accent-berry 2px, transparent 2px),
     radial-gradient(circle at 75% 75%, $primary-300 1px, transparent 1px);
   background-size: 40px 40px, 60px 60px;
 }

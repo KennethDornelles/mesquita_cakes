@@ -1,52 +1,62 @@
-# Mesquita Cakes - Design System
+# Mesquita Cakes - Design System (Versão Orgânica)
 
-## 🎂 Visão Geral
+## � Visão Geral
 
-Este design system foi criado baseado na identidade visual da **Mesquita Cakes**, capturando a essência doce, acolhedora e artesanal da marca. O sistema utiliza uma paleta de cores inspirada nos tons pastéis da imagem de referência, tipografia amigável e componentes que transmitem a delicadeza e qualidade dos produtos.
+Este design system foi **atualizado** baseado no feedback do cliente para capturar a essência **orgânica, natural e artesanal** da marca Mesquita Cakes. O sistema agora utiliza a **fonte Organic** solicitada, paleta de cores mais naturais inspiradas em ingredientes orgânicos, e elementos visuais que transmitem autenticidade e sustentabilidade.
 
-## 🎨 Paleta de Cores
+## 🎨 Paleta de Cores Atualizada
 
-### Cores Principais
+### Cores Principais (Naturais)
 
-- **Primary (Rosa)**: Baseada na cor do bolo na logo
-  - `$primary-500`: #ec4899 (cor principal)
-  - `$primary-100`: #fce7f3 (tons claros)
-  - `$primary-700`: #be185d (tons escuros)
+- **Primary (Rosa Orgânico)**: Inspirado em frutas vermelhas naturais
+  - `$primary-500`: #ec6b6b (rosa suave e natural)
+  - `$primary-100`: #fdeaea (tons claros)
+  - `$primary-700`: #c73333 (tons escuros)
 
-- **Secondary (Verde Menta)**: Baseada na fita da logo
-  - `$secondary-500`: #14b8a6 (cor principal)
-  - `$secondary-100`: #ccfbf1 (tons claros)
-  - `$secondary-700`: #0f766e (tons escuros)
+- **Secondary (Verde Natural)**: Baseado em folhas e menta fresca
+  - `$secondary-500`: #22c55e (verde vibrante e natural)
+  - `$secondary-100`: #dcfce8 (tons claros)
+  - `$secondary-700`: #15803d (tons escuros)
 
-### Cores de Apoio
+### Cores de Ingredientes Orgânicos
 
-- **Accent Cream**: #fef7ed (cor do creme)
-- **Accent Strawberry**: #ff6b9d (cor do morango)
-- **Accent Macaron**: #ff8cc8 (cor dos macarons)
-- **Accent Heart**: #ff69b4 (cor dos corações)
+- **Accent Cream**: #fffbf0 (creme natural puro)
+- **Accent Vanilla**: #fdf4e3 (baunilha orgânica)
+- **Accent Honey**: #f59e0b (mel dourado)
+- **Accent Berry**: #ec4899 (frutas vermelhas)
+- **Accent Mint**: #10b981 (menta fresca)
+- **Accent Cocoa**: #78350f (cacau natural)
 
-### Cores Neutras
+### Backgrounds Orgânicos
 
-- Escala completa de cinzas de 50 a 900
-- Base para textos, backgrounds e bordas
+- **Primary Background**: #fef7f7 (rosa muito suave)
+- **Secondary Background**: #f0fdf5 (verde muito suave)
+- **Accent Background**: #fffbf0 (creme neutro)
 
-## 📝 Tipografia
+## 📝 Tipografia Orgânica
 
-### Famílias de Fonte
+### Famílias de Fonte Atualizadas
 
-1. **Primary (Fredoka One)**: Para títulos e logo
-   - Uso: Headings, logo, elementos de destaque
-   - Característica: Amigável, arredondada, divertida
+1. **Primary (Organic)**: **FONTE PRINCIPAL SOLICITADA**
+   - Uso: Logo, títulos principais, elementos de destaque
+   - Característica: Orgânica, manuscrita, autêntica
+   - Fallback: 'Dancing Script', 'Brush Script MT', cursive
 
-2. **Secondary (Quicksand)**: Para texto geral
+2. **Secondary (Organic + Inter)**: Para texto geral
    - Uso: Body text, navegação, labels
-   - Característica: Limpa, legível, moderna
+   - Característica: Limpa, legível, com toque orgânico
+   - Fallback: 'Inter', 'Helvetica Neue', sans-serif
 
 3. **Accent (Dancing Script)**: Para textos especiais
-   - Uso: Citações, textos decorativos
-   - Característica: Elegante, manuscrita, artesanal
+   - Uso: Citações, textos decorativos, assinaturas
+   - Característica: Elegante, manuscrita, cursiva
 
-### Tamanhos
+### Características Orgânicas
+
+- **Font Style**: Itálico em títulos para efeito manuscrito
+- **Letter Spacing**: Ligeiramente aumentado (0.5px-1px)
+- **Line Height**: Mais relaxado (1.6-1.8) para respiração
+- **Elementos Decorativos**: Emojis de plantas (🌿🌱🍃) nos títulos
 
 - **XS**: 12px
 - **SM**: 14px
