@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../services/product.service';
 import { Product, Category } from '../services/product.service';
@@ -12,20 +12,19 @@ import { BreadcrumbComponent } from '../components/breadcrumb.component';
   selector: 'app-catalog',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
-    ProductCardComponent, 
+    FormsModule,
+    ProductCardComponent,
     ProductFiltersComponent,
     ProductSearchComponent,
     BreadcrumbComponent
-  ],
+],
   template: `
     <div class="catalog-page">
       <!-- Breadcrumb -->
-      <app-breadcrumb 
+      <app-breadcrumb
         [items]="breadcrumbItems">
       </app-breadcrumb>
-      
+    
       <!-- Page Header -->
       <section class="catalog-header">
         <div class="container">
@@ -39,7 +38,7 @@ import { BreadcrumbComponent } from '../components/breadcrumb.component';
           </div>
         </div>
       </section>
-      
+    
       <!-- Search Section -->
       <section class="search-section">
         <div class="container">
@@ -49,11 +48,11 @@ import { BreadcrumbComponent } from '../components/breadcrumb.component';
           </app-product-search>
         </div>
       </section>
-      
+    
       <div class="catalog-content">
         <div class="container">
           <div class="catalog-layout">
-            
+    
             <!-- Sidebar Filters -->
             <aside class="catalog-sidebar">
               <app-product-filters
@@ -67,7 +66,7 @@ import { BreadcrumbComponent } from '../components/breadcrumb.component';
                 (clearFilters)="onClearFilters()">
               </app-product-filters>
             </aside>
-            
+    
             <!-- Products Grid -->
             <main class="catalog-main">
               <!-- Results Header -->
@@ -76,14 +75,16 @@ import { BreadcrumbComponent } from '../components/breadcrumb.component';
                   <span class="results-count">
                     {{ filteredProducts.length }} produtos encontrados
                   </span>
-                  <span class="results-category" *ngIf="selectedCategory">
-                    em {{ selectedCategory.name }}
-                  </span>
+                  @if (selectedCategory) {
+                    <span class="results-category">
+                      em {{ selectedCategory.name }}
+                    </span>
+                  }
                 </div>
-                
+    
                 <!-- View Toggle -->
                 <div class="view-toggle">
-                  <button 
+                  <button
                     class="view-btn"
                     [class.active]="viewMode === 'grid'"
                     (click)="viewMode = 'grid'"
@@ -92,7 +93,7 @@ import { BreadcrumbComponent } from '../components/breadcrumb.component';
                       <path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/>
                     </svg>
                   </button>
-                  <button 
+                  <button
                     class="view-btn"
                     [class.active]="viewMode === 'list'"
                     (click)="viewMode = 'list'"
@@ -103,62 +104,67 @@ import { BreadcrumbComponent } from '../components/breadcrumb.component';
                   </button>
                 </div>
               </div>
-              
+    
               <!-- Products Grid/List -->
               <div class="products-container" [class]="'view-' + viewMode">
-                <div class="products-grid" *ngIf="filteredProducts.length > 0">
-                  <app-product-card
-                    *ngFor="let product of paginatedProducts; trackBy: trackByProductId"
-                    [product]="product"
-                    [viewMode]="viewMode"
-                    (addToCart)="onAddToCart($event)"
-                    (viewDetails)="onViewDetails($event)">
-                  </app-product-card>
-                </div>
-                
-                <!-- Empty State -->
-                <div class="empty-state" *ngIf="filteredProducts.length === 0">
-                  <div class="empty-content">
-                    <div class="empty-icon">🔍</div>
-                    <h3 class="empty-title">Nenhum produto encontrado</h3>
-                    <p class="empty-description">
-                      Tente ajustar os filtros ou buscar por outro termo
-                    </p>
-                    <button class="btn btn--primary" (click)="onClearFilters()">
-                      Limpar filtros
-                    </button>
+                @if (filteredProducts.length > 0) {
+                  <div class="products-grid">
+                    @for (product of paginatedProducts; track trackByProductId($index, product)) {
+                      <app-product-card
+                        [product]="product"
+                        [viewMode]="viewMode"
+                        (addToCart)="onAddToCart($event)"
+                        (viewDetails)="onViewDetails($event)">
+                      </app-product-card>
+                    }
                   </div>
-                </div>
+                }
+    
+                <!-- Empty State -->
+                @if (filteredProducts.length === 0) {
+                  <div class="empty-state">
+                    <div class="empty-content">
+                      <div class="empty-icon">🔍</div>
+                      <h3 class="empty-title">Nenhum produto encontrado</h3>
+                      <p class="empty-description">
+                        Tente ajustar os filtros ou buscar por outro termo
+                      </p>
+                      <button class="btn btn--primary" (click)="onClearFilters()">
+                        Limpar filtros
+                      </button>
+                    </div>
+                  </div>
+                }
               </div>
-              
+    
               <!-- Pagination -->
-              <div class="pagination-container" *ngIf="totalPages > 1">
-                <nav class="pagination">
-                  <button 
-                    class="pagination-btn"
-                    [disabled]="currentPage === 1"
-                    (click)="goToPage(currentPage - 1)">
-                    ‹ Anterior
-                  </button>
-                  
-                  <span class="pagination-info">
-                    Página {{ currentPage }} de {{ totalPages }}
-                  </span>
-                  
-                  <button 
-                    class="pagination-btn"
-                    [disabled]="currentPage === totalPages"
-                    (click)="goToPage(currentPage + 1)">
-                    Próxima ›
-                  </button>
-                </nav>
-              </div>
+              @if (totalPages > 1) {
+                <div class="pagination-container">
+                  <nav class="pagination">
+                    <button
+                      class="pagination-btn"
+                      [disabled]="currentPage === 1"
+                      (click)="goToPage(currentPage - 1)">
+                      ‹ Anterior
+                    </button>
+                    <span class="pagination-info">
+                      Página {{ currentPage }} de {{ totalPages }}
+                    </span>
+                    <button
+                      class="pagination-btn"
+                      [disabled]="currentPage === totalPages"
+                      (click)="goToPage(currentPage + 1)">
+                      Próxima ›
+                    </button>
+                  </nav>
+                </div>
+              }
             </main>
           </div>
         </div>
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .catalog-page {
       min-height: 100vh;

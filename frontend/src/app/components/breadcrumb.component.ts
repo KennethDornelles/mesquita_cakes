@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 
 export interface BreadcrumbItem {
@@ -11,43 +11,44 @@ export interface BreadcrumbItem {
 @Component({
   selector: 'app-breadcrumb',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   template: `
     <nav class="breadcrumb-nav" aria-label="Breadcrumb">
       <div class="container">
         <ol class="breadcrumb-list">
-          <li 
-            *ngFor="let item of items; let last = last"
-            class="breadcrumb-item"
-            [class.active]="item.active || last">
-            
-            <a 
-              *ngIf="item.link && !item.active && !last"
-              [routerLink]="item.link"
-              class="breadcrumb-link">
-              {{ item.label }}
-            </a>
-            
-            <span 
-              *ngIf="!item.link || item.active || last"
-              class="breadcrumb-text">
-              {{ item.label }}
-            </span>
-            
-            <svg 
-              *ngIf="!last"
-              class="breadcrumb-separator"
-              width="16" 
-              height="16" 
-              viewBox="0 0 24 24" 
-              fill="currentColor">
-              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-            </svg>
-          </li>
+          @for (item of items; track item; let last = $last) {
+            <li
+              class="breadcrumb-item"
+              [class.active]="item.active || last">
+              @if (item.link && !item.active && !last) {
+                <a
+                  [routerLink]="item.link"
+                  class="breadcrumb-link">
+                  {{ item.label }}
+                </a>
+              }
+              @if (!item.link || item.active || last) {
+                <span
+                  class="breadcrumb-text">
+                  {{ item.label }}
+                </span>
+              }
+              @if (!last) {
+                <svg
+                  class="breadcrumb-separator"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                </svg>
+              }
+            </li>
+          }
         </ol>
       </div>
     </nav>
-  `,
+    `,
   styles: [`
     .breadcrumb-nav {
       background: white;

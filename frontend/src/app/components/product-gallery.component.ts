@@ -10,39 +10,43 @@ import { CommonModule } from '@angular/common';
       <!-- Main Image Display -->
       <div class="main-image-container">
         <div class="image-wrapper" [class.loading]="isLoading">
-          <img 
-            [src]="currentImage" 
+          <img
+            [src]="currentImage"
             [alt]="productName"
             class="main-image"
             (load)="onImageLoad()"
             (error)="onImageError($event)">
-          
+    
           <!-- Loading Placeholder -->
-          <div *ngIf="isLoading" class="image-loading">
-            <div class="loading-spinner"></div>
-          </div>
-          
+          @if (isLoading) {
+            <div class="image-loading">
+              <div class="loading-spinner"></div>
+            </div>
+          }
+    
           <!-- Navigation Arrows (for multiple images) -->
-          <button 
-            *ngIf="images.length > 1"
-            class="nav-arrow nav-arrow--prev"
-            (click)="previousImage()"
-            [disabled]="currentIndex === 0">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-            </svg>
-          </button>
-          
-          <button 
-            *ngIf="images.length > 1"
-            class="nav-arrow nav-arrow--next"
-            (click)="nextImage()"
-            [disabled]="currentIndex === images.length - 1">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-            </svg>
-          </button>
-          
+          @if (images.length > 1) {
+            <button
+              class="nav-arrow nav-arrow--prev"
+              (click)="previousImage()"
+              [disabled]="currentIndex === 0">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+              </svg>
+            </button>
+          }
+    
+          @if (images.length > 1) {
+            <button
+              class="nav-arrow nav-arrow--next"
+              (click)="nextImage()"
+              [disabled]="currentIndex === images.length - 1">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+              </svg>
+            </button>
+          }
+    
           <!-- Zoom Button -->
           <button class="zoom-btn" (click)="openLightbox()" title="Ampliar imagem">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -50,73 +54,80 @@ import { CommonModule } from '@angular/common';
               <path d="M12 10h-2v2H9v-2H7V9h2V7h1v2h2v1z"/>
             </svg>
           </button>
-          
+    
           <!-- Image Counter -->
-          <div *ngIf="images.length > 1" class="image-counter">
-            {{ currentIndex + 1 }} / {{ images.length }}
+          @if (images.length > 1) {
+            <div class="image-counter">
+              {{ currentIndex + 1 }} / {{ images.length }}
+            </div>
+          }
+        </div>
+      </div>
+    
+      <!-- Thumbnail Gallery -->
+      @if (images.length > 1) {
+        <div class="thumbnail-gallery">
+          <div class="thumbnails-container">
+            @for (image of images; track image; let i = $index) {
+              <button
+                class="thumbnail-btn"
+                [class.active]="i === currentIndex"
+                (click)="selectImage(i)">
+                <img [src]="image" [alt]="productName + ' - Imagem ' + (i + 1)" class="thumbnail-image">
+              </button>
+            }
           </div>
         </div>
-      </div>
-      
-      <!-- Thumbnail Gallery -->
-      <div *ngIf="images.length > 1" class="thumbnail-gallery">
-        <div class="thumbnails-container">
-          <button
-            *ngFor="let image of images; let i = index"
-            class="thumbnail-btn"
-            [class.active]="i === currentIndex"
-            (click)="selectImage(i)">
-            <img [src]="image" [alt]="productName + ' - Imagem ' + (i + 1)" class="thumbnail-image">
-          </button>
-        </div>
-      </div>
-      
+      }
+    
       <!-- Product Badges -->
       <div class="product-badges">
-        <span *ngFor="let badge of badges" class="badge" [ngClass]="'badge--' + badge.type">
-          {{ badge.emoji }} {{ badge.label }}
-        </span>
+        @for (badge of badges; track badge) {
+          <span class="badge" [ngClass]="'badge--' + badge.type">
+            {{ badge.emoji }} {{ badge.label }}
+          </span>
+        }
       </div>
     </div>
     
     <!-- Lightbox Modal -->
-    <div *ngIf="showLightbox" class="lightbox-overlay" (click)="closeLightbox()">
-      <div class="lightbox-container" (click)="$event.stopPropagation()">
-        <button class="lightbox-close" (click)="closeLightbox()">×</button>
-        
-        <div class="lightbox-content">
-          <img [src]="currentImage" [alt]="productName" class="lightbox-image">
-          
-          <!-- Lightbox Navigation -->
-          <button 
-            *ngIf="images.length > 1"
-            class="lightbox-nav lightbox-nav--prev"
-            (click)="previousImage()"
-            [disabled]="currentIndex === 0">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-            </svg>
-          </button>
-          
-          <button 
-            *ngIf="images.length > 1"
-            class="lightbox-nav lightbox-nav--next"
-            (click)="nextImage()"
-            [disabled]="currentIndex === images.length - 1">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-            </svg>
-          </button>
-        </div>
-        
-        <!-- Lightbox Info -->
-        <div class="lightbox-info">
-          <h3>{{ productName }}</h3>
-          <p>{{ currentIndex + 1 }} de {{ images.length }}</p>
+    @if (showLightbox) {
+      <div class="lightbox-overlay" (click)="closeLightbox()">
+        <div class="lightbox-container" (click)="$event.stopPropagation()">
+          <button class="lightbox-close" (click)="closeLightbox()">×</button>
+          <div class="lightbox-content">
+            <img [src]="currentImage" [alt]="productName" class="lightbox-image">
+            <!-- Lightbox Navigation -->
+            @if (images.length > 1) {
+              <button
+                class="lightbox-nav lightbox-nav--prev"
+                (click)="previousImage()"
+                [disabled]="currentIndex === 0">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+              </button>
+            }
+            @if (images.length > 1) {
+              <button
+                class="lightbox-nav lightbox-nav--next"
+                (click)="nextImage()"
+                [disabled]="currentIndex === images.length - 1">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+              </button>
+            }
+          </div>
+          <!-- Lightbox Info -->
+          <div class="lightbox-info">
+            <h3>{{ productName }}</h3>
+            <p>{{ currentIndex + 1 }} de {{ images.length }}</p>
+          </div>
         </div>
       </div>
-    </div>
-  `,
+    }
+    `,
   styles: [`
     .product-gallery {
       position: relative;

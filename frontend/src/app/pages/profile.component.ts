@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -9,7 +9,7 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
   template: `
     <div class="profile-page">
       <div class="container">
@@ -18,340 +18,367 @@ import { AuthService } from '../services/auth.service';
           <h1 class="page-title">👤 Meu Perfil</h1>
           <p class="page-subtitle">Gerencie suas informações pessoais e preferências</p>
         </div>
-
+    
         <div class="profile-layout">
           <!-- Sidebar Navigation -->
           <div class="profile-sidebar">
             <div class="profile-nav">
-              <button 
-                *ngFor="let tab of tabs" 
-                class="nav-item"
-                [class.active]="activeTab === tab.id"
-                (click)="setActiveTab(tab.id)">
-                <span class="nav-icon">{{ tab.icon }}</span>
-                <span class="nav-label">{{ tab.label }}</span>
-              </button>
+              @for (tab of tabs; track tab) {
+                <button
+                  class="nav-item"
+                  [class.active]="activeTab === tab.id"
+                  (click)="setActiveTab(tab.id)">
+                  <span class="nav-icon">{{ tab.icon }}</span>
+                  <span class="nav-label">{{ tab.label }}</span>
+                </button>
+              }
             </div>
-
+    
             <!-- User Summary -->
-            <div class="user-summary" *ngIf="userProfile">
-              <div class="user-avatar">
-                <span>{{ getUserInitials(userProfile.name) }}</span>
-              </div>
-              <div class="user-info">
-                <h3>{{ userProfile.name }}</h3>
-                <p>{{ userProfile.email }}</p>
-                <div class="loyalty-points">
-                  <span class="points-icon">🏆</span>
-                  <span>{{ userProfile.statistics.loyaltyPoints }} pontos</span>
+            @if (userProfile) {
+              <div class="user-summary">
+                <div class="user-avatar">
+                  <span>{{ getUserInitials(userProfile.name) }}</span>
+                </div>
+                <div class="user-info">
+                  <h3>{{ userProfile.name }}</h3>
+                  <p>{{ userProfile.email }}</p>
+                  <div class="loyalty-points">
+                    <span class="points-icon">🏆</span>
+                    <span>{{ userProfile.statistics.loyaltyPoints }} pontos</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            }
           </div>
-
+    
           <!-- Main Content -->
           <div class="profile-content">
-            
+    
             <!-- Personal Information Tab -->
-            <div *ngIf="activeTab === 'personal'" class="tab-content">
-              <div class="section-header">
-                <h2>📝 Informações Pessoais</h2>
-                <p>Mantenha seus dados sempre atualizados</p>
+            @if (activeTab === 'personal') {
+              <div class="tab-content">
+                <div class="section-header">
+                  <h2>📝 Informações Pessoais</h2>
+                  <p>Mantenha seus dados sempre atualizados</p>
+                </div>
+                <form [formGroup]="personalForm" (ngSubmit)="updatePersonalInfo()" class="profile-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="name" class="form-label">Nome completo *</label>
+                      <input
+                        id="name"
+                        type="text"
+                        formControlName="name"
+                        class="form-input"
+                        placeholder="Seu nome completo">
+                      @if (personalForm.get('name')?.invalid && personalForm.get('name')?.touched) {
+                        <div
+                          class="form-error">
+                          Nome é obrigatório
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="email" class="form-label">E-mail *</label>
+                      <input
+                        id="email"
+                        type="email"
+                        formControlName="email"
+                        class="form-input"
+                        placeholder="seu@email.com">
+                      @if (personalForm.get('email')?.invalid && personalForm.get('email')?.touched) {
+                        <div
+                          class="form-error">
+                          E-mail válido é obrigatório
+                        </div>
+                      }
+                    </div>
+                    <div class="form-group">
+                      <label for="phone" class="form-label">Telefone *</label>
+                      <input
+                        id="phone"
+                        type="tel"
+                        formControlName="phone"
+                        class="form-input"
+                        placeholder="(11) 99999-9999">
+                      @if (personalForm.get('phone')?.invalid && personalForm.get('phone')?.touched) {
+                        <div
+                          class="form-error">
+                          Telefone é obrigatório
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="birthDate" class="form-label">Data de nascimento</label>
+                      <input
+                        id="birthDate"
+                        type="date"
+                        formControlName="birthDate"
+                        class="form-input">
+                    </div>
+                  </div>
+                  <div class="form-actions">
+                    <button
+                      type="submit"
+                      class="btn btn--sweet"
+                      [disabled]="personalForm.invalid || isUpdatingPersonal"
+                      [class.loading]="isUpdatingPersonal">
+                      @if (!isUpdatingPersonal) {
+                        <span>Salvar Alterações</span>
+                      }
+                      @if (isUpdatingPersonal) {
+                        <span>Salvando...</span>
+                      }
+                    </button>
+                  </div>
+                </form>
               </div>
-
-              <form [formGroup]="personalForm" (ngSubmit)="updatePersonalInfo()" class="profile-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="name" class="form-label">Nome completo *</label>
-                    <input
-                      id="name"
-                      type="text"
-                      formControlName="name"
-                      class="form-input"
-                      placeholder="Seu nome completo">
-                    <div *ngIf="personalForm.get('name')?.invalid && personalForm.get('name')?.touched" 
-                         class="form-error">
-                      Nome é obrigatório
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="email" class="form-label">E-mail *</label>
-                    <input
-                      id="email"
-                      type="email"
-                      formControlName="email"
-                      class="form-input"
-                      placeholder="seu@email.com">
-                    <div *ngIf="personalForm.get('email')?.invalid && personalForm.get('email')?.touched" 
-                         class="form-error">
-                      E-mail válido é obrigatório
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="phone" class="form-label">Telefone *</label>
-                    <input
-                      id="phone"
-                      type="tel"
-                      formControlName="phone"
-                      class="form-input"
-                      placeholder="(11) 99999-9999">
-                    <div *ngIf="personalForm.get('phone')?.invalid && personalForm.get('phone')?.touched" 
-                         class="form-error">
-                      Telefone é obrigatório
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="birthDate" class="form-label">Data de nascimento</label>
-                    <input
-                      id="birthDate"
-                      type="date"
-                      formControlName="birthDate"
-                      class="form-input">
-                  </div>
-                </div>
-
-                <div class="form-actions">
-                  <button 
-                    type="submit" 
-                    class="btn btn--sweet"
-                    [disabled]="personalForm.invalid || isUpdatingPersonal"
-                    [class.loading]="isUpdatingPersonal">
-                    <span *ngIf="!isUpdatingPersonal">Salvar Alterações</span>
-                    <span *ngIf="isUpdatingPersonal">Salvando...</span>
-                  </button>
-                </div>
-              </form>
-            </div>
-
+            }
+    
             <!-- Addresses Tab -->
-            <div *ngIf="activeTab === 'addresses'" class="tab-content">
-              <div class="section-header">
-                <h2>📍 Meus Endereços</h2>
-                <p>Gerencie seus endereços de entrega</p>
-                <button class="btn btn--sweet btn--sm" (click)="openAddressModal()">
-                  + Novo Endereço
-                </button>
-              </div>
-
-              <div class="addresses-list">
-                <div *ngFor="let address of addresses" class="address-card">
-                  <div class="address-header">
-                    <h3>{{ address.name }}</h3>
-                    <div class="address-badges">
-                      <span *ngIf="address.isDefault" class="badge badge--primary">Padrão</span>
-                    </div>
-                  </div>
-                  
-                  <div class="address-content">
-                    <p class="address-text">
-                      {{ address.street }}, {{ address.number }}
-                      <span *ngIf="address.complement">, {{ address.complement }}</span>
-                    </p>
-                    <p class="address-text">
-                      {{ address.neighborhood }}, {{ address.city }} - {{ address.state }}
-                    </p>
-                    <p class="address-text">CEP: {{ address.zipCode }}</p>
-                    <p *ngIf="address.reference" class="address-reference">
-                      <strong>Referência:</strong> {{ address.reference }}
-                    </p>
-                  </div>
-
-                  <div class="address-actions">
-                    <button *ngIf="!address.isDefault" 
-                            class="btn btn--outline btn--sm" 
+            @if (activeTab === 'addresses') {
+              <div class="tab-content">
+                <div class="section-header">
+                  <h2>📍 Meus Endereços</h2>
+                  <p>Gerencie seus endereços de entrega</p>
+                  <button class="btn btn--sweet btn--sm" (click)="openAddressModal()">
+                    + Novo Endereço
+                  </button>
+                </div>
+                <div class="addresses-list">
+                  @for (address of addresses; track address) {
+                    <div class="address-card">
+                      <div class="address-header">
+                        <h3>{{ address.name }}</h3>
+                        <div class="address-badges">
+                          @if (address.isDefault) {
+                            <span class="badge badge--primary">Padrão</span>
+                          }
+                        </div>
+                      </div>
+                      <div class="address-content">
+                        <p class="address-text">
+                          {{ address.street }}, {{ address.number }}
+                          @if (address.complement) {
+                            <span>, {{ address.complement }}</span>
+                          }
+                        </p>
+                        <p class="address-text">
+                          {{ address.neighborhood }}, {{ address.city }} - {{ address.state }}
+                        </p>
+                        <p class="address-text">CEP: {{ address.zipCode }}</p>
+                        @if (address.reference) {
+                          <p class="address-reference">
+                            <strong>Referência:</strong> {{ address.reference }}
+                          </p>
+                        }
+                      </div>
+                      <div class="address-actions">
+                        @if (!address.isDefault) {
+                          <button
+                            class="btn btn--outline btn--sm"
                             (click)="setDefaultAddress(address.id)">
-                      Definir como Padrão
-                    </button>
-                    <button class="btn btn--outline btn--sm" (click)="editAddress(address)">
-                      Editar
-                    </button>
-                    <button class="btn btn--danger btn--sm" (click)="deleteAddress(address.id)">
-                      Excluir
-                    </button>
-                  </div>
-                </div>
-
-                <div *ngIf="addresses.length === 0" class="empty-state">
-                  <div class="empty-icon">📍</div>
-                  <h3>Nenhum endereço cadastrado</h3>
-                  <p>Adicione um endereço para facilitar seus pedidos</p>
-                  <button class="btn btn--sweet" (click)="openAddressModal()">
-                    Adicionar Primeiro Endereço
-                  </button>
+                            Definir como Padrão
+                          </button>
+                        }
+                        <button class="btn btn--outline btn--sm" (click)="editAddress(address)">
+                          Editar
+                        </button>
+                        <button class="btn btn--danger btn--sm" (click)="deleteAddress(address.id)">
+                          Excluir
+                        </button>
+                      </div>
+                    </div>
+                  }
+                  @if (addresses.length === 0) {
+                    <div class="empty-state">
+                      <div class="empty-icon">📍</div>
+                      <h3>Nenhum endereço cadastrado</h3>
+                      <p>Adicione um endereço para facilitar seus pedidos</p>
+                      <button class="btn btn--sweet" (click)="openAddressModal()">
+                        Adicionar Primeiro Endereço
+                      </button>
+                    </div>
+                  }
                 </div>
               </div>
-            </div>
-
+            }
+    
             <!-- Security Tab -->
-            <div *ngIf="activeTab === 'security'" class="tab-content">
-              <div class="section-header">
-                <h2>🔒 Segurança</h2>
-                <p>Gerencie a segurança da sua conta</p>
+            @if (activeTab === 'security') {
+              <div class="tab-content">
+                <div class="section-header">
+                  <h2>🔒 Segurança</h2>
+                  <p>Gerencie a segurança da sua conta</p>
+                </div>
+                <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="profile-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="currentPassword" class="form-label">Senha atual *</label>
+                      <input
+                        id="currentPassword"
+                        type="password"
+                        formControlName="currentPassword"
+                        class="form-input"
+                        placeholder="Digite sua senha atual">
+                      @if (passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched) {
+                        <div
+                          class="form-error">
+                          Senha atual é obrigatória
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="newPassword" class="form-label">Nova senha *</label>
+                      <input
+                        id="newPassword"
+                        type="password"
+                        formControlName="newPassword"
+                        class="form-input"
+                        placeholder="Digite a nova senha">
+                      @if (passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched) {
+                        <div
+                          class="form-error">
+                          Nova senha deve ter pelo menos 6 caracteres
+                        </div>
+                      }
+                    </div>
+                    <div class="form-group">
+                      <label for="confirmPassword" class="form-label">Confirmar nova senha *</label>
+                      <input
+                        id="confirmPassword"
+                        type="password"
+                        formControlName="confirmPassword"
+                        class="form-input"
+                        placeholder="Confirme a nova senha">
+                      @if (passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched) {
+                        <div
+                          class="form-error">
+                          Senhas não coincidem
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  <div class="form-actions">
+                    <button
+                      type="submit"
+                      class="btn btn--sweet"
+                      [disabled]="passwordForm.invalid || isChangingPassword"
+                      [class.loading]="isChangingPassword">
+                      @if (!isChangingPassword) {
+                        <span>Alterar Senha</span>
+                      }
+                      @if (isChangingPassword) {
+                        <span>Alterando...</span>
+                      }
+                    </button>
+                  </div>
+                </form>
               </div>
-
-              <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="profile-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="currentPassword" class="form-label">Senha atual *</label>
-                    <input
-                      id="currentPassword"
-                      type="password"
-                      formControlName="currentPassword"
-                      class="form-input"
-                      placeholder="Digite sua senha atual">
-                    <div *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched" 
-                         class="form-error">
-                      Senha atual é obrigatória
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="newPassword" class="form-label">Nova senha *</label>
-                    <input
-                      id="newPassword"
-                      type="password"
-                      formControlName="newPassword"
-                      class="form-input"
-                      placeholder="Digite a nova senha">
-                    <div *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched" 
-                         class="form-error">
-                      Nova senha deve ter pelo menos 6 caracteres
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="confirmPassword" class="form-label">Confirmar nova senha *</label>
-                    <input
-                      id="confirmPassword"
-                      type="password"
-                      formControlName="confirmPassword"
-                      class="form-input"
-                      placeholder="Confirme a nova senha">
-                    <div *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched" 
-                         class="form-error">
-                      Senhas não coincidem
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-actions">
-                  <button 
-                    type="submit" 
-                    class="btn btn--sweet"
-                    [disabled]="passwordForm.invalid || isChangingPassword"
-                    [class.loading]="isChangingPassword">
-                    <span *ngIf="!isChangingPassword">Alterar Senha</span>
-                    <span *ngIf="isChangingPassword">Alterando...</span>
-                  </button>
-                </div>
-              </form>
-            </div>
-
+            }
+    
             <!-- Preferences Tab -->
-            <div *ngIf="activeTab === 'preferences'" class="tab-content">
-              <div class="section-header">
-                <h2>⚙️ Preferências</h2>
-                <p>Configure suas preferências de notificação</p>
+            @if (activeTab === 'preferences') {
+              <div class="tab-content">
+                <div class="section-header">
+                  <h2>⚙️ Preferências</h2>
+                  <p>Configure suas preferências de notificação</p>
+                </div>
+                <div class="preferences-form">
+                  <div class="preference-item">
+                    <div class="preference-info">
+                      <h3>Notificações push</h3>
+                      <p>Receba notificações sobre o status dos seus pedidos</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="preferences.notifications"
+                        (change)="updatePreferences()">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="preference-item">
+                    <div class="preference-info">
+                      <h3>Newsletter</h3>
+                      <p>Receba novidades e promoções por e-mail</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="preferences.newsletter"
+                        (change)="updatePreferences()">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="preference-item">
+                    <div class="preference-info">
+                      <h3>SMS</h3>
+                      <p>Receba atualizações por SMS</p>
+                    </div>
+                    <label class="toggle-switch">
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="preferences.smsUpdates"
+                        (change)="updatePreferences()">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
               </div>
-
-              <div class="preferences-form">
-                <div class="preference-item">
-                  <div class="preference-info">
-                    <h3>Notificações push</h3>
-                    <p>Receba notificações sobre o status dos seus pedidos</p>
-                  </div>
-                  <label class="toggle-switch">
-                    <input 
-                      type="checkbox" 
-                      [(ngModel)]="preferences.notifications"
-                      (change)="updatePreferences()">
-                    <span class="toggle-slider"></span>
-                  </label>
-                </div>
-
-                <div class="preference-item">
-                  <div class="preference-info">
-                    <h3>Newsletter</h3>
-                    <p>Receba novidades e promoções por e-mail</p>
-                  </div>
-                  <label class="toggle-switch">
-                    <input 
-                      type="checkbox" 
-                      [(ngModel)]="preferences.newsletter"
-                      (change)="updatePreferences()">
-                    <span class="toggle-slider"></span>
-                  </label>
-                </div>
-
-                <div class="preference-item">
-                  <div class="preference-info">
-                    <h3>SMS</h3>
-                    <p>Receba atualizações por SMS</p>
-                  </div>
-                  <label class="toggle-switch">
-                    <input 
-                      type="checkbox" 
-                      [(ngModel)]="preferences.smsUpdates"
-                      (change)="updatePreferences()">
-                    <span class="toggle-slider"></span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
+            }
+    
             <!-- Statistics Tab -->
-            <div *ngIf="activeTab === 'statistics'" class="tab-content">
-              <div class="section-header">
-                <h2>📊 Estatísticas</h2>
-                <p>Veja um resumo da sua atividade</p>
+            @if (activeTab === 'statistics') {
+              <div class="tab-content">
+                <div class="section-header">
+                  <h2>📊 Estatísticas</h2>
+                  <p>Veja um resumo da sua atividade</p>
+                </div>
+                @if (userProfile) {
+                  <div class="statistics-grid">
+                    <div class="stat-card">
+                      <div class="stat-icon">🛒</div>
+                      <div class="stat-content">
+                        <h3>{{ userProfile.statistics.totalOrders }}</h3>
+                        <p>Pedidos realizados</p>
+                      </div>
+                    </div>
+                    <div class="stat-card">
+                      <div class="stat-icon">💰</div>
+                      <div class="stat-content">
+                        <h3>R$ {{ userProfile.statistics.totalSpent.toFixed(2).replace('.', ',') }}</h3>
+                        <p>Total gasto</p>
+                      </div>
+                    </div>
+                    <div class="stat-card">
+                      <div class="stat-icon">🏆</div>
+                      <div class="stat-content">
+                        <h3>{{ userProfile.statistics.loyaltyPoints }}</h3>
+                        <p>Pontos de fidelidade</p>
+                      </div>
+                    </div>
+                    <div class="stat-card">
+                      <div class="stat-icon">❤️</div>
+                      <div class="stat-content">
+                        <h3>{{ userProfile.statistics.favoriteProducts.length }}</h3>
+                        <p>Produtos favoritos</p>
+                      </div>
+                    </div>
+                  </div>
+                }
               </div>
-
-              <div class="statistics-grid" *ngIf="userProfile">
-                <div class="stat-card">
-                  <div class="stat-icon">🛒</div>
-                  <div class="stat-content">
-                    <h3>{{ userProfile.statistics.totalOrders }}</h3>
-                    <p>Pedidos realizados</p>
-                  </div>
-                </div>
-
-                <div class="stat-card">
-                  <div class="stat-icon">💰</div>
-                  <div class="stat-content">
-                    <h3>R$ {{ userProfile.statistics.totalSpent.toFixed(2).replace('.', ',') }}</h3>
-                    <p>Total gasto</p>
-                  </div>
-                </div>
-
-                <div class="stat-card">
-                  <div class="stat-icon">🏆</div>
-                  <div class="stat-content">
-                    <h3>{{ userProfile.statistics.loyaltyPoints }}</h3>
-                    <p>Pontos de fidelidade</p>
-                  </div>
-                </div>
-
-                <div class="stat-card">
-                  <div class="stat-icon">❤️</div>
-                  <div class="stat-content">
-                    <h3>{{ userProfile.statistics.favoriteProducts.length }}</h3>
-                    <p>Produtos favoritos</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            }
           </div>
         </div>
-
+    
         <!-- Address Modal -->
         <div class="modal-overlay" [class.active]="showAddressModal" (click)="closeAddressModal()">
           <div class="modal-content" (click)="$event.stopPropagation()">
@@ -359,7 +386,7 @@ import { AuthService } from '../services/auth.service';
               <h3>{{ editingAddress ? 'Editar' : 'Novo' }} Endereço</h3>
               <button class="modal-close" (click)="closeAddressModal()">×</button>
             </div>
-
+    
             <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="modal-form">
               <div class="form-row">
                 <div class="form-group">
@@ -372,7 +399,7 @@ import { AuthService } from '../services/auth.service';
                     placeholder="Ex: Casa, Trabalho">
                 </div>
               </div>
-
+    
               <div class="form-row">
                 <div class="form-group">
                   <label for="addressZipCode" class="form-label">CEP *</label>
@@ -385,7 +412,7 @@ import { AuthService } from '../services/auth.service';
                     (blur)="searchZipCode()">
                 </div>
               </div>
-
+    
               <div class="form-row">
                 <div class="form-group flex-grow">
                   <label for="addressStreet" class="form-label">Rua *</label>
@@ -396,7 +423,7 @@ import { AuthService } from '../services/auth.service';
                     class="form-input"
                     placeholder="Nome da rua">
                 </div>
-
+    
                 <div class="form-group">
                   <label for="addressNumber" class="form-label">Número *</label>
                   <input
@@ -407,7 +434,7 @@ import { AuthService } from '../services/auth.service';
                     placeholder="123">
                 </div>
               </div>
-
+    
               <div class="form-row">
                 <div class="form-group">
                   <label for="addressComplement" class="form-label">Complemento</label>
@@ -418,7 +445,7 @@ import { AuthService } from '../services/auth.service';
                     class="form-input"
                     placeholder="Apto, bloco, etc.">
                 </div>
-
+    
                 <div class="form-group">
                   <label for="addressNeighborhood" class="form-label">Bairro *</label>
                   <input
@@ -429,7 +456,7 @@ import { AuthService } from '../services/auth.service';
                     placeholder="Nome do bairro">
                 </div>
               </div>
-
+    
               <div class="form-row">
                 <div class="form-group">
                   <label for="addressCity" class="form-label">Cidade *</label>
@@ -440,7 +467,7 @@ import { AuthService } from '../services/auth.service';
                     class="form-input"
                     placeholder="Nome da cidade">
                 </div>
-
+    
                 <div class="form-group">
                   <label for="addressState" class="form-label">Estado *</label>
                   <select id="addressState" formControlName="state" class="form-select">
@@ -451,7 +478,7 @@ import { AuthService } from '../services/auth.service';
                   </select>
                 </div>
               </div>
-
+    
               <div class="form-row">
                 <div class="form-group full-width">
                   <label for="addressReference" class="form-label">Ponto de referência</label>
@@ -463,7 +490,7 @@ import { AuthService } from '../services/auth.service';
                     placeholder="Próximo ao supermercado, etc.">
                 </div>
               </div>
-
+    
               <div class="form-row">
                 <div class="form-group full-width">
                   <label class="form-checkbox">
@@ -473,18 +500,22 @@ import { AuthService } from '../services/auth.service';
                   </label>
                 </div>
               </div>
-
+    
               <div class="modal-actions">
                 <button type="button" class="btn btn--outline" (click)="closeAddressModal()">
                   Cancelar
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   class="btn btn--sweet"
                   [disabled]="addressForm.invalid || isSavingAddress"
                   [class.loading]="isSavingAddress">
-                  <span *ngIf="!isSavingAddress">{{ editingAddress ? 'Salvar' : 'Adicionar' }}</span>
-                  <span *ngIf="isSavingAddress">Salvando...</span>
+                  @if (!isSavingAddress) {
+                    <span>{{ editingAddress ? 'Salvar' : 'Adicionar' }}</span>
+                  }
+                  @if (isSavingAddress) {
+                    <span>Salvando...</span>
+                  }
                 </button>
               </div>
             </form>
@@ -492,7 +523,7 @@ import { AuthService } from '../services/auth.service';
         </div>
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .profile-page {
       background: #f8fafc;

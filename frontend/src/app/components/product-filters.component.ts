@@ -1,45 +1,46 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Category } from '../services/product.service';
 
 @Component({
   selector: 'app-product-filters',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   template: `
     <div class="filters-container">
-      
+    
       <!-- Categorias -->
       <div class="filter-group">
         <h4 class="filter-title">Categorias</h4>
         <div class="filter-content">
           <label class="filter-option">
-            <input 
-              type="radio" 
-              name="category" 
+            <input
+              type="radio"
+              name="category"
               [value]="null"
               [checked]="selectedCategory === null"
               (change)="onCategoryChange(null)">
             <span class="filter-label">Todas as categorias</span>
           </label>
-          
-          <label 
-            *ngFor="let category of categories" 
-            class="filter-option">
-            <input 
-              type="radio" 
-              name="category" 
-              [value]="category.id"
-              [checked]="selectedCategory === category.id"
-              (change)="onCategoryChange(category.id)">
-            <span class="filter-label">
-              {{ category.name }}
-            </span>
-          </label>
+    
+          @for (category of categories; track category) {
+            <label
+              class="filter-option">
+              <input
+                type="radio"
+                name="category"
+                [value]="category.id"
+                [checked]="selectedCategory === category.id"
+                (change)="onCategoryChange(category.id)">
+              <span class="filter-label">
+                {{ category.name }}
+              </span>
+            </label>
+          }
         </div>
       </div>
-      
+    
       <!-- Faixa de Preço -->
       <div class="filter-group">
         <h4 class="filter-title">Preço</h4>
@@ -48,8 +49,8 @@ import { Category } from '../services/product.service';
             <div class="price-inputs">
               <div class="price-input-group">
                 <label>Mín</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   class="price-input"
                   [value]="priceRange.min"
                   (input)="onPriceMinChange($event)"
@@ -57,32 +58,33 @@ import { Category } from '../services/product.service';
               </div>
               <div class="price-input-group">
                 <label>Máx</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   class="price-input"
                   [value]="priceRange.max"
                   (input)="onPriceMaxChange($event)"
                   min="0">
               </div>
             </div>
-            
+    
             <div class="price-presets">
-              <button 
-                *ngFor="let preset of pricePresets"
-                class="price-preset-btn"
-                (click)="setPriceRange(preset.min, preset.max)">
-                {{ preset.label }}
-              </button>
+              @for (preset of pricePresets; track preset) {
+                <button
+                  class="price-preset-btn"
+                  (click)="setPriceRange(preset.min, preset.max)">
+                  {{ preset.label }}
+                </button>
+              }
             </div>
           </div>
         </div>
       </div>
-      
+    
       <!-- Ordenação -->
       <div class="filter-group">
         <h4 class="filter-title">Ordenar por</h4>
         <div class="filter-content">
-          <select 
+          <select
             class="sort-select"
             [value]="sortBy"
             (change)="onSortChange($event)">
@@ -94,16 +96,16 @@ import { Category } from '../services/product.service';
           </select>
         </div>
       </div>
-      
+    
       <!-- Limpar Filtros -->
       <div class="filter-actions">
         <button class="clear-filters-btn" (click)="onClearFilters()">
           🗑️ Limpar filtros
         </button>
       </div>
-      
+    
     </div>
-  `,
+    `,
   styles: [`
     .filters-container {
       background: white;

@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Product } from '../services/product.service';
 
 @Component({
   selector: 'app-featured-products',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <section class="featured-section section">
       <div class="container">

@@ -29,14 +29,14 @@ interface OrderFilter {
             + Fazer Novo Pedido
           </button>
         </div>
-
+    
         <!-- Filters -->
         <div class="filters-section">
           <div class="filter-group">
             <label class="filter-label">Status:</label>
-            <select 
-              class="filter-select" 
-              [(ngModel)]="filters.status" 
+            <select
+              class="filter-select"
+              [(ngModel)]="filters.status"
               (change)="applyFilters()">
               <option value="">Todos</option>
               <option value="confirmed">Confirmado</option>
@@ -47,12 +47,12 @@ interface OrderFilter {
               <option value="cancelled">Cancelado</option>
             </select>
           </div>
-
+    
           <div class="filter-group">
             <label class="filter-label">Período:</label>
-            <select 
-              class="filter-select" 
-              [(ngModel)]="filters.dateRange" 
+            <select
+              class="filter-select"
+              [(ngModel)]="filters.dateRange"
               (change)="applyFilters()">
               <option value="">Todos</option>
               <option value="last7days">Últimos 7 dias</option>
@@ -61,7 +61,7 @@ interface OrderFilter {
               <option value="thisYear">Este ano</option>
             </select>
           </div>
-
+    
           <div class="filter-group search-group">
             <label class="filter-label">Buscar:</label>
             <input
@@ -72,171 +72,195 @@ interface OrderFilter {
               (input)="applyFilters()">
           </div>
         </div>
-
+    
         <!-- Orders List -->
         <div class="orders-section">
-          <div *ngIf="isLoading" class="loading-state">
-            <div class="spinner"></div>
-            <p>Carregando pedidos...</p>
-          </div>
-
-          <div *ngIf="!isLoading && filteredOrders.length === 0" class="empty-state">
-            <div class="empty-icon">📦</div>
-            <h3>Nenhum pedido encontrado</h3>
-            <p *ngIf="hasActiveFilters()">
-              Tente ajustar os filtros para encontrar seus pedidos
-            </p>
-            <p *ngIf="!hasActiveFilters()">
-              Você ainda não fez nenhum pedido. Que tal fazer o primeiro?
-            </p>
-            <button class="btn btn--sweet" (click)="goToProducts()">
-              Explorar Produtos
-            </button>
-          </div>
-
-          <div *ngIf="!isLoading && filteredOrders.length > 0" class="orders-list">
-            <div *ngFor="let order of filteredOrders" class="order-card">
-              <!-- Order Header -->
-              <div class="order-header">
-                <div class="order-info">
-                  <h3 class="order-title">Pedido #{{ order.id.substring(0, 8) }}</h3>
-                  <p class="order-date">{{ formatDate(order.createdAt) }}</p>
-                </div>
-                <div class="order-status">
-                  <span class="status-badge" [ngClass]="'status--' + order.status">
-                    {{ getStatusLabel(order.status) }}
-                  </span>
-                </div>
-              </div>
-
-              <!-- Order Summary -->
-              <div class="order-summary">
-                <div class="order-details">
-                  <div class="detail-item">
-                    <span class="detail-label">Total:</span>
-                    <span class="detail-value total-price">
-                      R$ {{ order.summary.total.toFixed(2).replace('.', ',') }}
-                    </span>
-                  </div>
-                  <div class="detail-item">
-                    <span class="detail-label">Itens:</span>
-                    <span class="detail-value">{{ order.items.length }} item(s)</span>
-                  </div>
-                  <div class="detail-item">
-                    <span class="detail-label">Pagamento:</span>
-                    <span class="detail-value">{{ getPaymentLabel(order.paymentMethod.type) }}</span>
-                  </div>
-                  <div *ngIf="order.deliveryAddress" class="detail-item">
-                    <span class="detail-label">Entrega:</span>
-                    <span class="detail-value">
-                      {{ order.deliveryAddress.neighborhood }}, {{ order.deliveryAddress.city }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Order Items -->
-              <div class="order-items">
-                <div class="items-header">
-                  <h4>Itens do pedido</h4>
-                  <button 
-                    class="toggle-items" 
-                    (click)="toggleOrderItems(order.id)"
-                    [class.expanded]="expandedOrders.has(order.id)">
-                    {{ expandedOrders.has(order.id) ? 'Ocultar' : 'Ver' }} itens
-                    <span class="toggle-icon">
-                      {{ expandedOrders.has(order.id) ? '▲' : '▼' }}
-                    </span>
-                  </button>
-                </div>
-
-                <div *ngIf="expandedOrders.has(order.id)" class="items-list">
-                  <div *ngFor="let item of order.items" class="order-item">
-                    <div class="item-image">
-                      <img [src]="item.product.imageUrl" [alt]="item.product.name">
+          @if (isLoading) {
+            <div class="loading-state">
+              <div class="spinner"></div>
+              <p>Carregando pedidos...</p>
+            </div>
+          }
+    
+          @if (!isLoading && filteredOrders.length === 0) {
+            <div class="empty-state">
+              <div class="empty-icon">📦</div>
+              <h3>Nenhum pedido encontrado</h3>
+              @if (hasActiveFilters()) {
+                <p>
+                  Tente ajustar os filtros para encontrar seus pedidos
+                </p>
+              }
+              @if (!hasActiveFilters()) {
+                <p>
+                  Você ainda não fez nenhum pedido. Que tal fazer o primeiro?
+                </p>
+              }
+              <button class="btn btn--sweet" (click)="goToProducts()">
+                Explorar Produtos
+              </button>
+            </div>
+          }
+    
+          @if (!isLoading && filteredOrders.length > 0) {
+            <div class="orders-list">
+              @for (order of filteredOrders; track order) {
+                <div class="order-card">
+                  <!-- Order Header -->
+                  <div class="order-header">
+                    <div class="order-info">
+                      <h3 class="order-title">Pedido #{{ order.id.substring(0, 8) }}</h3>
+                      <p class="order-date">{{ formatDate(order.createdAt) }}</p>
                     </div>
-                    <div class="item-details">
-                      <h5>{{ item.product.name }}</h5>
-                      <p *ngIf="item.customizations.length > 0" class="item-customizations">
-                        <strong>Personalizações:</strong>
-                        <span *ngFor="let custom of item.customizations; let last = last">
-                          {{ custom.name }}{{ !last ? ', ' : '' }}
-                        </span>
-                      </p>
-                      <div class="item-price-qty">
-                        <span>{{ item.quantity }}x R$ {{ item.unitPrice.toFixed(2).replace('.', ',') }}</span>
-                        <span class="item-total">
-                          R$ {{ (item.quantity * item.unitPrice).toFixed(2).replace('.', ',') }}
+                    <div class="order-status">
+                      <span class="status-badge" [ngClass]="'status--' + order.status">
+                        {{ getStatusLabel(order.status) }}
+                      </span>
+                    </div>
+                  </div>
+                  <!-- Order Summary -->
+                  <div class="order-summary">
+                    <div class="order-details">
+                      <div class="detail-item">
+                        <span class="detail-label">Total:</span>
+                        <span class="detail-value total-price">
+                          R$ {{ order.summary.total.toFixed(2).replace('.', ',') }}
                         </span>
                       </div>
+                      <div class="detail-item">
+                        <span class="detail-label">Itens:</span>
+                        <span class="detail-value">{{ order.items.length }} item(s)</span>
+                      </div>
+                      <div class="detail-item">
+                        <span class="detail-label">Pagamento:</span>
+                        <span class="detail-value">{{ getPaymentLabel(order.paymentMethod.type) }}</span>
+                      </div>
+                      @if (order.deliveryAddress) {
+                        <div class="detail-item">
+                          <span class="detail-label">Entrega:</span>
+                          <span class="detail-value">
+                            {{ order.deliveryAddress.neighborhood }}, {{ order.deliveryAddress.city }}
+                          </span>
+                        </div>
+                      }
                     </div>
                   </div>
-                </div>
-              </div>
-
-              <!-- Order Actions -->
-              <div class="order-actions">
-                <button 
-                  class="btn btn--outline btn--sm" 
-                  (click)="viewOrderDetails(order)">
-                  Ver Detalhes
-                </button>
-                
-                <button 
-                  *ngIf="canReorder(order)" 
-                  class="btn btn--sweet btn--sm" 
-                  (click)="reorderItems(order)">
-                  Pedir Novamente
-                </button>
-                
-                <button 
-                  *ngIf="canCancel(order)" 
-                  class="btn btn--danger btn--sm" 
-                  (click)="cancelOrder(order)">
-                  Cancelar
-                </button>
-                
-                <button 
-                  *ngIf="canRate(order)" 
-                  class="btn btn--outline btn--sm" 
-                  (click)="rateOrder(order)">
-                  Avaliar
-                </button>
-              </div>
-
-              <!-- Order Tracking -->
-              <div *ngIf="shouldShowTracking(order)" class="order-tracking">
-                <h4>Status do pedido</h4>
-                <div class="tracking-timeline">
-                  <div 
-                    *ngFor="let step of getTrackingSteps(order)" 
-                    class="tracking-step"
-                    [class.completed]="step.completed"
-                    [class.active]="step.active">
-                    <div class="step-indicator">
-                      <span class="step-icon">{{ step.icon }}</span>
+                  <!-- Order Items -->
+                  <div class="order-items">
+                    <div class="items-header">
+                      <h4>Itens do pedido</h4>
+                      <button
+                        class="toggle-items"
+                        (click)="toggleOrderItems(order.id)"
+                        [class.expanded]="expandedOrders.has(order.id)">
+                        {{ expandedOrders.has(order.id) ? 'Ocultar' : 'Ver' }} itens
+                        <span class="toggle-icon">
+                          {{ expandedOrders.has(order.id) ? '▲' : '▼' }}
+                        </span>
+                      </button>
                     </div>
-                    <div class="step-content">
-                      <h5>{{ step.title }}</h5>
-                      <p>{{ step.description }}</p>
-                      <small *ngIf="step.timestamp">{{ formatDateTime(step.timestamp) }}</small>
-                    </div>
+                    @if (expandedOrders.has(order.id)) {
+                      <div class="items-list">
+                        @for (item of order.items; track item) {
+                          <div class="order-item">
+                            <div class="item-image">
+                              <img [src]="item.product.imageUrl" [alt]="item.product.name">
+                            </div>
+                            <div class="item-details">
+                              <h5>{{ item.product.name }}</h5>
+                              @if (item.customizations.length > 0) {
+                                <p class="item-customizations">
+                                  <strong>Personalizações:</strong>
+                                  @for (custom of item.customizations; track custom; let last = $last) {
+                                    <span>
+                                      {{ custom.name }}{{ !last ? ', ' : '' }}
+                                    </span>
+                                  }
+                                </p>
+                              }
+                              <div class="item-price-qty">
+                                <span>{{ item.quantity }}x R$ {{ item.unitPrice.toFixed(2).replace('.', ',') }}</span>
+                                <span class="item-total">
+                                  R$ {{ (item.quantity * item.unitPrice).toFixed(2).replace('.', ',') }}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
                   </div>
+                  <!-- Order Actions -->
+                  <div class="order-actions">
+                    <button
+                      class="btn btn--outline btn--sm"
+                      (click)="viewOrderDetails(order)">
+                      Ver Detalhes
+                    </button>
+                    @if (canReorder(order)) {
+                      <button
+                        class="btn btn--sweet btn--sm"
+                        (click)="reorderItems(order)">
+                        Pedir Novamente
+                      </button>
+                    }
+                    @if (canCancel(order)) {
+                      <button
+                        class="btn btn--danger btn--sm"
+                        (click)="cancelOrder(order)">
+                        Cancelar
+                      </button>
+                    }
+                    @if (canRate(order)) {
+                      <button
+                        class="btn btn--outline btn--sm"
+                        (click)="rateOrder(order)">
+                        Avaliar
+                      </button>
+                    }
+                  </div>
+                  <!-- Order Tracking -->
+                  @if (shouldShowTracking(order)) {
+                    <div class="order-tracking">
+                      <h4>Status do pedido</h4>
+                      <div class="tracking-timeline">
+                        @for (step of getTrackingSteps(order); track step) {
+                          <div
+                            class="tracking-step"
+                            [class.completed]="step.completed"
+                            [class.active]="step.active">
+                            <div class="step-indicator">
+                              <span class="step-icon">{{ step.icon }}</span>
+                            </div>
+                            <div class="step-content">
+                              <h5>{{ step.title }}</h5>
+                              <p>{{ step.description }}</p>
+                              @if (step.timestamp) {
+                                <small>{{ formatDateTime(step.timestamp) }}</small>
+                              }
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
                 </div>
-              </div>
+              }
             </div>
-          </div>
-
+          }
+    
           <!-- Load More -->
-          <div *ngIf="hasMoreOrders && !isLoading" class="load-more-section">
-            <button class="btn btn--outline" (click)="loadMoreOrders()">
-              Carregar Mais Pedidos
-            </button>
-          </div>
+          @if (hasMoreOrders && !isLoading) {
+            <div class="load-more-section">
+              <button class="btn btn--outline" (click)="loadMoreOrders()">
+                Carregar Mais Pedidos
+              </button>
+            </div>
+          }
         </div>
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .order-history-page {
       background: #f8fafc;

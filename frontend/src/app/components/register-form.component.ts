@@ -9,7 +9,7 @@ import { AuthService, RegisterRequest } from '../services/auth.service';
   imports: [CommonModule, ReactiveFormsModule],
   template: `
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-      
+    
       <!-- Name Field -->
       <div class="form-group">
         <label for="name" class="form-label">Nome completo</label>
@@ -26,12 +26,18 @@ import { AuthService, RegisterRequest } from '../services/auth.service';
             placeholder="Seu nome completo"
             autocomplete="name">
         </div>
-        <div *ngIf="nameControl?.invalid && nameControl?.touched" class="error-message">
-          <span *ngIf="nameControl?.errors?.['required']">Nome é obrigatório</span>
-          <span *ngIf="nameControl?.errors?.['minlength']">Nome deve ter pelo menos 2 caracteres</span>
-        </div>
+        @if (nameControl?.invalid && nameControl?.touched) {
+          <div class="error-message">
+            @if (nameControl?.errors?.['required']) {
+              <span>Nome é obrigatório</span>
+            }
+            @if (nameControl?.errors?.['minlength']) {
+              <span>Nome deve ter pelo menos 2 caracteres</span>
+            }
+          </div>
+        }
       </div>
-
+    
       <!-- Email Field -->
       <div class="form-group">
         <label for="email" class="form-label">E-mail</label>
@@ -48,12 +54,18 @@ import { AuthService, RegisterRequest } from '../services/auth.service';
             placeholder="seu&#64;email.com"
             autocomplete="email">
         </div>
-        <div *ngIf="emailControl?.invalid && emailControl?.touched" class="error-message">
-          <span *ngIf="emailControl?.errors?.['required']">E-mail é obrigatório</span>
-          <span *ngIf="emailControl?.errors?.['email']">E-mail inválido</span>
-        </div>
+        @if (emailControl?.invalid && emailControl?.touched) {
+          <div class="error-message">
+            @if (emailControl?.errors?.['required']) {
+              <span>E-mail é obrigatório</span>
+            }
+            @if (emailControl?.errors?.['email']) {
+              <span>E-mail inválido</span>
+            }
+          </div>
+        }
       </div>
-
+    
       <!-- Phone Field -->
       <div class="form-group">
         <label for="phone" class="form-label">Telefone</label>
@@ -71,12 +83,18 @@ import { AuthService, RegisterRequest } from '../services/auth.service';
             autocomplete="tel"
             (input)="formatPhone($event)">
         </div>
-        <div *ngIf="phoneControl?.invalid && phoneControl?.touched" class="error-message">
-          <span *ngIf="phoneControl?.errors?.['required']">Telefone é obrigatório</span>
-          <span *ngIf="phoneControl?.errors?.['pattern']">Telefone inválido</span>
-        </div>
+        @if (phoneControl?.invalid && phoneControl?.touched) {
+          <div class="error-message">
+            @if (phoneControl?.errors?.['required']) {
+              <span>Telefone é obrigatório</span>
+            }
+            @if (phoneControl?.errors?.['pattern']) {
+              <span>Telefone inválido</span>
+            }
+          </div>
+        }
       </div>
-
+    
       <!-- Password Field -->
       <div class="form-group">
         <label for="password" class="form-label">Senha</label>
@@ -97,30 +115,44 @@ import { AuthService, RegisterRequest } from '../services/auth.service';
             class="password-toggle"
             (click)="togglePassword()"
             title="{{ showPassword ? 'Ocultar senha' : 'Mostrar senha' }}">
-            <svg *ngIf="!showPassword" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-            </svg>
-            <svg *ngIf="showPassword" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/>
-            </svg>
+            @if (!showPassword) {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            }
+            @if (showPassword) {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/>
+              </svg>
+            }
           </button>
         </div>
-        <div *ngIf="passwordControl?.invalid && passwordControl?.touched" class="error-message">
-          <span *ngIf="passwordControl?.errors?.['required']">Senha é obrigatória</span>
-          <span *ngIf="passwordControl?.errors?.['minlength']">Senha deve ter pelo menos 6 caracteres</span>
-          <span *ngIf="passwordControl?.errors?.['pattern']">Senha deve conter pelo menos uma letra e um número</span>
-        </div>
-        
-        <!-- Password Strength Indicator -->
-        <div class="password-strength" *ngIf="passwordControl?.value">
-          <div class="strength-label">Força da senha:</div>
-          <div class="strength-bar">
-            <div class="strength-fill" [ngClass]="getPasswordStrengthClass()"></div>
+        @if (passwordControl?.invalid && passwordControl?.touched) {
+          <div class="error-message">
+            @if (passwordControl?.errors?.['required']) {
+              <span>Senha é obrigatória</span>
+            }
+            @if (passwordControl?.errors?.['minlength']) {
+              <span>Senha deve ter pelo menos 6 caracteres</span>
+            }
+            @if (passwordControl?.errors?.['pattern']) {
+              <span>Senha deve conter pelo menos uma letra e um número</span>
+            }
           </div>
-          <div class="strength-text">{{ getPasswordStrengthText() }}</div>
-        </div>
+        }
+    
+        <!-- Password Strength Indicator -->
+        @if (passwordControl?.value) {
+          <div class="password-strength">
+            <div class="strength-label">Força da senha:</div>
+            <div class="strength-bar">
+              <div class="strength-fill" [ngClass]="getPasswordStrengthClass()"></div>
+            </div>
+            <div class="strength-text">{{ getPasswordStrengthText() }}</div>
+          </div>
+        }
       </div>
-
+    
       <!-- Confirm Password Field -->
       <div class="form-group">
         <label for="confirmPassword" class="form-label">Confirmar senha</label>
@@ -141,40 +173,54 @@ import { AuthService, RegisterRequest } from '../services/auth.service';
             class="password-toggle"
             (click)="toggleConfirmPassword()"
             title="{{ showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha' }}">
-            <svg *ngIf="!showConfirmPassword" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-            </svg>
-            <svg *ngIf="showConfirmPassword" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/>
-            </svg>
+            @if (!showConfirmPassword) {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            }
+            @if (showConfirmPassword) {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/>
+              </svg>
+            }
           </button>
         </div>
-        <div *ngIf="confirmPasswordControl?.invalid && confirmPasswordControl?.touched" class="error-message">
-          <span *ngIf="confirmPasswordControl?.errors?.['required']">Confirmação de senha é obrigatória</span>
-          <span *ngIf="confirmPasswordControl?.errors?.['passwordMismatch']">Senhas não coincidem</span>
-        </div>
+        @if (confirmPasswordControl?.invalid && confirmPasswordControl?.touched) {
+          <div class="error-message">
+            @if (confirmPasswordControl?.errors?.['required']) {
+              <span>Confirmação de senha é obrigatória</span>
+            }
+            @if (confirmPasswordControl?.errors?.['passwordMismatch']) {
+              <span>Senhas não coincidem</span>
+            }
+          </div>
+        }
       </div>
-
+    
       <!-- Terms and Conditions -->
       <div class="form-group">
         <label class="checkbox-label">
           <input type="checkbox" formControlName="acceptTerms" class="checkbox">
           <span class="checkbox-text">
-            Li e aceito os 
+            Li e aceito os
             <button type="button" class="terms-link" (click)="showTermsModal = true">
               Termos de Uso
-            </button> 
-            e a 
+            </button>
+            e a
             <button type="button" class="terms-link" (click)="showPrivacyModal = true">
               Política de Privacidade
             </button>
           </span>
         </label>
-        <div *ngIf="acceptTermsControl?.invalid && acceptTermsControl?.touched" class="error-message">
-          <span *ngIf="acceptTermsControl?.errors?.['required']">Você deve aceitar os termos para continuar</span>
-        </div>
+        @if (acceptTermsControl?.invalid && acceptTermsControl?.touched) {
+          <div class="error-message">
+            @if (acceptTermsControl?.errors?.['required']) {
+              <span>Você deve aceitar os termos para continuar</span>
+            }
+          </div>
+        }
       </div>
-
+    
       <!-- Marketing Consent -->
       <div class="form-group">
         <label class="checkbox-label">
@@ -184,102 +230,102 @@ import { AuthService, RegisterRequest } from '../services/auth.service';
           </span>
         </label>
       </div>
-
+    
       <!-- Submit Button -->
-      <button 
-        type="submit" 
+      <button
+        type="submit"
         class="submit-btn"
         [disabled]="registerForm.invalid || isLoading"
         [class.loading]="isLoading">
-        <span *ngIf="!isLoading">Criar Conta</span>
-        <span *ngIf="isLoading" class="loading-content">
-          <svg class="loading-spinner" width="20" height="20" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="32">
-              <animate attributeName="stroke-dasharray" dur="2s" values="0 32;16 16;0 32;0 32" repeatCount="indefinite"/>
-              <animate attributeName="stroke-dashoffset" dur="2s" values="0;-16;-32;-32" repeatCount="indefinite"/>
-            </circle>
-          </svg>
-          Criando conta...
-        </span>
+        @if (!isLoading) {
+          <span>Criar Conta</span>
+        }
+        @if (isLoading) {
+          <span class="loading-content">
+            <svg class="loading-spinner" width="20" height="20" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="32">
+                <animate attributeName="stroke-dasharray" dur="2s" values="0 32;16 16;0 32;0 32" repeatCount="indefinite"/>
+                <animate attributeName="stroke-dashoffset" dur="2s" values="0;-16;-32;-32" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+            Criando conta...
+          </span>
+        }
       </button>
-
+    
       <!-- Error Message -->
-      <div *ngIf="errorMessage" class="form-error">
-        {{ errorMessage }}
-      </div>
-
+      @if (errorMessage) {
+        <div class="form-error">
+          {{ errorMessage }}
+        </div>
+      }
+    
       <!-- Login Link -->
       <div class="switch-mode">
-        <p>Já tem uma conta? 
+        <p>Já tem uma conta?
           <button type="button" class="switch-btn" (click)="onSwitchToLogin()">
             Fazer login
           </button>
         </p>
       </div>
     </form>
-
+    
     <!-- Terms Modal -->
-    <div *ngIf="showTermsModal" class="modal-overlay" (click)="showTermsModal = false">
-      <div class="modal-content" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <h3>Termos de Uso</h3>
-          <button class="modal-close" (click)="showTermsModal = false">×</button>
-        </div>
-        <div class="modal-body">
-          <div class="terms-content">
-            <h4>1. Aceitação dos Termos</h4>
-            <p>Ao utilizar nossos serviços, você concorda com estes termos de uso.</p>
-            
-            <h4>2. Uso do Serviço</h4>
-            <p>Nosso serviço é destinado para pedidos de bolos e doces. Você deve usar o serviço apenas para fins legais.</p>
-            
-            <h4>3. Conta do Usuário</h4>
-            <p>Você é responsável por manter a segurança de sua conta e senha. Notifique-nos imediatamente sobre qualquer uso não autorizado.</p>
-            
-            <h4>4. Pedidos e Pagamentos</h4>
-            <p>Todos os pedidos estão sujeitos à disponibilidade. Os preços podem variar sem aviso prévio.</p>
-            
-            <h4>5. Política de Cancelamento</h4>
-            <p>Cancelamentos devem ser feitos com pelo menos 24 horas de antecedência.</p>
-            
-            <h4>6. Limitação de Responsabilidade</h4>
-            <p>Nossa responsabilidade é limitada ao valor do produto adquirido.</p>
+    @if (showTermsModal) {
+      <div class="modal-overlay" (click)="showTermsModal = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h3>Termos de Uso</h3>
+            <button class="modal-close" (click)="showTermsModal = false">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="terms-content">
+              <h4>1. Aceitação dos Termos</h4>
+              <p>Ao utilizar nossos serviços, você concorda com estes termos de uso.</p>
+              <h4>2. Uso do Serviço</h4>
+              <p>Nosso serviço é destinado para pedidos de bolos e doces. Você deve usar o serviço apenas para fins legais.</p>
+              <h4>3. Conta do Usuário</h4>
+              <p>Você é responsável por manter a segurança de sua conta e senha. Notifique-nos imediatamente sobre qualquer uso não autorizado.</p>
+              <h4>4. Pedidos e Pagamentos</h4>
+              <p>Todos os pedidos estão sujeitos à disponibilidade. Os preços podem variar sem aviso prévio.</p>
+              <h4>5. Política de Cancelamento</h4>
+              <p>Cancelamentos devem ser feitos com pelo menos 24 horas de antecedência.</p>
+              <h4>6. Limitação de Responsabilidade</h4>
+              <p>Nossa responsabilidade é limitada ao valor do produto adquirido.</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
+    }
+    
     <!-- Privacy Modal -->
-    <div *ngIf="showPrivacyModal" class="modal-overlay" (click)="showPrivacyModal = false">
-      <div class="modal-content" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <h3>Política de Privacidade</h3>
-          <button class="modal-close" (click)="showPrivacyModal = false">×</button>
-        </div>
-        <div class="modal-body">
-          <div class="terms-content">
-            <h4>1. Coleta de Informações</h4>
-            <p>Coletamos informações quando você se registra, faz um pedido ou interage com nosso site.</p>
-            
-            <h4>2. Uso das Informações</h4>
-            <p>Suas informações são usadas para processar pedidos, melhorar nossos serviços e comunicações.</p>
-            
-            <h4>3. Compartilhamento de Dados</h4>
-            <p>Não vendemos, trocamos ou transferimos suas informações pessoais para terceiros sem seu consentimento.</p>
-            
-            <h4>4. Segurança</h4>
-            <p>Implementamos medidas de segurança para proteger suas informações pessoais.</p>
-            
-            <h4>5. Cookies</h4>
-            <p>Utilizamos cookies para melhorar sua experiência e analisar o tráfego do site.</p>
-            
-            <h4>6. Seus Direitos</h4>
-            <p>Você pode acessar, atualizar ou excluir suas informações pessoais a qualquer momento.</p>
+    @if (showPrivacyModal) {
+      <div class="modal-overlay" (click)="showPrivacyModal = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h3>Política de Privacidade</h3>
+            <button class="modal-close" (click)="showPrivacyModal = false">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="terms-content">
+              <h4>1. Coleta de Informações</h4>
+              <p>Coletamos informações quando você se registra, faz um pedido ou interage com nosso site.</p>
+              <h4>2. Uso das Informações</h4>
+              <p>Suas informações são usadas para processar pedidos, melhorar nossos serviços e comunicações.</p>
+              <h4>3. Compartilhamento de Dados</h4>
+              <p>Não vendemos, trocamos ou transferimos suas informações pessoais para terceiros sem seu consentimento.</p>
+              <h4>4. Segurança</h4>
+              <p>Implementamos medidas de segurança para proteger suas informações pessoais.</p>
+              <h4>5. Cookies</h4>
+              <p>Utilizamos cookies para melhorar sua experiência e analisar o tráfego do site.</p>
+              <h4>6. Seus Direitos</h4>
+              <p>Você pode acessar, atualizar ou excluir suas informações pessoais a qualquer momento.</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  `,
+    }
+    `,
   styles: [`
     .register-form {
       display: flex;

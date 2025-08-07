@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,239 +8,267 @@ import { CartService, CartItem, CartSummary } from '../services/cart.service';
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [RouterModule, ReactiveFormsModule],
   template: `
     <div class="cart-page">
       <div class="container">
         <!-- Page Header -->
         <div class="page-header">
           <h1 class="page-title">🛒 Carrinho de Compras</h1>
-          <p class="page-subtitle" *ngIf="cartItems.length > 0">
-            {{ cartSummary.itemCount }} {{ cartSummary.itemCount === 1 ? 'item' : 'itens' }} no seu carrinho
-          </p>
-        </div>
-
-        <div class="cart-layout" *ngIf="cartItems.length > 0">
-          <!-- Cart Items -->
-          <div class="cart-items-section">
-            <div class="cart-items">
-              <div *ngFor="let item of cartItems; trackBy: trackByItemId" class="cart-item">
-                <div class="item-image">
-                  <img [src]="item.productImage" [alt]="item.productName" loading="lazy">
-                  <span class="item-category">{{ item.productCategory }}</span>
-                </div>
-                
-                <div class="item-details">
-                  <h3 class="item-name">{{ item.productName }}</h3>
-                  
-                  <!-- Customizations -->
-                  <div class="item-customizations" *ngIf="hasCustomizations(item)">
-                    <div *ngIf="item.customization.size" class="customization-item">
-                      <strong>Tamanho:</strong> {{ item.customization.size.name }}
-                      <span *ngIf="item.customization.size.price > 0" class="customization-price">
-                        (+R$ {{ item.customization.size.price.toFixed(2).replace('.', ',') }})
-                      </span>
-                    </div>
-                    
-                    <div *ngIf="item.customization.flavor" class="customization-item">
-                      <strong>Sabor:</strong> {{ item.customization.flavor.name }}
-                      <span *ngIf="item.customization.flavor.price > 0" class="customization-price">
-                        (+R$ {{ item.customization.flavor.price.toFixed(2).replace('.', ',') }})
-                      </span>
-                    </div>
-                    
-                    <div *ngIf="item.customization.decoration" class="customization-item">
-                      <strong>Decoração:</strong> {{ item.customization.decoration.name }}
-                      <span *ngIf="item.customization.decoration.price > 0" class="customization-price">
-                        (+R$ {{ item.customization.decoration.price.toFixed(2).replace('.', ',') }})
-                      </span>
-                    </div>
-                    
-                    <div *ngIf="item.customization.extras && item.customization.extras.length > 0" 
-                         class="customization-item">
-                      <strong>Extras:</strong>
-                      <span *ngFor="let extra of item.customization.extras; let last = last">
-                        {{ extra.name }}
-                        <span class="customization-price">(+R$ {{ extra.price.toFixed(2).replace('.', ',') }})</span>
-                        <span *ngIf="!last">, </span>
-                      </span>
-                    </div>
-                    
-                    <div *ngIf="item.customization.specialInstructions" class="customization-item special-instructions">
-                      <strong>Instruções especiais:</strong>
-                      <span class="instructions-text">{{ item.customization.specialInstructions }}</span>
-                    </div>
-                  </div>
-                  
-                  <!-- Price per unit -->
-                  <div class="item-unit-price">
-                    R$ {{ item.unitPrice.toFixed(2).replace('.', ',') }} por unidade
-                  </div>
-                </div>
-                
-                <div class="item-actions">
-                  <!-- Quantity Controls -->
-                  <div class="quantity-controls">
-                    <button 
-                      class="quantity-btn quantity-btn--decrease"
-                      (click)="decreaseQuantity(item)"
-                      [disabled]="item.quantity <= 1">
-                      -
-                    </button>
-                    <span class="quantity-display">{{ item.quantity }}</span>
-                    <button 
-                      class="quantity-btn quantity-btn--increase"
-                      (click)="increaseQuantity(item)"
-                      [disabled]="item.quantity >= 20">
-                      +
-                    </button>
-                  </div>
-                  
-                  <!-- Item Total Price -->
-                  <div class="item-total-price">
-                    <span class="price-label">Total:</span>
-                    <span class="price-value">R$ {{ item.totalPrice.toFixed(2).replace('.', ',') }}</span>
-                  </div>
-                  
-                  <!-- Remove Button -->
-                  <button 
-                    class="remove-btn"
-                    (click)="removeItem(item)"
-                    title="Remover item">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Promo Code Section -->
-            <div class="promo-code-section">
-              <form [formGroup]="promoForm" (ngSubmit)="applyPromoCode()" class="promo-form">
-                <div class="promo-input-group">
-                  <input
-                    type="text"
-                    formControlName="code"
-                    placeholder="Código promocional"
-                    class="promo-input"
-                    [class.error]="promoError">
-                  <button 
-                    type="submit" 
-                    class="promo-btn"
-                    [disabled]="promoForm.invalid || isApplyingPromo">
-                    <span *ngIf="!isApplyingPromo">Aplicar</span>
-                    <span *ngIf="isApplyingPromo">Aplicando...</span>
-                  </button>
-                </div>
-                
-                <div *ngIf="promoError" class="promo-error">
-                  {{ promoError }}
-                </div>
-                
-                <div *ngIf="promoSuccess" class="promo-success">
-                  {{ promoSuccess }}
-                </div>
-              </form>
-              
-              <!-- Available Promo Codes Hint -->
-              <div class="promo-hints">
-                <button class="promo-hint-btn" (click)="togglePromoHints()">
-                  <span *ngIf="!showPromoHints">Ver códigos disponíveis</span>
-                  <span *ngIf="showPromoHints">Ocultar códigos</span>
-                </button>
-                
-                <div *ngIf="showPromoHints" class="promo-hints-list">
-                  <div class="promo-hint-item">
-                    <strong>BEMVINDO10:</strong> 10% de desconto para novos clientes (pedido mín. R$ 50)
-                  </div>
-                  <div class="promo-hint-item">
-                    <strong>FRETEGRATIS:</strong> Frete grátis acima de R$ 30
-                  </div>
-                  <div class="promo-hint-item">
-                    <strong>ANIVERSARIO20:</strong> 20% de desconto especial (pedido mín. R$ 100)
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Cart Summary -->
-          <div class="cart-summary-section">
-            <div class="cart-summary">
-              <h3 class="summary-title">Resumo do Pedido</h3>
-              
-              <div class="summary-row">
-                <span class="summary-label">Subtotal ({{ cartSummary.itemCount }} {{ cartSummary.itemCount === 1 ? 'item' : 'itens' }}):</span>
-                <span class="summary-value">R$ {{ cartSummary.subtotal.toFixed(2).replace('.', ',') }}</span>
-              </div>
-              
-              <div class="summary-row">
-                <span class="summary-label">Entrega:</span>
-                <span class="summary-value" [class.free-shipping]="cartSummary.deliveryFee === 0">
-                  <span *ngIf="cartSummary.deliveryFee === 0">Grátis</span>
-                  <span *ngIf="cartSummary.deliveryFee > 0">R$ {{ cartSummary.deliveryFee.toFixed(2).replace('.', ',') }}</span>
-                </span>
-              </div>
-              
-              <div *ngIf="cartSummary.discount > 0" class="summary-row discount-row">
-                <span class="summary-label">Desconto:</span>
-                <span class="summary-value discount-value">-R$ {{ cartSummary.discount.toFixed(2).replace('.', ',') }}</span>
-              </div>
-              
-              <div class="summary-divider"></div>
-              
-              <div class="summary-row total-row">
-                <span class="summary-label">Total:</span>
-                <span class="summary-value total-value">R$ {{ cartSummary.total.toFixed(2).replace('.', ',') }}</span>
-              </div>
-              
-              <!-- Free Shipping Progress -->
-              <div *ngIf="cartSummary.deliveryFee > 0 && cartSummary.subtotal < 80" class="free-shipping-progress">
-                <div class="progress-text">
-                  Adicione mais R$ {{ (80 - cartSummary.subtotal).toFixed(2).replace('.', ',') }} para ganhar frete grátis!
-                </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" [style.width.%]="(cartSummary.subtotal / 80) * 100"></div>
-                </div>
-              </div>
-              
-              <!-- Delivery Estimate -->
-              <div class="delivery-estimate">
-                <div class="estimate-title">📦 Prazo de entrega</div>
-                <div class="estimate-time">{{ deliveryEstimate.min }}-{{ deliveryEstimate.max }} horas úteis</div>
-                <div class="estimate-type">{{ deliveryEstimate.type }}</div>
-              </div>
-              
-              <!-- Action Buttons -->
-              <div class="summary-actions">
-                <button class="btn btn--outline" (click)="continueShopping()">
-                  ← Continuar Comprando
-                </button>
-                <button class="btn btn--sweet" (click)="proceedToCheckout()">
-                  Finalizar Pedido →
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Empty Cart State -->
-        <div *ngIf="cartItems.length === 0" class="empty-cart">
-          <div class="empty-cart-content">
-            <div class="empty-cart-icon">🛒</div>
-            <h2 class="empty-cart-title">Seu carrinho está vazio</h2>
-            <p class="empty-cart-text">
-              Que tal explorar nossos deliciosos produtos e adicionar alguns ao seu carrinho?
+          @if (cartItems.length > 0) {
+            <p class="page-subtitle">
+              {{ cartSummary.itemCount }} {{ cartSummary.itemCount === 1 ? 'item' : 'itens' }} no seu carrinho
             </p>
-            <button class="btn btn--sweet" (click)="continueShopping()">
-              Ver Produtos
-            </button>
-          </div>
+          }
         </div>
+    
+        @if (cartItems.length > 0) {
+          <div class="cart-layout">
+            <!-- Cart Items -->
+            <div class="cart-items-section">
+              <div class="cart-items">
+                @for (item of cartItems; track trackByItemId($index, item)) {
+                  <div class="cart-item">
+                    <div class="item-image">
+                      <img [src]="item.productImage" [alt]="item.productName" loading="lazy">
+                      <span class="item-category">{{ item.productCategory }}</span>
+                    </div>
+                    <div class="item-details">
+                      <h3 class="item-name">{{ item.productName }}</h3>
+                      <!-- Customizations -->
+                      @if (hasCustomizations(item)) {
+                        <div class="item-customizations">
+                          @if (item.customization.size) {
+                            <div class="customization-item">
+                              <strong>Tamanho:</strong> {{ item.customization.size.name }}
+                              @if (item.customization.size.price > 0) {
+                                <span class="customization-price">
+                                  (+R$ {{ item.customization.size.price.toFixed(2).replace('.', ',') }})
+                                </span>
+                              }
+                            </div>
+                          }
+                          @if (item.customization.flavor) {
+                            <div class="customization-item">
+                              <strong>Sabor:</strong> {{ item.customization.flavor.name }}
+                              @if (item.customization.flavor.price > 0) {
+                                <span class="customization-price">
+                                  (+R$ {{ item.customization.flavor.price.toFixed(2).replace('.', ',') }})
+                                </span>
+                              }
+                            </div>
+                          }
+                          @if (item.customization.decoration) {
+                            <div class="customization-item">
+                              <strong>Decoração:</strong> {{ item.customization.decoration.name }}
+                              @if (item.customization.decoration.price > 0) {
+                                <span class="customization-price">
+                                  (+R$ {{ item.customization.decoration.price.toFixed(2).replace('.', ',') }})
+                                </span>
+                              }
+                            </div>
+                          }
+                          @if (item.customization.extras && item.customization.extras.length > 0) {
+                            <div
+                              class="customization-item">
+                              <strong>Extras:</strong>
+                              @for (extra of item.customization.extras; track extra; let last = $last) {
+                                <span>
+                                  {{ extra.name }}
+                                  <span class="customization-price">(+R$ {{ extra.price.toFixed(2).replace('.', ',') }})</span>
+                                  @if (!last) {
+                                    <span>, </span>
+                                  }
+                                </span>
+                              }
+                            </div>
+                          }
+                          @if (item.customization.specialInstructions) {
+                            <div class="customization-item special-instructions">
+                              <strong>Instruções especiais:</strong>
+                              <span class="instructions-text">{{ item.customization.specialInstructions }}</span>
+                            </div>
+                          }
+                        </div>
+                      }
+                      <!-- Price per unit -->
+                      <div class="item-unit-price">
+                        R$ {{ item.unitPrice.toFixed(2).replace('.', ',') }} por unidade
+                      </div>
+                    </div>
+                    <div class="item-actions">
+                      <!-- Quantity Controls -->
+                      <div class="quantity-controls">
+                        <button
+                          class="quantity-btn quantity-btn--decrease"
+                          (click)="decreaseQuantity(item)"
+                          [disabled]="item.quantity <= 1">
+                          -
+                        </button>
+                        <span class="quantity-display">{{ item.quantity }}</span>
+                        <button
+                          class="quantity-btn quantity-btn--increase"
+                          (click)="increaseQuantity(item)"
+                          [disabled]="item.quantity >= 20">
+                          +
+                        </button>
+                      </div>
+                      <!-- Item Total Price -->
+                      <div class="item-total-price">
+                        <span class="price-label">Total:</span>
+                        <span class="price-value">R$ {{ item.totalPrice.toFixed(2).replace('.', ',') }}</span>
+                      </div>
+                      <!-- Remove Button -->
+                      <button
+                        class="remove-btn"
+                        (click)="removeItem(item)"
+                        title="Remover item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+              <!-- Promo Code Section -->
+              <div class="promo-code-section">
+                <form [formGroup]="promoForm" (ngSubmit)="applyPromoCode()" class="promo-form">
+                  <div class="promo-input-group">
+                    <input
+                      type="text"
+                      formControlName="code"
+                      placeholder="Código promocional"
+                      class="promo-input"
+                      [class.error]="promoError">
+                    <button
+                      type="submit"
+                      class="promo-btn"
+                      [disabled]="promoForm.invalid || isApplyingPromo">
+                      @if (!isApplyingPromo) {
+                        <span>Aplicar</span>
+                      }
+                      @if (isApplyingPromo) {
+                        <span>Aplicando...</span>
+                      }
+                    </button>
+                  </div>
+                  @if (promoError) {
+                    <div class="promo-error">
+                      {{ promoError }}
+                    </div>
+                  }
+                  @if (promoSuccess) {
+                    <div class="promo-success">
+                      {{ promoSuccess }}
+                    </div>
+                  }
+                </form>
+                <!-- Available Promo Codes Hint -->
+                <div class="promo-hints">
+                  <button class="promo-hint-btn" (click)="togglePromoHints()">
+                    @if (!showPromoHints) {
+                      <span>Ver códigos disponíveis</span>
+                    }
+                    @if (showPromoHints) {
+                      <span>Ocultar códigos</span>
+                    }
+                  </button>
+                  @if (showPromoHints) {
+                    <div class="promo-hints-list">
+                      <div class="promo-hint-item">
+                        <strong>BEMVINDO10:</strong> 10% de desconto para novos clientes (pedido mín. R$ 50)
+                      </div>
+                      <div class="promo-hint-item">
+                        <strong>FRETEGRATIS:</strong> Frete grátis acima de R$ 30
+                      </div>
+                      <div class="promo-hint-item">
+                        <strong>ANIVERSARIO20:</strong> 20% de desconto especial (pedido mín. R$ 100)
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+            <!-- Cart Summary -->
+            <div class="cart-summary-section">
+              <div class="cart-summary">
+                <h3 class="summary-title">Resumo do Pedido</h3>
+                <div class="summary-row">
+                  <span class="summary-label">Subtotal ({{ cartSummary.itemCount }} {{ cartSummary.itemCount === 1 ? 'item' : 'itens' }}):</span>
+                  <span class="summary-value">R$ {{ cartSummary.subtotal.toFixed(2).replace('.', ',') }}</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Entrega:</span>
+                  <span class="summary-value" [class.free-shipping]="cartSummary.deliveryFee === 0">
+                    @if (cartSummary.deliveryFee === 0) {
+                      <span>Grátis</span>
+                    }
+                    @if (cartSummary.deliveryFee > 0) {
+                      <span>R$ {{ cartSummary.deliveryFee.toFixed(2).replace('.', ',') }}</span>
+                    }
+                  </span>
+                </div>
+                @if (cartSummary.discount > 0) {
+                  <div class="summary-row discount-row">
+                    <span class="summary-label">Desconto:</span>
+                    <span class="summary-value discount-value">-R$ {{ cartSummary.discount.toFixed(2).replace('.', ',') }}</span>
+                  </div>
+                }
+                <div class="summary-divider"></div>
+                <div class="summary-row total-row">
+                  <span class="summary-label">Total:</span>
+                  <span class="summary-value total-value">R$ {{ cartSummary.total.toFixed(2).replace('.', ',') }}</span>
+                </div>
+                <!-- Free Shipping Progress -->
+                @if (cartSummary.deliveryFee > 0 && cartSummary.subtotal < 80) {
+                  <div class="free-shipping-progress">
+                    <div class="progress-text">
+                      Adicione mais R$ {{ (80 - cartSummary.subtotal).toFixed(2).replace('.', ',') }} para ganhar frete grátis!
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="(cartSummary.subtotal / 80) * 100"></div>
+                    </div>
+                  </div>
+                }
+                <!-- Delivery Estimate -->
+                <div class="delivery-estimate">
+                  <div class="estimate-title">📦 Prazo de entrega</div>
+                  <div class="estimate-time">{{ deliveryEstimate.min }}-{{ deliveryEstimate.max }} horas úteis</div>
+                  <div class="estimate-type">{{ deliveryEstimate.type }}</div>
+                </div>
+                <!-- Action Buttons -->
+                <div class="summary-actions">
+                  <button class="btn btn--outline" (click)="continueShopping()">
+                    ← Continuar Comprando
+                  </button>
+                  <button class="btn btn--sweet" (click)="proceedToCheckout()">
+                    Finalizar Pedido →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+    
+        <!-- Empty Cart State -->
+        @if (cartItems.length === 0) {
+          <div class="empty-cart">
+            <div class="empty-cart-content">
+              <div class="empty-cart-icon">🛒</div>
+              <h2 class="empty-cart-title">Seu carrinho está vazio</h2>
+              <p class="empty-cart-text">
+                Que tal explorar nossos deliciosos produtos e adicionar alguns ao seu carrinho?
+              </p>
+              <button class="btn btn--sweet" (click)="continueShopping()">
+                Ver Produtos
+              </button>
+            </div>
+          </div>
+        }
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .cart-page {
       background: #f8fafc;

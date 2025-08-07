@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -9,26 +9,26 @@ import { CartService } from '../services/cart.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   template: `
     <header class="header">
       <nav class="navbar">
         <div class="container">
           <div class="navbar-content">
-            
+    
             <!-- Logo -->
             <div class="navbar-brand">
               <a routerLink="/home" class="logo-link">
                 <div class="logo">
-                  <img src="/logo.jpg" 
-                       alt="Mesquita Cakes" 
-                       class="logo-image"
-                       (error)="onLogoError($event)">
+                  <img src="/logo.jpg"
+                    alt="Mesquita Cakes"
+                    class="logo-image"
+                    (error)="onLogoError($event)">
                   <span class="logo-text">Mesquita Cakes</span>
                 </div>
               </a>
             </div>
-            
+    
             <!-- Navigation Menu -->
             <nav class="navbar-menu" [class.active]="menuOpen">
               <a routerLink="/home" class="nav-link" routerLinkActive="active" (click)="closeMenu()">Home</a>
@@ -36,74 +36,79 @@ import { CartService } from '../services/cart.service';
               <a routerLink="/sobre" class="nav-link" routerLinkActive="active" (click)="closeMenu()">Sobre</a>
               <a routerLink="/contato" class="nav-link" routerLinkActive="active" (click)="closeMenu()">Contato</a>
             </nav>
-            
+    
             <!-- Action Buttons -->
             <div class="navbar-actions">
               <!-- User Menu (when logged in) -->
-              <div *ngIf="currentUser" class="user-menu">
-                <button class="user-btn" (click)="toggleUserMenu()">
-                  <div class="user-avatar">
-                    <span>{{ getUserInitials(currentUser.name) }}</span>
-                  </div>
-                  <span class="user-name">{{ currentUser.name.split(' ')[0] }}</span>
-                  <svg class="dropdown-icon" [class.open]="userMenuOpen" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M7 10l5 5 5-5z"/>
-                  </svg>
-                </button>
-                
-                <!-- User Dropdown -->
-                <div class="user-dropdown" [class.active]="userMenuOpen">
-                  <div class="user-info">
-                    <div class="user-avatar-large">
+              @if (currentUser) {
+                <div class="user-menu">
+                  <button class="user-btn" (click)="toggleUserMenu()">
+                    <div class="user-avatar">
                       <span>{{ getUserInitials(currentUser.name) }}</span>
                     </div>
-                    <div class="user-details">
-                      <h4>{{ currentUser.name }}</h4>
-                      <p>{{ currentUser.email }}</p>
-                      <span class="user-role" [class.admin]="currentUser.role === 'ADMIN'">
-                        {{ currentUser.role === 'ADMIN' ? 'Administrador' : 'Cliente' }}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="dropdown-divider"></div>
-                  <div class="dropdown-menu">
-                    <button class="dropdown-item" (click)="goToProfile()">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                      </svg>
-                      Meu Perfil
-                    </button>
-                    <button class="dropdown-item" (click)="goToOrders()">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                      </svg>
-                      Meus Pedidos
-                    </button>
-                    <button *ngIf="currentUser.role === 'ADMIN'" class="dropdown-item" (click)="goToAdmin()">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                      </svg>
-                      Painel Admin
-                    </button>
-                  </div>
-                  <div class="dropdown-divider"></div>
-                  <button class="dropdown-item logout-btn" (click)="logout()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                    <span class="user-name">{{ currentUser.name.split(' ')[0] }}</span>
+                    <svg class="dropdown-icon" [class.open]="userMenuOpen" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M7 10l5 5 5-5z"/>
                     </svg>
-                    Sair
                   </button>
+                  <!-- User Dropdown -->
+                  <div class="user-dropdown" [class.active]="userMenuOpen">
+                    <div class="user-info">
+                      <div class="user-avatar-large">
+                        <span>{{ getUserInitials(currentUser.name) }}</span>
+                      </div>
+                      <div class="user-details">
+                        <h4>{{ currentUser.name }}</h4>
+                        <p>{{ currentUser.email }}</p>
+                        <span class="user-role" [class.admin]="currentUser.role === 'ADMIN'">
+                          {{ currentUser.role === 'ADMIN' ? 'Administrador' : 'Cliente' }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-menu">
+                      <button class="dropdown-item" (click)="goToProfile()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        Meu Perfil
+                      </button>
+                      <button class="dropdown-item" (click)="goToOrders()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                        Meus Pedidos
+                      </button>
+                      @if (currentUser.role === 'ADMIN') {
+                        <button class="dropdown-item" (click)="goToAdmin()">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                          </svg>
+                          Painel Admin
+                        </button>
+                      }
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item logout-btn" (click)="logout()">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                      </svg>
+                      Sair
+                    </button>
+                  </div>
                 </div>
-              </div>
-              
+              }
+    
               <!-- Login Button (when not logged in) -->
-              <button *ngIf="!currentUser" class="login-btn btn btn--outline btn--sm" (click)="goToLogin()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v12z"/>
-                </svg>
-                Entrar
-              </button>
-              
+              @if (!currentUser) {
+                <button class="login-btn btn btn--outline btn--sm" (click)="goToLogin()">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v12z"/>
+                  </svg>
+                  Entrar
+                </button>
+              }
+    
               <!-- Cart Button -->
               <button class="cart-btn" (click)="toggleCart()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -111,9 +116,11 @@ import { CartService } from '../services/cart.service';
                   <circle cx="20" cy="21" r="1"></circle>
                   <path d="m1 1 4 4 6.38 12h8.62l2-8h-13"></path>
                 </svg>
-                <span class="cart-count" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+                @if (cartItemCount > 0) {
+                  <span class="cart-count">{{ cartItemCount }}</span>
+                }
               </button>
-              
+    
               <!-- WhatsApp Button -->
               <button class="whatsapp-btn btn btn--sweet btn--sm" (click)="openWhatsApp()">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -121,7 +128,7 @@ import { CartService } from '../services/cart.service';
                 </svg>
                 Pedidos
               </button>
-              
+    
               <!-- Mobile Menu Toggle -->
               <button class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle menu">
                 <span class="hamburger-line" [class.active]="menuOpen"></span>
@@ -129,18 +136,18 @@ import { CartService } from '../services/cart.service';
                 <span class="hamburger-line" [class.active]="menuOpen"></span>
               </button>
             </div>
-            
+    
           </div>
         </div>
       </nav>
-      
+    
       <!-- Mobile Menu Overlay -->
       <div class="mobile-overlay" [class.active]="menuOpen" (click)="closeMenu()"></div>
-      
+    
       <!-- User Menu Overlay -->
       <div class="user-overlay" [class.active]="userMenuOpen" (click)="closeUserMenu()"></div>
     </header>
-  `,
+    `,
   styles: [`
     .header {
       position: fixed;

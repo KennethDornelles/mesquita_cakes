@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { CheckoutService, Order } from '../services/checkout.service';
 
 @Component({
   selector: 'app-order-confirmation',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="confirmation-page">
       <div class="container">
         <div class="confirmation-content">
-          
+    
           <!-- Success Animation -->
           <div class="success-animation">
             <div class="checkmark-circle">
               <div class="checkmark">✓</div>
             </div>
           </div>
-          
+    
           <!-- Header -->
           <div class="confirmation-header">
             <h1 class="confirmation-title">🎉 Pedido Confirmado!</h1>
@@ -26,186 +26,196 @@ import { CheckoutService, Order } from '../services/checkout.service';
               Seu pedido foi realizado com sucesso e já está sendo preparado com muito carinho.
             </p>
           </div>
-          
+    
           <!-- Order Details -->
-          <div *ngIf="order" class="order-details">
-            <div class="order-card">
-              <div class="order-header">
-                <div class="order-number">
-                  <span class="label">Número do Pedido</span>
-                  <span class="number">#{{ order.orderNumber }}</span>
-                </div>
-                <div class="order-status">
-                  <span class="status-badge" [class]="'status-' + order.status">
-                    {{ getStatusText(order.status) }}
-                  </span>
-                </div>
-              </div>
-              
-              <!-- Delivery Info -->
-              <div class="delivery-info">
-                <div class="info-section">
-                  <div class="info-icon">🕒</div>
-                  <div class="info-content">
-                    <div class="info-title">Previsão de Entrega</div>
-                    <div class="info-value">{{ order.deliveryEstimate }}</div>
+          @if (order) {
+            <div class="order-details">
+              <div class="order-card">
+                <div class="order-header">
+                  <div class="order-number">
+                    <span class="label">Número do Pedido</span>
+                    <span class="number">#{{ order.orderNumber }}</span>
+                  </div>
+                  <div class="order-status">
+                    <span class="status-badge" [class]="'status-' + order.status">
+                      {{ getStatusText(order.status) }}
+                    </span>
                   </div>
                 </div>
-                
-                <div class="info-section">
-                  <div class="info-icon">📍</div>
-                  <div class="info-content">
-                    <div class="info-title">Endereço de Entrega</div>
-                    <div class="info-value">{{ getDeliveryAddress() }}</div>
-                  </div>
-                </div>
-                
-                <div class="info-section">
-                  <div class="info-icon">💳</div>
-                  <div class="info-content">
-                    <div class="info-title">Forma de Pagamento</div>
-                    <div class="info-value">{{ getPaymentMethodText() }}</div>
-                  </div>
-                </div>
-                
-                <div class="info-section">
-                  <div class="info-icon">💰</div>
-                  <div class="info-content">
-                    <div class="info-title">Total do Pedido</div>
-                    <div class="info-value total-price">R$ {{ order.summary.total.toFixed(2).replace('.', ',') }}</div>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- PIX Payment Details -->
-              <div *ngIf="order.paymentMethod?.type === 'pix' && order.pixDetails" class="pix-payment">
-                <div class="pix-header">
-                  <h3>💳 Pagamento via PIX</h3>
-                  <p>Use o código abaixo para realizar o pagamento:</p>
-                </div>
-                
-                <div class="pix-code">
-                  <div class="pix-qr">
-                    <div class="qr-placeholder">
-                      📱 QR Code
+                <!-- Delivery Info -->
+                <div class="delivery-info">
+                  <div class="info-section">
+                    <div class="info-icon">🕒</div>
+                    <div class="info-content">
+                      <div class="info-title">Previsão de Entrega</div>
+                      <div class="info-value">{{ order.deliveryEstimate }}</div>
                     </div>
                   </div>
-                  
-                  <div class="pix-details">
-                    <div class="pix-info">
-                      <label>Código PIX:</label>
-                      <div class="code-container">
-                        <input type="text" [value]="order.pixDetails.code" readonly class="pix-code-input">
-                        <button class="copy-btn" (click)="copyPixCode()">Copiar</button>
+                  <div class="info-section">
+                    <div class="info-icon">📍</div>
+                    <div class="info-content">
+                      <div class="info-title">Endereço de Entrega</div>
+                      <div class="info-value">{{ getDeliveryAddress() }}</div>
+                    </div>
+                  </div>
+                  <div class="info-section">
+                    <div class="info-icon">💳</div>
+                    <div class="info-content">
+                      <div class="info-title">Forma de Pagamento</div>
+                      <div class="info-value">{{ getPaymentMethodText() }}</div>
+                    </div>
+                  </div>
+                  <div class="info-section">
+                    <div class="info-icon">💰</div>
+                    <div class="info-content">
+                      <div class="info-title">Total do Pedido</div>
+                      <div class="info-value total-price">R$ {{ order.summary.total.toFixed(2).replace('.', ',') }}</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- PIX Payment Details -->
+                @if (order.paymentMethod?.type === 'pix' && order.pixDetails) {
+                  <div class="pix-payment">
+                    <div class="pix-header">
+                      <h3>💳 Pagamento via PIX</h3>
+                      <p>Use o código abaixo para realizar o pagamento:</p>
+                    </div>
+                    <div class="pix-code">
+                      <div class="pix-qr">
+                        <div class="qr-placeholder">
+                          📱 QR Code
+                        </div>
+                      </div>
+                      <div class="pix-details">
+                        <div class="pix-info">
+                          <label>Código PIX:</label>
+                          <div class="code-container">
+                            <input type="text" [value]="order.pixDetails.code" readonly class="pix-code-input">
+                            <button class="copy-btn" (click)="copyPixCode()">Copiar</button>
+                          </div>
+                        </div>
+                        <div class="pix-info">
+                          <label>Valor:</label>
+                          <span class="pix-amount">R$ {{ order.summary.total.toFixed(2).replace('.', ',') }}</span>
+                        </div>
+                        <div class="pix-info">
+                          <label>Vencimento:</label>
+                          <span class="pix-expiry">{{ order.pixDetails.expiresAt }}</span>
+                        </div>
                       </div>
                     </div>
-                    
-                    <div class="pix-info">
-                      <label>Valor:</label>
-                      <span class="pix-amount">R$ {{ order.summary.total.toFixed(2).replace('.', ',') }}</span>
-                    </div>
-                    
-                    <div class="pix-info">
-                      <label>Vencimento:</label>
-                      <span class="pix-expiry">{{ order.pixDetails.expiresAt }}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="pix-instructions">
-                  <h4>Como pagar:</h4>
-                  <ol>
-                    <li>Abra o app do seu banco</li>
-                    <li>Escaneie o QR Code ou copie e cole o código PIX</li>
-                    <li>Confirme o pagamento</li>
-                    <li>Pronto! Seu pedido será confirmado automaticamente</li>
-                  </ol>
-                </div>
-              </div>
-              
-              <!-- Order Items -->
-              <div class="order-items">
-                <h3 class="items-title">Itens do Pedido</h3>
-                <div class="items-list">
-                  <div *ngFor="let item of order.items" class="order-item">
-                    <div class="item-image">
-                      <img [src]="item.productImage" [alt]="item.productName">
-                    </div>
-                    <div class="item-details">
-                      <h4>{{ item.productName }}</h4>
-                      <p class="item-customizations" *ngIf="hasCustomizations(item)">
-                        <span *ngIf="item.customization.size">{{ item.customization.size.name }}</span>
-                        <span *ngIf="item.customization.flavor"> • {{ item.customization.flavor.name }}</span>
-                        <span *ngIf="item.customization.decoration"> • {{ item.customization.decoration.name }}</span>
-                      </p>
-                      <p class="item-quantity">Quantidade: {{ item.quantity }}</p>
-                    </div>
-                    <div class="item-price">
-                      R$ {{ item.totalPrice.toFixed(2).replace('.', ',') }}
+                    <div class="pix-instructions">
+                      <h4>Como pagar:</h4>
+                      <ol>
+                        <li>Abra o app do seu banco</li>
+                        <li>Escaneie o QR Code ou copie e cole o código PIX</li>
+                        <li>Confirme o pagamento</li>
+                        <li>Pronto! Seu pedido será confirmado automaticamente</li>
+                      </ol>
                     </div>
                   </div>
+                }
+                <!-- Order Items -->
+                <div class="order-items">
+                  <h3 class="items-title">Itens do Pedido</h3>
+                  <div class="items-list">
+                    @for (item of order.items; track item) {
+                      <div class="order-item">
+                        <div class="item-image">
+                          <img [src]="item.productImage" [alt]="item.productName">
+                        </div>
+                        <div class="item-details">
+                          <h4>{{ item.productName }}</h4>
+                          @if (hasCustomizations(item)) {
+                            <p class="item-customizations">
+                              @if (item.customization.size) {
+                                <span>{{ item.customization.size.name }}</span>
+                              }
+                              @if (item.customization.flavor) {
+                                <span> • {{ item.customization.flavor.name }}</span>
+                              }
+                              @if (item.customization.decoration) {
+                                <span> • {{ item.customization.decoration.name }}</span>
+                              }
+                            </p>
+                          }
+                          <p class="item-quantity">Quantidade: {{ item.quantity }}</p>
+                        </div>
+                        <div class="item-price">
+                          R$ {{ item.totalPrice.toFixed(2).replace('.', ',') }}
+                        </div>
+                      </div>
+                    }
+                  </div>
                 </div>
-              </div>
-              
-              <!-- Order Summary -->
-              <div class="order-summary">
-                <div class="summary-row">
-                  <span>Subtotal:</span>
-                  <span>R$ {{ order.summary.subtotal.toFixed(2).replace('.', ',') }}</span>
-                </div>
-                
-                <div class="summary-row">
-                  <span>Entrega:</span>
-                  <span [class.free]="order.summary.deliveryFee === 0">
-                    <span *ngIf="order.summary.deliveryFee === 0">Grátis</span>
-                    <span *ngIf="order.summary.deliveryFee > 0">R$ {{ order.summary.deliveryFee.toFixed(2).replace('.', ',') }}</span>
-                  </span>
-                </div>
-                
-                <div *ngIf="order.summary.discount > 0" class="summary-row discount">
-                  <span>Desconto:</span>
-                  <span>-R$ {{ order.summary.discount.toFixed(2).replace('.', ',') }}</span>
-                </div>
-                
-                <div class="summary-divider"></div>
-                
-                <div class="summary-row total">
-                  <span>Total:</span>
-                  <span>R$ {{ order.summary.total.toFixed(2).replace('.', ',') }}</span>
+                <!-- Order Summary -->
+                <div class="order-summary">
+                  <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>R$ {{ order.summary.subtotal.toFixed(2).replace('.', ',') }}</span>
+                  </div>
+                  <div class="summary-row">
+                    <span>Entrega:</span>
+                    <span [class.free]="order.summary.deliveryFee === 0">
+                      @if (order.summary.deliveryFee === 0) {
+                        <span>Grátis</span>
+                      }
+                      @if (order.summary.deliveryFee > 0) {
+                        <span>R$ {{ order.summary.deliveryFee.toFixed(2).replace('.', ',') }}</span>
+                      }
+                    </span>
+                  </div>
+                  @if (order.summary.discount > 0) {
+                    <div class="summary-row discount">
+                      <span>Desconto:</span>
+                      <span>-R$ {{ order.summary.discount.toFixed(2).replace('.', ',') }}</span>
+                    </div>
+                  }
+                  <div class="summary-divider"></div>
+                  <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>R$ {{ order.summary.total.toFixed(2).replace('.', ',') }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          
+          }
+    
           <!-- Loading State -->
-          <div *ngIf="!order && !error" class="loading-state">
-            <div class="loading-spinner"></div>
-            <p>Carregando detalhes do pedido...</p>
-          </div>
-          
+          @if (!order && !error) {
+            <div class="loading-state">
+              <div class="loading-spinner"></div>
+              <p>Carregando detalhes do pedido...</p>
+            </div>
+          }
+    
           <!-- Error State -->
-          <div *ngIf="error" class="error-state">
-            <div class="error-icon">❌</div>
-            <h3>Ops! Algo deu errado</h3>
-            <p>{{ error }}</p>
-            <button class="btn btn--outline" (click)="goHome()">
-              Voltar ao Início
-            </button>
-          </div>
-          
+          @if (error) {
+            <div class="error-state">
+              <div class="error-icon">❌</div>
+              <h3>Ops! Algo deu errado</h3>
+              <p>{{ error }}</p>
+              <button class="btn btn--outline" (click)="goHome()">
+                Voltar ao Início
+              </button>
+            </div>
+          }
+    
           <!-- Actions -->
-          <div *ngIf="order" class="confirmation-actions">
-            <button class="btn btn--sweet" (click)="trackOrder()">
-              📦 Acompanhar Pedido
-            </button>
-            <button class="btn btn--outline" (click)="goHome()">
-              🏠 Voltar ao Início
-            </button>
-            <button class="btn btn--outline" (click)="orderAgain()">
-              🔄 Pedir Novamente
-            </button>
-          </div>
-          
+          @if (order) {
+            <div class="confirmation-actions">
+              <button class="btn btn--sweet" (click)="trackOrder()">
+                📦 Acompanhar Pedido
+              </button>
+              <button class="btn btn--outline" (click)="goHome()">
+                🏠 Voltar ao Início
+              </button>
+              <button class="btn btn--outline" (click)="orderAgain()">
+                🔄 Pedir Novamente
+              </button>
+            </div>
+          }
+    
           <!-- Contact Info -->
           <div class="contact-info">
             <h3>Dúvidas sobre seu pedido?</h3>
@@ -225,7 +235,7 @@ import { CheckoutService, Order } from '../services/checkout.service';
         </div>
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .confirmation-page {
       background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);

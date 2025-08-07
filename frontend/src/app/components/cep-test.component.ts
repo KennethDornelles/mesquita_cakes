@@ -1,53 +1,61 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { AddressService } from '../services/address.service';
 
 @Component({
   selector: 'app-cep-test',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   template: `
     <div class="cep-test-container">
       <h2>Teste de CEP</h2>
-      
+    
       <div class="form-group">
         <label for="cep">Digite um CEP:</label>
-        <input 
-          id="cep" 
-          type="text" 
-          [(ngModel)]="cep" 
+        <input
+          id="cep"
+          type="text"
+          [(ngModel)]="cep"
           placeholder="00000-000"
           (input)="onCepChange()"
           maxlength="9">
       </div>
-      
-      <div *ngIf="isLoading" class="loading">
-        Buscando endereço...
-      </div>
-      
-      <div *ngIf="result && !isLoading" class="result">
-        <h3>Resultado:</h3>
-        <div *ngIf="result.valid" class="success">
-          <p><strong>CEP:</strong> {{ result.address?.zipCode }}</p>
-          <p><strong>Logradouro:</strong> {{ result.address?.street }}</p>
-          <p><strong>Bairro:</strong> {{ result.address?.neighborhood }}</p>
-          <p><strong>Cidade:</strong> {{ result.address?.city }}</p>
-          <p><strong>Estado:</strong> {{ result.address?.state }}</p>
-          
-          <div *ngIf="deliveryInfo" class="delivery-info">
-            <h4>Informações de Entrega:</h4>
-            <p><strong>Taxa:</strong> R$ {{ deliveryInfo.fee.toFixed(2).replace('.', ',') }}</p>
-            <p><strong>Prazo:</strong> {{ deliveryInfo.estimate }}</p>
-          </div>
+    
+      @if (isLoading) {
+        <div class="loading">
+          Buscando endereço...
         </div>
-        
-        <div *ngIf="!result.valid" class="error">
-          <p>❌ {{ result.error }}</p>
+      }
+    
+      @if (result && !isLoading) {
+        <div class="result">
+          <h3>Resultado:</h3>
+          @if (result.valid) {
+            <div class="success">
+              <p><strong>CEP:</strong> {{ result.address?.zipCode }}</p>
+              <p><strong>Logradouro:</strong> {{ result.address?.street }}</p>
+              <p><strong>Bairro:</strong> {{ result.address?.neighborhood }}</p>
+              <p><strong>Cidade:</strong> {{ result.address?.city }}</p>
+              <p><strong>Estado:</strong> {{ result.address?.state }}</p>
+              @if (deliveryInfo) {
+                <div class="delivery-info">
+                  <h4>Informações de Entrega:</h4>
+                  <p><strong>Taxa:</strong> R$ {{ deliveryInfo.fee.toFixed(2).replace('.', ',') }}</p>
+                  <p><strong>Prazo:</strong> {{ deliveryInfo.estimate }}</p>
+                </div>
+              }
+            </div>
+          }
+          @if (!result.valid) {
+            <div class="error">
+              <p>❌ {{ result.error }}</p>
+            </div>
+          }
         </div>
-      </div>
+      }
     </div>
-  `,
+    `,
   styles: [`
     .cep-test-container {
       max-width: 500px;

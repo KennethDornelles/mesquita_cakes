@@ -1,15 +1,15 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, LoginRequest } from '../services/auth.service';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   template: `
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-      
+    
       <!-- Email Field -->
       <div class="form-group">
         <label for="email" class="form-label">E-mail</label>
@@ -26,12 +26,18 @@ import { AuthService, LoginRequest } from '../services/auth.service';
             placeholder="seu@email.com"
             autocomplete="email">
         </div>
-        <div *ngIf="emailControl?.invalid && emailControl?.touched" class="error-message">
-          <span *ngIf="emailControl?.errors?.['required']">E-mail é obrigatório</span>
-          <span *ngIf="emailControl?.errors?.['email']">E-mail inválido</span>
-        </div>
+        @if (emailControl?.invalid && emailControl?.touched) {
+          <div class="error-message">
+            @if (emailControl?.errors?.['required']) {
+              <span>E-mail é obrigatório</span>
+            }
+            @if (emailControl?.errors?.['email']) {
+              <span>E-mail inválido</span>
+            }
+          </div>
+        }
       </div>
-
+    
       <!-- Password Field -->
       <div class="form-group">
         <label for="password" class="form-label">Senha</label>
@@ -52,20 +58,30 @@ import { AuthService, LoginRequest } from '../services/auth.service';
             class="password-toggle"
             (click)="togglePassword()"
             title="{{ showPassword ? 'Ocultar senha' : 'Mostrar senha' }}">
-            <svg *ngIf="!showPassword" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-            </svg>
-            <svg *ngIf="showPassword" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/>
-            </svg>
+            @if (!showPassword) {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            }
+            @if (showPassword) {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/>
+              </svg>
+            }
           </button>
         </div>
-        <div *ngIf="passwordControl?.invalid && passwordControl?.touched" class="error-message">
-          <span *ngIf="passwordControl?.errors?.['required']">Senha é obrigatória</span>
-          <span *ngIf="passwordControl?.errors?.['minlength']">Senha deve ter pelo menos 6 caracteres</span>
-        </div>
+        @if (passwordControl?.invalid && passwordControl?.touched) {
+          <div class="error-message">
+            @if (passwordControl?.errors?.['required']) {
+              <span>Senha é obrigatória</span>
+            }
+            @if (passwordControl?.errors?.['minlength']) {
+              <span>Senha deve ter pelo menos 6 caracteres</span>
+            }
+          </div>
+        }
       </div>
-
+    
       <!-- Remember Me and Forgot Password -->
       <div class="form-options">
         <label class="checkbox-label">
@@ -76,30 +92,36 @@ import { AuthService, LoginRequest } from '../services/auth.service';
           Esqueci minha senha
         </button>
       </div>
-
+    
       <!-- Submit Button -->
-      <button 
-        type="submit" 
+      <button
+        type="submit"
         class="submit-btn"
         [disabled]="loginForm.invalid || isLoading"
         [class.loading]="isLoading">
-        <span *ngIf="!isLoading">Entrar</span>
-        <span *ngIf="isLoading" class="loading-content">
-          <svg class="loading-spinner" width="20" height="20" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="32">
-              <animate attributeName="stroke-dasharray" dur="2s" values="0 32;16 16;0 32;0 32" repeatCount="indefinite"/>
-              <animate attributeName="stroke-dashoffset" dur="2s" values="0;-16;-32;-32" repeatCount="indefinite"/>
-            </circle>
-          </svg>
-          Entrando...
-        </span>
+        @if (!isLoading) {
+          <span>Entrar</span>
+        }
+        @if (isLoading) {
+          <span class="loading-content">
+            <svg class="loading-spinner" width="20" height="20" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="32">
+                <animate attributeName="stroke-dasharray" dur="2s" values="0 32;16 16;0 32;0 32" repeatCount="indefinite"/>
+                <animate attributeName="stroke-dashoffset" dur="2s" values="0;-16;-32;-32" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+            Entrando...
+          </span>
+        }
       </button>
-
+    
       <!-- Error Message -->
-      <div *ngIf="errorMessage" class="form-error">
-        {{ errorMessage }}
-      </div>
-
+      @if (errorMessage) {
+        <div class="form-error">
+          {{ errorMessage }}
+        </div>
+      }
+    
       <!-- Demo Credentials -->
       <div class="demo-credentials">
         <p class="demo-title">🎯 Contas de demonstração:</p>
@@ -112,49 +134,51 @@ import { AuthService, LoginRequest } from '../services/auth.service';
           </button>
         </div>
       </div>
-
+    
       <!-- Register Link -->
       <div class="switch-mode">
-        <p>Não tem uma conta? 
+        <p>Não tem uma conta?
           <button type="button" class="switch-btn" (click)="onSwitchToRegister()">
             Criar conta
           </button>
         </p>
       </div>
     </form>
-
+    
     <!-- Forgot Password Modal -->
-    <div *ngIf="showForgotModal" class="modal-overlay" (click)="closeForgotModal()">
-      <div class="modal-content" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <h3>Recuperar Senha</h3>
-          <button class="modal-close" (click)="closeForgotModal()">×</button>
+    @if (showForgotModal) {
+      <div class="modal-overlay" (click)="closeForgotModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h3>Recuperar Senha</h3>
+            <button class="modal-close" (click)="closeForgotModal()">×</button>
+          </div>
+          <form [formGroup]="forgotForm" (ngSubmit)="onSubmitForgot()" class="forgot-form">
+            <p class="modal-description">
+              Digite seu e-mail e enviaremos um link para redefinir sua senha.
+            </p>
+            <div class="form-group">
+              <label for="forgotEmail" class="form-label">E-mail</label>
+              <input
+                id="forgotEmail"
+                type="email"
+                formControlName="email"
+                class="form-input"
+                placeholder="seu@email.com">
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn btn--secondary" (click)="closeForgotModal()">
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn--primary" [disabled]="forgotForm.invalid || isForgotLoading">
+                {{ isForgotLoading ? 'Enviando...' : 'Enviar Link' }}
+              </button>
+            </div>
+          </form>
         </div>
-        <form [formGroup]="forgotForm" (ngSubmit)="onSubmitForgot()" class="forgot-form">
-          <p class="modal-description">
-            Digite seu e-mail e enviaremos um link para redefinir sua senha.
-          </p>
-          <div class="form-group">
-            <label for="forgotEmail" class="form-label">E-mail</label>
-            <input
-              id="forgotEmail"
-              type="email"
-              formControlName="email"
-              class="form-input"
-              placeholder="seu@email.com">
-          </div>
-          <div class="modal-actions">
-            <button type="button" class="btn btn--secondary" (click)="closeForgotModal()">
-              Cancelar
-            </button>
-            <button type="submit" class="btn btn--primary" [disabled]="forgotForm.invalid || isForgotLoading">
-              {{ isForgotLoading ? 'Enviando...' : 'Enviar Link' }}
-            </button>
-          </div>
-        </form>
       </div>
-    </div>
-  `,
+    }
+    `,
   styles: [`
     .login-form {
       display: flex;

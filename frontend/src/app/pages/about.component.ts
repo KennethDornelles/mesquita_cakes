@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 
 interface TeamMember {
@@ -26,7 +26,7 @@ interface Value {
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="about-page">
       <div class="container">
@@ -59,26 +59,26 @@ interface Value {
             </div>
           </div>
         </div>
-
+    
         <!-- Story Section -->
         <div class="story-section">
           <div class="story-content">
             <h2 class="section-title">📖 Nossa Jornada</h2>
             <div class="story-text">
               <p>
-                A <strong>Mesquita Cakes</strong> nasceu em 2012 do sonho de Maria Silva, uma apaixonada confeiteira 
-                que transformou sua cozinha doméstica em um laboratório de sabores únicos. O que começou como 
-                uma pequena produção para amigos e familiares, hoje se tornou uma das confeitarias mais queridas 
+                A <strong>Mesquita Cakes</strong> nasceu em 2012 do sonho de Maria Silva, uma apaixonada confeiteira
+                que transformou sua cozinha doméstica em um laboratório de sabores únicos. O que começou como
+                uma pequena produção para amigos e familiares, hoje se tornou uma das confeitarias mais queridas
                 de Mesquita e região.
               </p>
               <p>
-                Nossa missão sempre foi clara: criar momentos especiais através de doces artesanais feitos com 
-                muito amor e ingredientes de primeira qualidade. Cada receita é cuidadosamente desenvolvida, 
+                Nossa missão sempre foi clara: criar momentos especiais através de doces artesanais feitos com
+                muito amor e ingredientes de primeira qualidade. Cada receita é cuidadosamente desenvolvida,
                 cada decoração é pensada nos mínimos detalhes, e cada cliente é tratado como parte da nossa família.
               </p>
               <p>
-                Ao longo dos anos, crescemos, mas nunca perdemos nossa essência familiar. Continuamos fazendo 
-                tudo à mão, com a mesma dedicação e carinho do primeiro dia. Nossa equipe é formada por pessoas 
+                Ao longo dos anos, crescemos, mas nunca perdemos nossa essência familiar. Continuamos fazendo
+                tudo à mão, com a mesma dedicação e carinho do primeiro dia. Nossa equipe é formada por pessoas
                 que compartilham da nossa paixão pela confeitaria e pelo atendimento excepcional.
               </p>
             </div>
@@ -86,62 +86,69 @@ interface Value {
           <div class="story-timeline">
             <h3>🕒 Marcos Importantes</h3>
             <div class="timeline">
-              <div *ngFor="let achievement of achievements" class="timeline-item">
-                <div class="timeline-icon">{{ achievement.icon }}</div>
-                <div class="timeline-content">
-                  <span class="timeline-year">{{ achievement.year }}</span>
-                  <h4>{{ achievement.title }}</h4>
-                  <p>{{ achievement.description }}</p>
+              @for (achievement of achievements; track achievement) {
+                <div class="timeline-item">
+                  <div class="timeline-icon">{{ achievement.icon }}</div>
+                  <div class="timeline-content">
+                    <span class="timeline-year">{{ achievement.year }}</span>
+                    <h4>{{ achievement.title }}</h4>
+                    <p>{{ achievement.description }}</p>
+                  </div>
                 </div>
-              </div>
+              }
             </div>
           </div>
         </div>
-
+    
         <!-- Values Section -->
         <div class="values-section">
           <h2 class="section-title">💖 Nossos Valores</h2>
           <p class="section-subtitle">
             Os princípios que guiam cada doce que criamos
           </p>
-          
+    
           <div class="values-grid">
-            <div *ngFor="let value of values" class="value-card">
-              <div class="value-icon">{{ value.icon }}</div>
-              <h3>{{ value.title }}</h3>
-              <p>{{ value.description }}</p>
-            </div>
+            @for (value of values; track value) {
+              <div class="value-card">
+                <div class="value-icon">{{ value.icon }}</div>
+                <h3>{{ value.title }}</h3>
+                <p>{{ value.description }}</p>
+              </div>
+            }
           </div>
         </div>
-
+    
         <!-- Team Section -->
         <div class="team-section">
           <h2 class="section-title">👥 Nossa Equipe</h2>
           <p class="section-subtitle">
             Conheça as pessoas talentosas por trás dos nossos doces
           </p>
-          
+    
           <div class="team-grid">
-            <div *ngFor="let member of teamMembers" class="team-card">
-              <div class="member-image">
-                <img [src]="member.image" [alt]="member.name">
-              </div>
-              <div class="member-info">
-                <h3>{{ member.name }}</h3>
-                <span class="member-role">{{ member.role }}</span>
-                <p class="member-description">{{ member.description }}</p>
-                <div class="member-specialties">
-                  <span 
-                    *ngFor="let specialty of member.specialties" 
-                    class="specialty-tag">
-                    {{ specialty }}
-                  </span>
+            @for (member of teamMembers; track member) {
+              <div class="team-card">
+                <div class="member-image">
+                  <img [src]="member.image" [alt]="member.name">
+                </div>
+                <div class="member-info">
+                  <h3>{{ member.name }}</h3>
+                  <span class="member-role">{{ member.role }}</span>
+                  <p class="member-description">{{ member.description }}</p>
+                  <div class="member-specialties">
+                    @for (specialty of member.specialties; track specialty) {
+                      <span
+                        class="specialty-tag">
+                        {{ specialty }}
+                      </span>
+                    }
+                  </div>
                 </div>
               </div>
-            </div>
+            }
           </div>
         </div>
-
+    
         <!-- Mission Section -->
         <div class="mission-section">
           <div class="mission-content">
@@ -150,39 +157,39 @@ interface Value {
               <div class="mission-text">
                 <h3>Missão</h3>
                 <p>
-                  Criar momentos especiais e inesquecíveis através de doces artesanais de alta qualidade, 
-                  feitos com amor e dedicação, proporcionando experiências únicas que toquem o coração 
+                  Criar momentos especiais e inesquecíveis através de doces artesanais de alta qualidade,
+                  feitos com amor e dedicação, proporcionando experiências únicas que toquem o coração
                   de nossos clientes.
                 </p>
               </div>
             </div>
-
+    
             <div class="mission-item">
               <div class="mission-icon">👁️</div>
               <div class="mission-text">
                 <h3>Visão</h3>
                 <p>
-                  Ser reconhecida como a confeitaria de referência na região, conhecida pela excelência 
-                  em qualidade, criatividade e atendimento, expandindo nossa presença e levando nossos 
+                  Ser reconhecida como a confeitaria de referência na região, conhecida pela excelência
+                  em qualidade, criatividade e atendimento, expandindo nossa presença e levando nossos
                   sabores únicos para cada vez mais pessoas.
                 </p>
               </div>
             </div>
-
+    
             <div class="mission-item">
               <div class="mission-icon">⭐</div>
               <div class="mission-text">
                 <h3>Valores</h3>
                 <p>
-                  Qualidade acima de tudo, atendimento humanizado, inovação constante, sustentabilidade, 
-                  respeito aos nossos colaboradores e clientes, e a paixão pela confeitaria como arte 
+                  Qualidade acima de tudo, atendimento humanizado, inovação constante, sustentabilidade,
+                  respeito aos nossos colaboradores e clientes, e a paixão pela confeitaria como arte
                   que transforma vidas.
                 </p>
               </div>
             </div>
           </div>
         </div>
-
+    
         <!-- Quality Section -->
         <div class="quality-section">
           <h2 class="section-title">🏆 Nosso Compromisso com a Qualidade</h2>
@@ -191,83 +198,83 @@ interface Value {
               <div class="quality-icon">🥄</div>
               <h3>Ingredientes Premium</h3>
               <p>
-                Selecionamos cuidadosamente cada ingrediente, priorizando fornecedores locais 
+                Selecionamos cuidadosamente cada ingrediente, priorizando fornecedores locais
                 e produtos de origem controlada para garantir o melhor sabor e qualidade.
               </p>
             </div>
-
+    
             <div class="quality-card">
               <div class="quality-icon">👨‍🍳</div>
               <h3>Produção Artesanal</h3>
               <p>
-                Todos os nossos doces são feitos à mão, seguindo receitas tradicionais 
+                Todos os nossos doces são feitos à mão, seguindo receitas tradicionais
                 aperfeiçoadas ao longo dos anos, garantindo autenticidade em cada mordida.
               </p>
             </div>
-
+    
             <div class="quality-card">
               <div class="quality-icon">🌡️</div>
               <h3>Controle Rigoroso</h3>
               <p>
-                Mantemos rígidos padrões de higiene e controle de qualidade em todas as 
+                Mantemos rígidos padrões de higiene e controle de qualidade em todas as
                 etapas da produção, seguindo as melhores práticas da indústria alimentícia.
               </p>
             </div>
-
+    
             <div class="quality-card">
               <div class="quality-icon">🎨</div>
               <h3>Criatividade Única</h3>
               <p>
-                Nossa equipe criativa está sempre desenvolvendo novos sabores e 
+                Nossa equipe criativa está sempre desenvolvendo novos sabores e
                 apresentações, combinando tradição com inovação para surpreender nossos clientes.
               </p>
             </div>
           </div>
         </div>
-
+    
         <!-- Community Section -->
         <div class="community-section">
           <h2 class="section-title">🤝 Compromisso Social</h2>
           <p class="section-subtitle">
             Acreditamos que uma empresa deve contribuir positivamente para sua comunidade
           </p>
-          
+    
           <div class="community-grid">
             <div class="community-card">
               <div class="community-icon">🎂</div>
               <h3>Doações para Instituições</h3>
               <p>
-                Mensalmente doamos bolos e doces para orfanatos, asilos e instituições 
+                Mensalmente doamos bolos e doces para orfanatos, asilos e instituições
                 de caridade da região, espalhando alegria para quem mais precisa.
               </p>
             </div>
-
+    
             <div class="community-card">
               <div class="community-icon">📚</div>
               <h3>Cursos Gratuitos</h3>
               <p>
-                Oferecemos oficinas gratuitas de confeitaria básica para jovens da 
+                Oferecemos oficinas gratuitas de confeitaria básica para jovens da
                 comunidade, promovendo capacitação profissional e geração de renda.
               </p>
             </div>
-
+    
             <div class="community-card">
               <div class="community-icon">🌱</div>
               <h3>Sustentabilidade</h3>
               <p>
-                Utilizamos embalagens eco-friendly, fazemos compostagem dos resíduos 
+                Utilizamos embalagens eco-friendly, fazemos compostagem dos resíduos
                 orgânicos e compramos de produtores locais sempre que possível.
               </p>
             </div>
           </div>
         </div>
-
+    
         <!-- CTA Section -->
         <div class="cta-section">
           <div class="cta-content">
             <h2>🎉 Faça Parte da Nossa História</h2>
             <p>
-              Venha conhecer nossa confeitaria e descobrir por que somos a escolha favorita 
+              Venha conhecer nossa confeitaria e descobrir por que somos a escolha favorita
               de milhares de clientes. Cada doce é uma nova história, cada cliente é especial.
             </p>
             <div class="cta-buttons">
@@ -282,7 +289,7 @@ interface Value {
         </div>
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .about-page {
       background: #f8fafc;

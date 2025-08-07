@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export interface Review {
@@ -17,199 +17,228 @@ export interface Review {
 @Component({
   selector: 'app-product-reviews',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   template: `
     <div class="product-reviews">
       <!-- Reviews Header -->
       <div class="reviews-header">
         <h3 class="reviews-title">Avaliações dos Clientes</h3>
-        
+    
         <!-- Rating Summary -->
         <div class="rating-summary">
           <div class="overall-rating">
             <div class="rating-score">{{ averageRating.toFixed(1) }}</div>
             <div class="rating-stars">
-              <span 
-                *ngFor="let star of getOverallStars(); let i = index"
-                class="star"
-                [class.filled]="star">
-                ⭐
-              </span>
+              @for (star of getOverallStars(); track star; let i = $index) {
+                <span
+                  class="star"
+                  [class.filled]="star">
+                  ⭐
+                </span>
+              }
             </div>
             <div class="rating-count">{{ reviews.length }} avaliações</div>
           </div>
-          
+    
           <!-- Rating Breakdown -->
           <div class="rating-breakdown">
-            <div *ngFor="let breakdown of ratingBreakdown" class="rating-row">
-              <span class="rating-label">{{ breakdown.stars }} estrelas</span>
-              <div class="rating-bar">
-                <div class="rating-fill" [style.width.%]="breakdown.percentage"></div>
+            @for (breakdown of ratingBreakdown; track breakdown) {
+              <div class="rating-row">
+                <span class="rating-label">{{ breakdown.stars }} estrelas</span>
+                <div class="rating-bar">
+                  <div class="rating-fill" [style.width.%]="breakdown.percentage"></div>
+                </div>
+                <span class="rating-percentage">{{ breakdown.percentage }}%</span>
               </div>
-              <span class="rating-percentage">{{ breakdown.percentage }}%</span>
-            </div>
+            }
           </div>
         </div>
       </div>
-      
+    
       <!-- Add Review Button -->
       <div class="add-review-section">
-        <button 
-          class="btn btn--outline"
-          (click)="toggleReviewForm()"
-          *ngIf="!showReviewForm">
-          ✏️ Escrever Avaliação
-        </button>
+        @if (!showReviewForm) {
+          <button
+            class="btn btn--outline"
+            (click)="toggleReviewForm()"
+            >
+            ✏️ Escrever Avaliação
+          </button>
+        }
       </div>
-      
+    
       <!-- Review Form -->
-      <div *ngIf="showReviewForm" class="review-form-container">
-        <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="review-form">
-          <h4>Deixe sua avaliação</h4>
-          
-          <!-- Rating Input -->
-          <div class="form-group">
-            <label class="form-label">Sua nota *</label>
-            <div class="star-rating-input">
+      @if (showReviewForm) {
+        <div class="review-form-container">
+          <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="review-form">
+            <h4>Deixe sua avaliação</h4>
+            <!-- Rating Input -->
+            <div class="form-group">
+              <label class="form-label">Sua nota *</label>
+              <div class="star-rating-input">
+                @for (star of [1,2,3,4,5]; track star; let i = $index) {
+                  <button
+                    type="button"
+                    class="star-btn"
+                    [class.active]="newRating >= star"
+                    (click)="setRating(star)">
+                    ⭐
+                  </button>
+                }
+              </div>
+              @if (reviewForm.get('rating')?.invalid && reviewForm.get('rating')?.touched) {
+                <div class="error-message">
+                  Por favor, selecione uma nota
+                </div>
+              }
+            </div>
+            <!-- Name Input -->
+            <div class="form-group">
+              <label for="reviewName" class="form-label">Seu nome *</label>
+              <input
+                id="reviewName"
+                type="text"
+                formControlName="name"
+                class="form-input"
+                placeholder="Digite seu nome">
+              @if (reviewForm.get('name')?.invalid && reviewForm.get('name')?.touched) {
+                <div class="error-message">
+                  Nome é obrigatório
+                </div>
+              }
+            </div>
+            <!-- Comment Input -->
+            <div class="form-group">
+              <label for="reviewComment" class="form-label">Seu comentário *</label>
+              <textarea
+                id="reviewComment"
+                formControlName="comment"
+                class="form-textarea"
+                rows="4"
+              placeholder="Conte-nos sobre sua experiência com este produto..."></textarea>
+              @if (reviewForm.get('comment')?.invalid && reviewForm.get('comment')?.touched) {
+                <div class="error-message">
+                  Comentário é obrigatório
+                </div>
+              }
+            </div>
+            <!-- Form Actions -->
+            <div class="form-actions">
+              <button type="button" class="btn btn--secondary" (click)="cancelReview()">
+                Cancelar
+              </button>
               <button
-                *ngFor="let star of [1,2,3,4,5]; let i = index"
-                type="button"
-                class="star-btn"
-                [class.active]="newRating >= star"
-                (click)="setRating(star)">
-                ⭐
+                type="submit"
+                class="btn btn--sweet"
+                [disabled]="reviewForm.invalid || isSubmitting">
+                @if (!isSubmitting) {
+                  <span>Enviar Avaliação</span>
+                }
+                @if (isSubmitting) {
+                  <span>Enviando...</span>
+                }
               </button>
             </div>
-            <div *ngIf="reviewForm.get('rating')?.invalid && reviewForm.get('rating')?.touched" class="error-message">
-              Por favor, selecione uma nota
-            </div>
-          </div>
-          
-          <!-- Name Input -->
-          <div class="form-group">
-            <label for="reviewName" class="form-label">Seu nome *</label>
-            <input
-              id="reviewName"
-              type="text"
-              formControlName="name"
-              class="form-input"
-              placeholder="Digite seu nome">
-            <div *ngIf="reviewForm.get('name')?.invalid && reviewForm.get('name')?.touched" class="error-message">
-              Nome é obrigatório
-            </div>
-          </div>
-          
-          <!-- Comment Input -->
-          <div class="form-group">
-            <label for="reviewComment" class="form-label">Seu comentário *</label>
-            <textarea
-              id="reviewComment"
-              formControlName="comment"
-              class="form-textarea"
-              rows="4"
-              placeholder="Conte-nos sobre sua experiência com este produto..."></textarea>
-            <div *ngIf="reviewForm.get('comment')?.invalid && reviewForm.get('comment')?.touched" class="error-message">
-              Comentário é obrigatório
-            </div>
-          </div>
-          
-          <!-- Form Actions -->
-          <div class="form-actions">
-            <button type="button" class="btn btn--secondary" (click)="cancelReview()">
-              Cancelar
-            </button>
-            <button 
-              type="submit" 
-              class="btn btn--sweet"
-              [disabled]="reviewForm.invalid || isSubmitting">
-              <span *ngIf="!isSubmitting">Enviar Avaliação</span>
-              <span *ngIf="isSubmitting">Enviando...</span>
-            </button>
-          </div>
-        </form>
-      </div>
-      
+          </form>
+        </div>
+      }
+    
       <!-- Reviews List -->
       <div class="reviews-list">
-        <div *ngFor="let review of displayedReviews" class="review-item">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar">
-                <img *ngIf="review.userAvatar" [src]="review.userAvatar" [alt]="review.userName">
-                <span *ngIf="!review.userAvatar">{{ getInitials(review.userName) }}</span>
-              </div>
-              <div class="reviewer-details">
-                <h5 class="reviewer-name">
-                  {{ review.userName }}
-                  <span *ngIf="review.verified" class="verified-badge" title="Compra verificada">✅</span>
-                </h5>
-                <div class="review-meta">
-                  <div class="review-stars">
-                    <span 
-                      *ngFor="let star of getReviewStars(review.rating); let i = index"
-                      class="star"
-                      [class.filled]="star">
-                      ⭐
-                    </span>
+        @for (review of displayedReviews; track review) {
+          <div class="review-item">
+            <div class="review-header">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">
+                  @if (review.userAvatar) {
+                    <img [src]="review.userAvatar" [alt]="review.userName">
+                  }
+                  @if (!review.userAvatar) {
+                    <span>{{ getInitials(review.userName) }}</span>
+                  }
+                </div>
+                <div class="reviewer-details">
+                  <h5 class="reviewer-name">
+                    {{ review.userName }}
+                    @if (review.verified) {
+                      <span class="verified-badge" title="Compra verificada">✅</span>
+                    }
+                  </h5>
+                  <div class="review-meta">
+                    <div class="review-stars">
+                      @for (star of getReviewStars(review.rating); track star; let i = $index) {
+                        <span
+                          class="star"
+                          [class.filled]="star">
+                          ⭐
+                        </span>
+                      }
+                    </div>
+                    <span class="review-date">{{ formatDate(review.date) }}</span>
                   </div>
-                  <span class="review-date">{{ formatDate(review.date) }}</span>
                 </div>
               </div>
+              <!-- Review Actions -->
+              <div class="review-actions">
+                <button
+                  class="helpful-btn"
+                  (click)="markHelpful(review)"
+                  [class.active]="isMarkedHelpful(review.id)">
+                  👍 Útil ({{ review.helpful }})
+                </button>
+              </div>
             </div>
-            
-            <!-- Review Actions -->
-            <div class="review-actions">
-              <button 
-                class="helpful-btn"
-                (click)="markHelpful(review)"
-                [class.active]="isMarkedHelpful(review.id)">
-                👍 Útil ({{ review.helpful }})
-              </button>
+            <div class="review-content">
+              <p class="review-comment">{{ review.comment }}</p>
+              <!-- Review Images -->
+              @if (review.images && review.images.length > 0) {
+                <div class="review-images">
+                  @for (image of review.images; track image) {
+                    <img
+                      [src]="image"
+                      [alt]="'Foto da avaliação de ' + review.userName"
+                      class="review-image"
+                      (click)="openImageModal(image)">
+                  }
+                </div>
+              }
             </div>
           </div>
-          
-          <div class="review-content">
-            <p class="review-comment">{{ review.comment }}</p>
-            
-            <!-- Review Images -->
-            <div *ngIf="review.images && review.images.length > 0" class="review-images">
-              <img 
-                *ngFor="let image of review.images"
-                [src]="image"
-                [alt]="'Foto da avaliação de ' + review.userName"
-                class="review-image"
-                (click)="openImageModal(image)">
-            </div>
-          </div>
-        </div>
-        
+        }
+    
         <!-- Load More Button -->
-        <div *ngIf="hasMoreReviews" class="load-more-section">
-          <button class="btn btn--outline" (click)="loadMoreReviews()">
-            Ver mais avaliações
-          </button>
-        </div>
-        
+        @if (hasMoreReviews) {
+          <div class="load-more-section">
+            <button class="btn btn--outline" (click)="loadMoreReviews()">
+              Ver mais avaliações
+            </button>
+          </div>
+        }
+    
         <!-- Empty State -->
-        <div *ngIf="reviews.length === 0" class="empty-reviews">
-          <div class="empty-icon">💭</div>
-          <h4>Ainda não há avaliações</h4>
-          <p>Seja o primeiro a avaliar este produto!</p>
-          <button class="btn btn--sweet" (click)="toggleReviewForm()">
-            Escrever primeira avaliação
-          </button>
-        </div>
+        @if (reviews.length === 0) {
+          <div class="empty-reviews">
+            <div class="empty-icon">💭</div>
+            <h4>Ainda não há avaliações</h4>
+            <p>Seja o primeiro a avaliar este produto!</p>
+            <button class="btn btn--sweet" (click)="toggleReviewForm()">
+              Escrever primeira avaliação
+            </button>
+          </div>
+        }
       </div>
     </div>
     
     <!-- Image Modal -->
-    <div *ngIf="showImageModal" class="image-modal-overlay" (click)="closeImageModal()">
-      <div class="image-modal-content" (click)="$event.stopPropagation()">
-        <button class="image-modal-close" (click)="closeImageModal()">×</button>
-        <img [src]="selectedImage" alt="Imagem da avaliação" class="modal-image">
+    @if (showImageModal) {
+      <div class="image-modal-overlay" (click)="closeImageModal()">
+        <div class="image-modal-content" (click)="$event.stopPropagation()">
+          <button class="image-modal-close" (click)="closeImageModal()">×</button>
+          <img [src]="selectedImage" alt="Imagem da avaliação" class="modal-image">
+        </div>
       </div>
-    </div>
-  `,
+    }
+    `,
   styles: [`
     .product-reviews {
       background: white;

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -11,14 +11,14 @@ import { AuthService, User } from '../services/auth.service';
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
   template: `
     <div class="checkout-page">
       <div class="container">
         <!-- Page Header -->
         <div class="page-header">
           <h1 class="page-title">🛒 Finalizar Pedido</h1>
-          
+    
           <!-- Progress Steps -->
           <div class="checkout-progress">
             <div class="progress-step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
@@ -42,496 +42,541 @@ import { AuthService, User } from '../services/auth.service';
             </div>
           </div>
         </div>
-
+    
         <div class="checkout-layout">
           <!-- Main Content -->
           <div class="checkout-main">
-            
+    
             <!-- Step 1: Customer Information -->
-            <div *ngIf="currentStep === 1" class="checkout-step">
-              <div class="step-header">
-                <h2 class="step-title">👤 Suas Informações</h2>
-                <p class="step-description">Precisamos de alguns dados para prosseguir com o pedido</p>
-              </div>
-              
-              <form [formGroup]="customerForm" class="checkout-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="customerName" class="form-label">Nome completo *</label>
-                    <input
-                      id="customerName"
-                      type="text"
-                      formControlName="name"
-                      class="form-input"
-                      placeholder="Seu nome completo">
-                    <div *ngIf="customerForm.get('name')?.invalid && customerForm.get('name')?.touched" 
-                         class="form-error">
-                      Nome é obrigatório
-                    </div>
-                  </div>
+            @if (currentStep === 1) {
+              <div class="checkout-step">
+                <div class="step-header">
+                  <h2 class="step-title">👤 Suas Informações</h2>
+                  <p class="step-description">Precisamos de alguns dados para prosseguir com o pedido</p>
                 </div>
-                
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="customerEmail" class="form-label">E-mail *</label>
-                    <input
-                      id="customerEmail"
-                      type="email"
-                      formControlName="email"
-                      class="form-input"
-                      placeholder="seu@email.com">
-                    <div *ngIf="customerForm.get('email')?.invalid && customerForm.get('email')?.touched" 
-                         class="form-error">
-                      E-mail válido é obrigatório
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="customerPhone" class="form-label">Telefone *</label>
-                    <input
-                      id="customerPhone"
-                      type="tel"
-                      formControlName="phone"
-                      class="form-input"
-                      placeholder="(11) 99999-9999">
-                    <div *ngIf="customerForm.get('phone')?.invalid && customerForm.get('phone')?.touched" 
-                         class="form-error">
-                      Telefone é obrigatório
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="form-actions">
-                  <button type="button" class="btn btn--outline" (click)="goBack()">
-                    ← Voltar ao Carrinho
-                  </button>
-                  <button type="button" class="btn btn--sweet" (click)="nextStep()" [disabled]="customerForm.invalid">
-                    Continuar →
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- Step 2: Delivery Address -->
-            <div *ngIf="currentStep === 2" class="checkout-step">
-              <div class="step-header">
-                <h2 class="step-title">📍 Endereço de Entrega</h2>
-                <p class="step-description">Onde você gostaria de receber seu pedido?</p>
-              </div>
-              
-              <form [formGroup]="addressForm" class="checkout-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="zipCode" class="form-label">CEP *</label>
-                    <div class="input-with-button">
+                <form [formGroup]="customerForm" class="checkout-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="customerName" class="form-label">Nome completo *</label>
                       <input
-                        id="zipCode"
+                        id="customerName"
                         type="text"
-                        formControlName="zipCode"
+                        formControlName="name"
                         class="form-input"
-                        placeholder="00000-000"
-                        (blur)="validateZipCode()"
-                        maxlength="9">
-                      <button type="button" class="input-btn" (click)="validateZipCode()" [disabled]="isValidatingZip">
-                        <span *ngIf="!isValidatingZip">Buscar</span>
-                        <span *ngIf="isValidatingZip">...</span>
-                      </button>
-                    </div>
-                    <div *ngIf="addressForm.get('zipCode')?.invalid && addressForm.get('zipCode')?.touched" 
-                         class="form-error">
-                      CEP válido é obrigatório
+                        placeholder="Seu nome completo">
+                      @if (customerForm.get('name')?.invalid && customerForm.get('name')?.touched) {
+                        <div
+                          class="form-error">
+                          Nome é obrigatório
+                        </div>
+                      }
                     </div>
                   </div>
-                </div>
-                
-                <div class="form-row">
-                  <div class="form-group flex-grow">
-                    <label for="street" class="form-label">Rua *</label>
-                    <input
-                      id="street"
-                      type="text"
-                      formControlName="street"
-                      class="form-input"
-                      placeholder="Nome da rua">
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="number" class="form-label">Número *</label>
-                    <input
-                      id="number"
-                      type="text"
-                      formControlName="number"
-                      class="form-input"
-                      placeholder="123">
-                  </div>
-                </div>
-                
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="complement" class="form-label">Complemento</label>
-                    <input
-                      id="complement"
-                      type="text"
-                      formControlName="complement"
-                      class="form-input"
-                      placeholder="Apto, bloco, etc.">
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="neighborhood" class="form-label">Bairro *</label>
-                    <input
-                      id="neighborhood"
-                      type="text"
-                      formControlName="neighborhood"
-                      class="form-input"
-                      placeholder="Nome do bairro">
-                  </div>
-                </div>
-                
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="city" class="form-label">Cidade *</label>
-                    <input
-                      id="city"
-                      type="text"
-                      formControlName="city"
-                      class="form-input"
-                      placeholder="Nome da cidade">
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="state" class="form-label">Estado *</label>
-                    <select id="state" formControlName="state" class="form-select">
-                      <option value="">Selecione</option>
-                      <option value="SP">São Paulo</option>
-                      <option value="RJ">Rio de Janeiro</option>
-                      <option value="MG">Minas Gerais</option>
-                      <!-- Adicionar outros estados -->
-                    </select>
-                  </div>
-                </div>
-                
-                <div class="form-row">
-                  <div class="form-group full-width">
-                    <label for="reference" class="form-label">Ponto de referência</label>
-                    <input
-                      id="reference"
-                      type="text"
-                      formControlName="reference"
-                      class="form-input"
-                      placeholder="Próximo ao supermercado, em frente à escola, etc.">
-                  </div>
-                </div>
-                
-                <!-- Delivery Estimate -->
-                <div *ngIf="deliveryEstimate" class="delivery-estimate-box">
-                  <div class="estimate-icon">🚚</div>
-                  <div class="estimate-content">
-                    <div class="estimate-title">Previsão de entrega</div>
-                    <div class="estimate-time">{{ deliveryEstimate.estimate }}</div>
-                    <div class="estimate-fee" *ngIf="deliveryEstimate.fee > 0">
-                      Taxa de entrega: R$ {{ deliveryEstimate.fee.toFixed(2).replace('.', ',') }}
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="customerEmail" class="form-label">E-mail *</label>
+                      <input
+                        id="customerEmail"
+                        type="email"
+                        formControlName="email"
+                        class="form-input"
+                        placeholder="seu@email.com">
+                      @if (customerForm.get('email')?.invalid && customerForm.get('email')?.touched) {
+                        <div
+                          class="form-error">
+                          E-mail válido é obrigatório
+                        </div>
+                      }
                     </div>
-                    <div class="estimate-fee free" *ngIf="deliveryEstimate.fee === 0">
-                      Entrega gratuita! 🎉
+                    <div class="form-group">
+                      <label for="customerPhone" class="form-label">Telefone *</label>
+                      <input
+                        id="customerPhone"
+                        type="tel"
+                        formControlName="phone"
+                        class="form-input"
+                        placeholder="(11) 99999-9999">
+                      @if (customerForm.get('phone')?.invalid && customerForm.get('phone')?.touched) {
+                        <div
+                          class="form-error">
+                          Telefone é obrigatório
+                        </div>
+                      }
                     </div>
                   </div>
+                  <div class="form-actions">
+                    <button type="button" class="btn btn--outline" (click)="goBack()">
+                      ← Voltar ao Carrinho
+                    </button>
+                    <button type="button" class="btn btn--sweet" (click)="nextStep()" [disabled]="customerForm.invalid">
+                      Continuar →
+                    </button>
+                  </div>
+                </form>
+              </div>
+            }
+    
+            <!-- Step 2: Delivery Address -->
+            @if (currentStep === 2) {
+              <div class="checkout-step">
+                <div class="step-header">
+                  <h2 class="step-title">📍 Endereço de Entrega</h2>
+                  <p class="step-description">Onde você gostaria de receber seu pedido?</p>
                 </div>
-                
+                <form [formGroup]="addressForm" class="checkout-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="zipCode" class="form-label">CEP *</label>
+                      <div class="input-with-button">
+                        <input
+                          id="zipCode"
+                          type="text"
+                          formControlName="zipCode"
+                          class="form-input"
+                          placeholder="00000-000"
+                          (blur)="validateZipCode()"
+                          maxlength="9">
+                        <button type="button" class="input-btn" (click)="validateZipCode()" [disabled]="isValidatingZip">
+                          @if (!isValidatingZip) {
+                            <span>Buscar</span>
+                          }
+                          @if (isValidatingZip) {
+                            <span>...</span>
+                          }
+                        </button>
+                      </div>
+                      @if (addressForm.get('zipCode')?.invalid && addressForm.get('zipCode')?.touched) {
+                        <div
+                          class="form-error">
+                          CEP válido é obrigatório
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group flex-grow">
+                      <label for="street" class="form-label">Rua *</label>
+                      <input
+                        id="street"
+                        type="text"
+                        formControlName="street"
+                        class="form-input"
+                        placeholder="Nome da rua">
+                    </div>
+                    <div class="form-group">
+                      <label for="number" class="form-label">Número *</label>
+                      <input
+                        id="number"
+                        type="text"
+                        formControlName="number"
+                        class="form-input"
+                        placeholder="123">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="complement" class="form-label">Complemento</label>
+                      <input
+                        id="complement"
+                        type="text"
+                        formControlName="complement"
+                        class="form-input"
+                        placeholder="Apto, bloco, etc.">
+                    </div>
+                    <div class="form-group">
+                      <label for="neighborhood" class="form-label">Bairro *</label>
+                      <input
+                        id="neighborhood"
+                        type="text"
+                        formControlName="neighborhood"
+                        class="form-input"
+                        placeholder="Nome do bairro">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="city" class="form-label">Cidade *</label>
+                      <input
+                        id="city"
+                        type="text"
+                        formControlName="city"
+                        class="form-input"
+                        placeholder="Nome da cidade">
+                    </div>
+                    <div class="form-group">
+                      <label for="state" class="form-label">Estado *</label>
+                      <select id="state" formControlName="state" class="form-select">
+                        <option value="">Selecione</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="MG">Minas Gerais</option>
+                        <!-- Adicionar outros estados -->
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group full-width">
+                      <label for="reference" class="form-label">Ponto de referência</label>
+                      <input
+                        id="reference"
+                        type="text"
+                        formControlName="reference"
+                        class="form-input"
+                        placeholder="Próximo ao supermercado, em frente à escola, etc.">
+                    </div>
+                  </div>
+                  <!-- Delivery Estimate -->
+                  @if (deliveryEstimate) {
+                    <div class="delivery-estimate-box">
+                      <div class="estimate-icon">🚚</div>
+                      <div class="estimate-content">
+                        <div class="estimate-title">Previsão de entrega</div>
+                        <div class="estimate-time">{{ deliveryEstimate.estimate }}</div>
+                        @if (deliveryEstimate.fee > 0) {
+                          <div class="estimate-fee">
+                            Taxa de entrega: R$ {{ deliveryEstimate.fee.toFixed(2).replace('.', ',') }}
+                          </div>
+                        }
+                        @if (deliveryEstimate.fee === 0) {
+                          <div class="estimate-fee free">
+                            Entrega gratuita! 🎉
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                  <div class="form-actions">
+                    <button type="button" class="btn btn--outline" (click)="previousStep()">
+                      ← Voltar
+                    </button>
+                    <button type="button" class="btn btn--sweet" (click)="nextStep()" [disabled]="addressForm.invalid">
+                      Continuar →
+                    </button>
+                  </div>
+                </form>
+              </div>
+            }
+    
+            <!-- Step 3: Payment Method -->
+            @if (currentStep === 3) {
+              <div class="checkout-step">
+                <div class="step-header">
+                  <h2 class="step-title">💳 Forma de Pagamento</h2>
+                  <p class="step-description">Escolha como você deseja pagar</p>
+                </div>
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                  @for (method of paymentMethods; track method) {
+                    <div
+                      class="payment-method"
+                      [class.selected]="selectedPaymentMethod?.id === method.id"
+                      (click)="selectPaymentMethod(method)">
+                      <div class="method-icon">{{ method.icon }}</div>
+                      <div class="method-info">
+                        <div class="method-name">{{ method.name }}</div>
+                        <div class="method-description">{{ method.description }}</div>
+                        @if (method.fee !== undefined && method.fee !== 0) {
+                          <div class="method-fee">
+                            @if (method.fee && method.fee > 0) {
+                              <span>Taxa: {{ (method.fee * 100).toFixed(1) }}%</span>
+                            }
+                            @if (method.fee && method.fee < 0) {
+                              <span class="discount">Desconto: {{ Math.abs(method.fee * 100).toFixed(0) }}%</span>
+                            }
+                          </div>
+                        }
+                      </div>
+                      <div class="method-radio">
+                        <div class="radio-button" [class.checked]="selectedPaymentMethod?.id === method.id"></div>
+                      </div>
+                    </div>
+                  }
+                </div>
+                <!-- Payment Details Forms -->
+                @if (selectedPaymentMethod) {
+                  <div class="payment-details">
+                    <!-- Credit Card Form -->
+                    @if (selectedPaymentMethod.type === 'credit_card') {
+                      <div class="payment-form">
+                        <form [formGroup]="creditCardForm">
+                          <div class="form-row">
+                            <div class="form-group full-width">
+                              <label for="cardNumber" class="form-label">Número do cartão *</label>
+                              <input
+                                id="cardNumber"
+                                type="text"
+                                formControlName="number"
+                                class="form-input"
+                                placeholder="0000 0000 0000 0000"
+                                maxlength="19"
+                                (input)="formatCardNumber($event)">
+                              @if (cardBrand) {
+                                <div class="card-brand">{{ cardBrand }}</div>
+                              }
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group">
+                              <label for="cardName" class="form-label">Nome no cartão *</label>
+                              <input
+                                id="cardName"
+                                type="text"
+                                formControlName="name"
+                                class="form-input"
+                                placeholder="Como está no cartão">
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group">
+                              <label for="expiryDate" class="form-label">Validade *</label>
+                              <input
+                                id="expiryDate"
+                                type="text"
+                                formControlName="expiry"
+                                class="form-input"
+                                placeholder="MM/AA"
+                                maxlength="5"
+                                (input)="formatExpiry($event)">
+                            </div>
+                            <div class="form-group">
+                              <label for="cvv" class="form-label">CVV *</label>
+                              <input
+                                id="cvv"
+                                type="text"
+                                formControlName="cvv"
+                                class="form-input"
+                                placeholder="123"
+                                maxlength="4">
+                            </div>
+                            <div class="form-group">
+                              <label for="installments" class="form-label">Parcelas</label>
+                              <select id="installments" formControlName="installments" class="form-select">
+                                @for (installment of selectedPaymentMethod.installments; track installment) {
+                                  <option [value]="installment">
+                                    {{ installment }}x de R$ {{ (cartSummary.total / installment).toFixed(2).replace('.', ',') }}
+                                    @if (installment === 1) {
+                                      <span> à vista</span>
+                                    }
+                                  </option>
+                                }
+                              </select>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    }
+                    <!-- PIX Form -->
+                    @if (selectedPaymentMethod.type === 'pix') {
+                      <div class="payment-form">
+                        <div class="pix-info">
+                          <div class="pix-icon">📱</div>
+                          <div class="pix-content">
+                            <h4>Pagamento via PIX</h4>
+                            <p>Após confirmar o pedido, você receberá o código PIX para pagamento.</p>
+                            <div class="pix-discount">
+                              <strong>💰 Desconto de 5% aplicado!</strong>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    <!-- Money Form -->
+                    @if (selectedPaymentMethod.type === 'money') {
+                      <div class="payment-form">
+                        <form [formGroup]="moneyForm">
+                          <div class="form-group">
+                            <label class="form-checkbox">
+                              <input type="checkbox" formControlName="needsChange">
+                              <span class="checkmark"></span>
+                              Preciso de troco
+                            </label>
+                          </div>
+                          @if (moneyForm.value.needsChange) {
+                            <div class="form-group">
+                              <label for="changeFor" class="form-label">Troco para quanto?</label>
+                              <input
+                                id="changeFor"
+                                type="number"
+                                formControlName="changeFor"
+                                class="form-input"
+                                placeholder="0,00"
+                                min="0"
+                                step="0.01">
+                            </div>
+                          }
+                        </form>
+                      </div>
+                    }
+                  </div>
+                }
                 <div class="form-actions">
                   <button type="button" class="btn btn--outline" (click)="previousStep()">
                     ← Voltar
                   </button>
-                  <button type="button" class="btn btn--sweet" (click)="nextStep()" [disabled]="addressForm.invalid">
+                  <button type="button" class="btn btn--sweet" (click)="nextStep()" [disabled]="!isPaymentValid()">
                     Continuar →
                   </button>
                 </div>
-              </form>
-            </div>
-
-            <!-- Step 3: Payment Method -->
-            <div *ngIf="currentStep === 3" class="checkout-step">
-              <div class="step-header">
-                <h2 class="step-title">💳 Forma de Pagamento</h2>
-                <p class="step-description">Escolha como você deseja pagar</p>
               </div>
-              
-              <!-- Payment Methods -->
-              <div class="payment-methods">
-                <div *ngFor="let method of paymentMethods" 
-                     class="payment-method"
-                     [class.selected]="selectedPaymentMethod?.id === method.id"
-                     (click)="selectPaymentMethod(method)">
-                  <div class="method-icon">{{ method.icon }}</div>
-                  <div class="method-info">
-                    <div class="method-name">{{ method.name }}</div>
-                    <div class="method-description">{{ method.description }}</div>
-                    <div *ngIf="method.fee !== undefined && method.fee !== 0" class="method-fee">
-                      <span *ngIf="method.fee && method.fee > 0">Taxa: {{ (method.fee * 100).toFixed(1) }}%</span>
-                      <span *ngIf="method.fee && method.fee < 0" class="discount">Desconto: {{ Math.abs(method.fee * 100).toFixed(0) }}%</span>
-                    </div>
-                  </div>
-                  <div class="method-radio">
-                    <div class="radio-button" [class.checked]="selectedPaymentMethod?.id === method.id"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Payment Details Forms -->
-              <div *ngIf="selectedPaymentMethod" class="payment-details">
-                
-                <!-- Credit Card Form -->
-                <div *ngIf="selectedPaymentMethod.type === 'credit_card'" class="payment-form">
-                  <form [formGroup]="creditCardForm">
-                    <div class="form-row">
-                      <div class="form-group full-width">
-                        <label for="cardNumber" class="form-label">Número do cartão *</label>
-                        <input
-                          id="cardNumber"
-                          type="text"
-                          formControlName="number"
-                          class="form-input"
-                          placeholder="0000 0000 0000 0000"
-                          maxlength="19"
-                          (input)="formatCardNumber($event)">
-                        <div *ngIf="cardBrand" class="card-brand">{{ cardBrand }}</div>
-                      </div>
-                    </div>
-                    
-                    <div class="form-row">
-                      <div class="form-group">
-                        <label for="cardName" class="form-label">Nome no cartão *</label>
-                        <input
-                          id="cardName"
-                          type="text"
-                          formControlName="name"
-                          class="form-input"
-                          placeholder="Como está no cartão">
-                      </div>
-                    </div>
-                    
-                    <div class="form-row">
-                      <div class="form-group">
-                        <label for="expiryDate" class="form-label">Validade *</label>
-                        <input
-                          id="expiryDate"
-                          type="text"
-                          formControlName="expiry"
-                          class="form-input"
-                          placeholder="MM/AA"
-                          maxlength="5"
-                          (input)="formatExpiry($event)">
-                      </div>
-                      
-                      <div class="form-group">
-                        <label for="cvv" class="form-label">CVV *</label>
-                        <input
-                          id="cvv"
-                          type="text"
-                          formControlName="cvv"
-                          class="form-input"
-                          placeholder="123"
-                          maxlength="4">
-                      </div>
-                      
-                      <div class="form-group">
-                        <label for="installments" class="form-label">Parcelas</label>
-                        <select id="installments" formControlName="installments" class="form-select">
-                          <option *ngFor="let installment of selectedPaymentMethod.installments" [value]="installment">
-                            {{ installment }}x de R$ {{ (cartSummary.total / installment).toFixed(2).replace('.', ',') }}
-                            <span *ngIf="installment === 1"> à vista</span>
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                
-                <!-- PIX Form -->
-                <div *ngIf="selectedPaymentMethod.type === 'pix'" class="payment-form">
-                  <div class="pix-info">
-                    <div class="pix-icon">📱</div>
-                    <div class="pix-content">
-                      <h4>Pagamento via PIX</h4>
-                      <p>Após confirmar o pedido, você receberá o código PIX para pagamento.</p>
-                      <div class="pix-discount">
-                        <strong>💰 Desconto de 5% aplicado!</strong>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Money Form -->
-                <div *ngIf="selectedPaymentMethod.type === 'money'" class="payment-form">
-                  <form [formGroup]="moneyForm">
-                    <div class="form-group">
-                      <label class="form-checkbox">
-                        <input type="checkbox" formControlName="needsChange">
-                        <span class="checkmark"></span>
-                        Preciso de troco
-                      </label>
-                    </div>
-                    
-                    <div *ngIf="moneyForm.value.needsChange" class="form-group">
-                      <label for="changeFor" class="form-label">Troco para quanto?</label>
-                      <input
-                        id="changeFor"
-                        type="number"
-                        formControlName="changeFor"
-                        class="form-input"
-                        placeholder="0,00"
-                        min="0"
-                        step="0.01">
-                    </div>
-                  </form>
-                </div>
-              </div>
-              
-              <div class="form-actions">
-                <button type="button" class="btn btn--outline" (click)="previousStep()">
-                  ← Voltar
-                </button>
-                <button type="button" class="btn btn--sweet" (click)="nextStep()" [disabled]="!isPaymentValid()">
-                  Continuar →
-                </button>
-              </div>
-            </div>
-
+            }
+    
             <!-- Step 4: Order Confirmation -->
-            <div *ngIf="currentStep === 4" class="checkout-step">
-              <div class="step-header">
-                <h2 class="step-title">✅ Confirmar Pedido</h2>
-                <p class="step-description">Revise todos os dados antes de finalizar</p>
-              </div>
-              
-              <!-- Order Summary -->
-              <div class="order-confirmation">
-                <!-- Customer Info -->
-                <div class="confirmation-section">
-                  <h3 class="section-title">👤 Dados do Cliente</h3>
-                  <div class="section-content">
-                    <p><strong>Nome:</strong> {{ customerForm.value.name }}</p>
-                    <p><strong>E-mail:</strong> {{ customerForm.value.email }}</p>
-                    <p><strong>Telefone:</strong> {{ customerForm.value.phone }}</p>
-                  </div>
+            @if (currentStep === 4) {
+              <div class="checkout-step">
+                <div class="step-header">
+                  <h2 class="step-title">✅ Confirmar Pedido</h2>
+                  <p class="step-description">Revise todos os dados antes de finalizar</p>
                 </div>
-                
-                <!-- Delivery Address -->
-                <div class="confirmation-section">
-                  <h3 class="section-title">📍 Endereço de Entrega</h3>
-                  <div class="section-content">
-                    <p>{{ getFullAddress() }}</p>
-                    <p *ngIf="addressForm.value.reference">
-                      <strong>Referência:</strong> {{ addressForm.value.reference }}
-                    </p>
-                  </div>
-                </div>
-                
-                <!-- Payment Method -->
-                <div class="confirmation-section">
-                  <h3 class="section-title">💳 Forma de Pagamento</h3>
-                  <div class="section-content">
-                    <p>{{ selectedPaymentMethod?.name }}</p>
-                    <div *ngIf="selectedPaymentMethod?.type === 'credit_card' && creditCardForm.value.installments > 1">
-                      <p>{{ creditCardForm.value.installments }}x de R$ {{ (cartSummary.total / creditCardForm.value.installments).toFixed(2).replace('.', ',') }}</p>
-                    </div>
-                    <div *ngIf="selectedPaymentMethod?.type === 'money' && moneyForm.value.needsChange">
-                      <p>Troco para: R$ {{ moneyForm.value.changeFor?.toFixed(2).replace('.', ',') }}</p>
+                <!-- Order Summary -->
+                <div class="order-confirmation">
+                  <!-- Customer Info -->
+                  <div class="confirmation-section">
+                    <h3 class="section-title">👤 Dados do Cliente</h3>
+                    <div class="section-content">
+                      <p><strong>Nome:</strong> {{ customerForm.value.name }}</p>
+                      <p><strong>E-mail:</strong> {{ customerForm.value.email }}</p>
+                      <p><strong>Telefone:</strong> {{ customerForm.value.phone }}</p>
                     </div>
                   </div>
-                </div>
-                
-                <!-- Order Items -->
-                <div class="confirmation-section">
-                  <h3 class="section-title">🛒 Itens do Pedido</h3>
-                  <div class="order-items">
-                    <div *ngFor="let item of cartItems" class="order-item">
-                      <div class="item-image">
-                        <img [src]="item.productImage" [alt]="item.productName">
-                      </div>
-                      <div class="item-details">
-                        <h4>{{ item.productName }}</h4>
-                        <p class="item-customizations" *ngIf="hasCustomizations(item)">
-                          <span *ngIf="item.customization.size">{{ item.customization.size.name }}</span>
-                          <span *ngIf="item.customization.flavor"> • {{ item.customization.flavor.name }}</span>
+                  <!-- Delivery Address -->
+                  <div class="confirmation-section">
+                    <h3 class="section-title">📍 Endereço de Entrega</h3>
+                    <div class="section-content">
+                      <p>{{ getFullAddress() }}</p>
+                      @if (addressForm.value.reference) {
+                        <p>
+                          <strong>Referência:</strong> {{ addressForm.value.reference }}
                         </p>
-                        <p class="item-quantity">Quantidade: {{ item.quantity }}</p>
-                      </div>
-                      <div class="item-price">
-                        R$ {{ item.totalPrice.toFixed(2).replace('.', ',') }}
-                      </div>
+                      }
                     </div>
                   </div>
-                </div>
-                
-                <!-- Special Notes -->
-                <div class="confirmation-section">
-                  <h3 class="section-title">📝 Observações</h3>
-                  <textarea
-                    [(ngModel)]="orderNotes"
-                    class="order-notes"
-                    placeholder="Alguma observação especial para o pedido?"
+                  <!-- Payment Method -->
+                  <div class="confirmation-section">
+                    <h3 class="section-title">💳 Forma de Pagamento</h3>
+                    <div class="section-content">
+                      <p>{{ selectedPaymentMethod?.name }}</p>
+                      @if (selectedPaymentMethod?.type === 'credit_card' && creditCardForm.value.installments > 1) {
+                        <div>
+                          <p>{{ creditCardForm.value.installments }}x de R$ {{ (cartSummary.total / creditCardForm.value.installments).toFixed(2).replace('.', ',') }}</p>
+                        </div>
+                      }
+                      @if (selectedPaymentMethod?.type === 'money' && moneyForm.value.needsChange) {
+                        <div>
+                          <p>Troco para: R$ {{ moneyForm.value.changeFor?.toFixed(2).replace('.', ',') }}</p>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  <!-- Order Items -->
+                  <div class="confirmation-section">
+                    <h3 class="section-title">🛒 Itens do Pedido</h3>
+                    <div class="order-items">
+                      @for (item of cartItems; track item) {
+                        <div class="order-item">
+                          <div class="item-image">
+                            <img [src]="item.productImage" [alt]="item.productName">
+                          </div>
+                          <div class="item-details">
+                            <h4>{{ item.productName }}</h4>
+                            @if (hasCustomizations(item)) {
+                              <p class="item-customizations">
+                                @if (item.customization.size) {
+                                  <span>{{ item.customization.size.name }}</span>
+                                }
+                                @if (item.customization.flavor) {
+                                  <span> • {{ item.customization.flavor.name }}</span>
+                                }
+                              </p>
+                            }
+                            <p class="item-quantity">Quantidade: {{ item.quantity }}</p>
+                          </div>
+                          <div class="item-price">
+                            R$ {{ item.totalPrice.toFixed(2).replace('.', ',') }}
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  <!-- Special Notes -->
+                  <div class="confirmation-section">
+                    <h3 class="section-title">📝 Observações</h3>
+                    <textarea
+                      [(ngModel)]="orderNotes"
+                      class="order-notes"
+                      placeholder="Alguma observação especial para o pedido?"
                     rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button type="button" class="btn btn--outline" (click)="previousStep()">
+                    ← Voltar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn--sweet"
+                    (click)="finalizeOrder()"
+                    [disabled]="isProcessingOrder"
+                    [class.loading]="isProcessingOrder">
+                    @if (!isProcessingOrder) {
+                      <span>Finalizar Pedido</span>
+                    }
+                    @if (isProcessingOrder) {
+                      <span>Processando...</span>
+                    }
+                  </button>
                 </div>
               </div>
-              
-              <div class="form-actions">
-                <button type="button" class="btn btn--outline" (click)="previousStep()">
-                  ← Voltar
-                </button>
-                <button 
-                  type="button" 
-                  class="btn btn--sweet" 
-                  (click)="finalizeOrder()" 
-                  [disabled]="isProcessingOrder"
-                  [class.loading]="isProcessingOrder">
-                  <span *ngIf="!isProcessingOrder">Finalizar Pedido</span>
-                  <span *ngIf="isProcessingOrder">Processando...</span>
-                </button>
-              </div>
-            </div>
+            }
           </div>
-          
+    
           <!-- Order Summary Sidebar -->
           <div class="checkout-sidebar">
             <div class="order-summary">
               <h3 class="summary-title">Resumo do Pedido</h3>
-              
+    
               <!-- Items Summary -->
               <div class="summary-items">
-                <div *ngFor="let item of cartItems" class="summary-item">
-                  <div class="item-info">
-                    <span class="item-name">{{ item.productName }}</span>
-                    <span class="item-qty">{{ item.quantity }}x</span>
+                @for (item of cartItems; track item) {
+                  <div class="summary-item">
+                    <div class="item-info">
+                      <span class="item-name">{{ item.productName }}</span>
+                      <span class="item-qty">{{ item.quantity }}x</span>
+                    </div>
+                    <span class="item-total">R$ {{ item.totalPrice.toFixed(2).replace('.', ',') }}</span>
                   </div>
-                  <span class="item-total">R$ {{ item.totalPrice.toFixed(2).replace('.', ',') }}</span>
-                </div>
+                }
               </div>
-              
+    
               <div class="summary-divider"></div>
-              
+    
               <!-- Totals -->
               <div class="summary-totals">
                 <div class="total-row">
                   <span>Subtotal:</span>
                   <span>R$ {{ cartSummary.subtotal.toFixed(2).replace('.', ',') }}</span>
                 </div>
-                
+    
                 <div class="total-row">
                   <span>Entrega:</span>
                   <span [class.free]="cartSummary.deliveryFee === 0">
-                    <span *ngIf="cartSummary.deliveryFee === 0">Grátis</span>
-                    <span *ngIf="cartSummary.deliveryFee > 0">R$ {{ cartSummary.deliveryFee.toFixed(2).replace('.', ',') }}</span>
+                    @if (cartSummary.deliveryFee === 0) {
+                      <span>Grátis</span>
+                    }
+                    @if (cartSummary.deliveryFee > 0) {
+                      <span>R$ {{ cartSummary.deliveryFee.toFixed(2).replace('.', ',') }}</span>
+                    }
                   </span>
                 </div>
-                
-                <div *ngIf="cartSummary.discount > 0" class="total-row discount">
-                  <span>Desconto:</span>
-                  <span>-R$ {{ cartSummary.discount.toFixed(2).replace('.', ',') }}</span>
-                </div>
-                
+    
+                @if (cartSummary.discount > 0) {
+                  <div class="total-row discount">
+                    <span>Desconto:</span>
+                    <span>-R$ {{ cartSummary.discount.toFixed(2).replace('.', ',') }}</span>
+                  </div>
+                }
+    
                 <div class="summary-divider"></div>
-                
+    
                 <div class="total-row final">
                   <span>Total:</span>
                   <span>R$ {{ cartSummary.total.toFixed(2).replace('.', ',') }}</span>
@@ -542,7 +587,7 @@ import { AuthService, User } from '../services/auth.service';
         </div>
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .checkout-page {
       background: #f8fafc;

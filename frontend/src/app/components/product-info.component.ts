@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -20,176 +20,209 @@ export interface ProductCustomization {
 @Component({
   selector: 'app-product-info',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   template: `
     <div class="product-info">
       <!-- Product Header -->
       <div class="product-header">
         <div class="product-badges">
-          <span *ngIf="product.featured" class="badge badge--featured">⭐ Destaque</span>
-          <span *ngIf="product.isNew" class="badge badge--new">🆕 Novo</span>
-          <span *ngIf="product.discount > 0" class="badge badge--sale">
-            🏷️ {{ product.discount }}% OFF
-          </span>
-          <span *ngIf="!product.available" class="badge badge--unavailable">Indisponível</span>
+          @if (product.featured) {
+            <span class="badge badge--featured">⭐ Destaque</span>
+          }
+          @if (product.isNew) {
+            <span class="badge badge--new">🆕 Novo</span>
+          }
+          @if (product.discount > 0) {
+            <span class="badge badge--sale">
+              🏷️ {{ product.discount }}% OFF
+            </span>
+          }
+          @if (!product.available) {
+            <span class="badge badge--unavailable">Indisponível</span>
+          }
         </div>
-        
+    
         <h1 class="product-title">{{ product.name }}</h1>
         <p class="product-description">{{ product.description }}</p>
-        
+    
         <!-- Rating -->
         <div class="product-rating">
           <div class="rating-stars">
-            <span 
-              *ngFor="let star of getStars(); let i = index"
-              class="star"
-              [class.filled]="star">
-              ⭐
-            </span>
+            @for (star of getStars(); track star; let i = $index) {
+              <span
+                class="star"
+                [class.filled]="star">
+                ⭐
+              </span>
+            }
           </div>
           <span class="rating-text">({{ product.rating }} - {{ product.reviewCount }} avaliações)</span>
         </div>
       </div>
-
+    
       <!-- Pricing Section -->
       <div class="pricing-section">
         <div class="price-container">
-          <span *ngIf="product.discount > 0" class="original-price">
-            R$ {{ product.originalPrice?.toFixed(2).replace('.', ',') }}
-          </span>
+          @if (product.discount > 0) {
+            <span class="original-price">
+              R$ {{ product.originalPrice?.toFixed(2).replace('.', ',') }}
+            </span>
+          }
           <span class="current-price">
             R$ {{ getCurrentPrice().toFixed(2).replace('.', ',') }}
           </span>
-          <span *ngIf="product.discount > 0" class="discount-amount">
-            Economize R$ {{ getSavings().toFixed(2).replace('.', ',') }}
-          </span>
+          @if (product.discount > 0) {
+            <span class="discount-amount">
+              Economize R$ {{ getSavings().toFixed(2).replace('.', ',') }}
+            </span>
+          }
         </div>
-        
+    
         <!-- Installments -->
-        <div *ngIf="product.allowInstallments" class="installments">
-          <span class="installment-text">
-            ou 12x de R$ {{ getInstallmentPrice().toFixed(2).replace('.', ',') }} sem juros
-          </span>
-        </div>
+        @if (product.allowInstallments) {
+          <div class="installments">
+            <span class="installment-text">
+              ou 12x de R$ {{ getInstallmentPrice().toFixed(2).replace('.', ',') }} sem juros
+            </span>
+          </div>
+        }
       </div>
-
+    
       <!-- Customization Form -->
       <form [formGroup]="customizationForm" class="customization-form">
-        
+    
         <!-- Size Selection -->
-        <div *ngIf="customization.sizes.length > 0" class="customization-group">
-          <label class="customization-label">Tamanho *</label>
-          <div class="option-grid">
-            <label 
-              *ngFor="let size of customization.sizes"
-              class="option-card"
-              [class.selected]="selectedSize?.id === size.id"
-              [class.unavailable]="!size.available">
-              <input 
-                type="radio" 
-                [value]="size.id"
-                (change)="selectSize(size)"
-                [disabled]="!size.available"
-                style="display: none;">
-              <div class="option-content">
-                <span class="option-name">{{ size.name }}</span>
-                <span class="option-price" *ngIf="size.price > 0">
-                  +R$ {{ size.price.toFixed(2).replace('.', ',') }}
-                </span>
-              </div>
-            </label>
+        @if (customization.sizes.length > 0) {
+          <div class="customization-group">
+            <label class="customization-label">Tamanho *</label>
+            <div class="option-grid">
+              @for (size of customization.sizes; track size) {
+                <label
+                  class="option-card"
+                  [class.selected]="selectedSize?.id === size.id"
+                  [class.unavailable]="!size.available">
+                  <input
+                    type="radio"
+                    [value]="size.id"
+                    (change)="selectSize(size)"
+                    [disabled]="!size.available"
+                    style="display: none;">
+                  <div class="option-content">
+                    <span class="option-name">{{ size.name }}</span>
+                    @if (size.price > 0) {
+                      <span class="option-price">
+                        +R$ {{ size.price.toFixed(2).replace('.', ',') }}
+                      </span>
+                    }
+                  </div>
+                </label>
+              }
+            </div>
           </div>
-        </div>
-
+        }
+    
         <!-- Flavor Selection -->
-        <div *ngIf="customization.flavors.length > 0" class="customization-group">
-          <label class="customization-label">Sabor *</label>
-          <div class="option-grid">
-            <label 
-              *ngFor="let flavor of customization.flavors"
-              class="option-card"
-              [class.selected]="selectedFlavor?.id === flavor.id"
-              [class.unavailable]="!flavor.available">
-              <input 
-                type="radio" 
-                [value]="flavor.id"
-                (change)="selectFlavor(flavor)"
-                [disabled]="!flavor.available"
-                style="display: none;">
-              <div class="option-content">
-                <span class="option-name">{{ flavor.name }}</span>
-                <span class="option-price" *ngIf="flavor.price > 0">
-                  +R$ {{ flavor.price.toFixed(2).replace('.', ',') }}
-                </span>
-              </div>
-            </label>
+        @if (customization.flavors.length > 0) {
+          <div class="customization-group">
+            <label class="customization-label">Sabor *</label>
+            <div class="option-grid">
+              @for (flavor of customization.flavors; track flavor) {
+                <label
+                  class="option-card"
+                  [class.selected]="selectedFlavor?.id === flavor.id"
+                  [class.unavailable]="!flavor.available">
+                  <input
+                    type="radio"
+                    [value]="flavor.id"
+                    (change)="selectFlavor(flavor)"
+                    [disabled]="!flavor.available"
+                    style="display: none;">
+                  <div class="option-content">
+                    <span class="option-name">{{ flavor.name }}</span>
+                    @if (flavor.price > 0) {
+                      <span class="option-price">
+                        +R$ {{ flavor.price.toFixed(2).replace('.', ',') }}
+                      </span>
+                    }
+                  </div>
+                </label>
+              }
+            </div>
           </div>
-        </div>
-
+        }
+    
         <!-- Decoration Selection -->
-        <div *ngIf="customization.decorations.length > 0" class="customization-group">
-          <label class="customization-label">Decoração</label>
-          <div class="option-grid">
-            <label 
-              *ngFor="let decoration of customization.decorations"
-              class="option-card"
-              [class.selected]="selectedDecoration?.id === decoration.id"
-              [class.unavailable]="!decoration.available">
-              <input 
-                type="radio" 
-                [value]="decoration.id"
-                (change)="selectDecoration(decoration)"
-                [disabled]="!decoration.available"
-                style="display: none;">
-              <div class="option-content">
-                <span class="option-name">{{ decoration.name }}</span>
-                <span class="option-price" *ngIf="decoration.price > 0">
-                  +R$ {{ decoration.price.toFixed(2).replace('.', ',') }}
-                </span>
-              </div>
-            </label>
+        @if (customization.decorations.length > 0) {
+          <div class="customization-group">
+            <label class="customization-label">Decoração</label>
+            <div class="option-grid">
+              @for (decoration of customization.decorations; track decoration) {
+                <label
+                  class="option-card"
+                  [class.selected]="selectedDecoration?.id === decoration.id"
+                  [class.unavailable]="!decoration.available">
+                  <input
+                    type="radio"
+                    [value]="decoration.id"
+                    (change)="selectDecoration(decoration)"
+                    [disabled]="!decoration.available"
+                    style="display: none;">
+                  <div class="option-content">
+                    <span class="option-name">{{ decoration.name }}</span>
+                    @if (decoration.price > 0) {
+                      <span class="option-price">
+                        +R$ {{ decoration.price.toFixed(2).replace('.', ',') }}
+                      </span>
+                    }
+                  </div>
+                </label>
+              }
+            </div>
           </div>
-        </div>
-
+        }
+    
         <!-- Extras Selection -->
-        <div *ngIf="customization.extras.length > 0" class="customization-group">
-          <label class="customization-label">Extras</label>
-          <div class="option-grid">
-            <label 
-              *ngFor="let extra of customization.extras"
-              class="option-card checkbox-card"
-              [class.selected]="isExtraSelected(extra.id)"
-              [class.unavailable]="!extra.available">
-              <input 
-                type="checkbox" 
-                [value]="extra.id"
-                (change)="toggleExtra(extra)"
-                [disabled]="!extra.available"
-                style="display: none;">
-              <div class="option-content">
-                <span class="option-name">{{ extra.name }}</span>
-                <span class="option-price">
-                  +R$ {{ extra.price.toFixed(2).replace('.', ',') }}
-                </span>
-              </div>
-            </label>
+        @if (customization.extras.length > 0) {
+          <div class="customization-group">
+            <label class="customization-label">Extras</label>
+            <div class="option-grid">
+              @for (extra of customization.extras; track extra) {
+                <label
+                  class="option-card checkbox-card"
+                  [class.selected]="isExtraSelected(extra.id)"
+                  [class.unavailable]="!extra.available">
+                  <input
+                    type="checkbox"
+                    [value]="extra.id"
+                    (change)="toggleExtra(extra)"
+                    [disabled]="!extra.available"
+                    style="display: none;">
+                  <div class="option-content">
+                    <span class="option-name">{{ extra.name }}</span>
+                    <span class="option-price">
+                      +R$ {{ extra.price.toFixed(2).replace('.', ',') }}
+                    </span>
+                  </div>
+                </label>
+              }
+            </div>
           </div>
-        </div>
-
+        }
+    
         <!-- Quantity Selection -->
         <div class="customization-group">
           <label class="customization-label">Quantidade</label>
           <div class="quantity-selector">
-            <button 
-              type="button" 
+            <button
+              type="button"
               class="quantity-btn"
               (click)="decreaseQuantity()"
               [disabled]="quantity <= 1">
               -
             </button>
             <span class="quantity-display">{{ quantity }}</span>
-            <button 
-              type="button" 
+            <button
+              type="button"
               class="quantity-btn"
               (click)="increaseQuantity()"
               [disabled]="quantity >= maxQuantity">
@@ -197,7 +230,7 @@ export interface ProductCustomization {
             </button>
           </div>
         </div>
-
+    
         <!-- Special Instructions -->
         <div class="customization-group">
           <label for="specialInstructions" class="customization-label">
@@ -208,57 +241,71 @@ export interface ProductCustomization {
             formControlName="specialInstructions"
             class="special-instructions"
             rows="3"
-            placeholder="Ex: Escrever 'Parabéns João' no bolo, sem nozes, etc."></textarea>
+          placeholder="Ex: Escrever 'Parabéns João' no bolo, sem nozes, etc."></textarea>
         </div>
       </form>
-
+    
       <!-- Total Price Summary -->
       <div class="price-summary">
         <div class="summary-row">
           <span>Produto base:</span>
           <span>R$ {{ getCurrentPrice().toFixed(2).replace('.', ',') }}</span>
         </div>
-        <div *ngIf="getCustomizationTotal() > 0" class="summary-row">
-          <span>Personalizações:</span>
-          <span>+R$ {{ getCustomizationTotal().toFixed(2).replace('.', ',') }}</span>
-        </div>
-        <div *ngIf="quantity > 1" class="summary-row">
-          <span>Quantidade ({{ quantity }}x):</span>
-          <span>-</span>
-        </div>
+        @if (getCustomizationTotal() > 0) {
+          <div class="summary-row">
+            <span>Personalizações:</span>
+            <span>+R$ {{ getCustomizationTotal().toFixed(2).replace('.', ',') }}</span>
+          </div>
+        }
+        @if (quantity > 1) {
+          <div class="summary-row">
+            <span>Quantidade ({{ quantity }}x):</span>
+            <span>-</span>
+          </div>
+        }
         <div class="summary-row total-row">
           <span>Total:</span>
           <span class="total-price">R$ {{ getFinalPrice().toFixed(2).replace('.', ',') }}</span>
         </div>
       </div>
-
+    
       <!-- Action Buttons -->
       <div class="action-buttons">
-        <button 
+        <button
           class="btn btn--outline btn--large"
           (click)="addToWishlist()"
           [class.active]="isInWishlist">
-          <span *ngIf="!isInWishlist">🤍 Favoritar</span>
-          <span *ngIf="isInWishlist">❤️ Favoritado</span>
+          @if (!isInWishlist) {
+            <span>🤍 Favoritar</span>
+          }
+          @if (isInWishlist) {
+            <span>❤️ Favoritado</span>
+          }
         </button>
-        
-        <button 
+    
+        <button
           class="btn btn--sweet btn--large"
           (click)="addToCart()"
           [disabled]="!canAddToCart() || isAddingToCart"
           [class.loading]="isAddingToCart">
-          <span *ngIf="!isAddingToCart && product.available">
-            🛒 Adicionar ao Carrinho
-          </span>
-          <span *ngIf="!isAddingToCart && !product.available">
-            Produto Indisponível
-          </span>
-          <span *ngIf="isAddingToCart">
-            Adicionando...
-          </span>
+          @if (!isAddingToCart && product.available) {
+            <span>
+              🛒 Adicionar ao Carrinho
+            </span>
+          }
+          @if (!isAddingToCart && !product.available) {
+            <span>
+              Produto Indisponível
+            </span>
+          }
+          @if (isAddingToCart) {
+            <span>
+              Adicionando...
+            </span>
+          }
         </button>
       </div>
-
+    
       <!-- Delivery Info -->
       <div class="delivery-info">
         <div class="delivery-item">
@@ -268,7 +315,7 @@ export interface ProductCustomization {
             <p>Receba em 24-48h na Grande São Paulo</p>
           </div>
         </div>
-        
+    
         <div class="delivery-item">
           <span class="delivery-icon">🎂</span>
           <div class="delivery-content">
@@ -276,7 +323,7 @@ export interface ProductCustomization {
             <p>Feito no dia da entrega para máxima qualidade</p>
           </div>
         </div>
-        
+    
         <div class="delivery-item">
           <span class="delivery-icon">💝</span>
           <div class="delivery-content">
@@ -285,24 +332,32 @@ export interface ProductCustomization {
           </div>
         </div>
       </div>
-
+    
       <!-- Product Details -->
       <div class="product-details">
-        <div class="detail-item" *ngIf="product.weight">
-          <strong>Peso:</strong> {{ product.weight }}
-        </div>
-        <div class="detail-item" *ngIf="product.serves">
-          <strong>Serve:</strong> {{ product.serves }} pessoas
-        </div>
-        <div class="detail-item" *ngIf="product.preparationTime">
-          <strong>Tempo de preparo:</strong> {{ product.preparationTime }}
-        </div>
-        <div class="detail-item" *ngIf="product.shelfLife">
-          <strong>Validade:</strong> {{ product.shelfLife }}
-        </div>
+        @if (product.weight) {
+          <div class="detail-item">
+            <strong>Peso:</strong> {{ product.weight }}
+          </div>
+        }
+        @if (product.serves) {
+          <div class="detail-item">
+            <strong>Serve:</strong> {{ product.serves }} pessoas
+          </div>
+        }
+        @if (product.preparationTime) {
+          <div class="detail-item">
+            <strong>Tempo de preparo:</strong> {{ product.preparationTime }}
+          </div>
+        }
+        @if (product.shelfLife) {
+          <div class="detail-item">
+            <strong>Validade:</strong> {{ product.shelfLife }}
+          </div>
+        }
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .product-info {
       background: white;

@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Category } from '../services/product.service';
 
 @Component({
   selector: 'app-category-grid',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <section class="categories-section section bg-cream">
       <div class="container">

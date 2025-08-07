@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService, Product } from '../services/product.service';
 import { BreadcrumbComponent } from '../components/breadcrumb.component';
@@ -12,89 +12,88 @@ import { ProductRecommendationsComponent } from '../components/product-recommend
   selector: 'app-product-detail-enhanced',
   standalone: true,
   imports: [
-    CommonModule, 
     BreadcrumbComponent,
     ProductGalleryComponent,
     ProductInfoComponent,
     ProductReviewsComponent,
     ProductRecommendationsComponent
-  ],
+],
   template: `
-    <div class="product-detail-page" *ngIf="product">
-      
-      <!-- Breadcrumb -->
-      <app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
-      
-      <!-- Product Detail -->
-      <section class="product-detail-section">
-        <div class="container">
-          <div class="product-detail-grid">
-            
-            <!-- Product Gallery -->
-            <div class="product-gallery-section">
-              <app-product-gallery 
-                [images]="productImages"
-                [productName]="product.name"
-                [badges]="getProductBadges()">
-              </app-product-gallery>
-            </div>
-            
-            <!-- Product Info -->
-            <div class="product-info-section">
-              <app-product-info 
-                [product]="product"
-                [customization]="productCustomization"
-                (addToCartEvent)="onAddToCart($event)"
-                (addToWishlistEvent)="onAddToWishlist($event)">
-              </app-product-info>
+    @if (product) {
+      <div class="product-detail-page">
+        <!-- Breadcrumb -->
+        <app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
+        <!-- Product Detail -->
+        <section class="product-detail-section">
+          <div class="container">
+            <div class="product-detail-grid">
+              <!-- Product Gallery -->
+              <div class="product-gallery-section">
+                <app-product-gallery
+                  [images]="productImages"
+                  [productName]="product.name"
+                  [badges]="getProductBadges()">
+                </app-product-gallery>
+              </div>
+              <!-- Product Info -->
+              <div class="product-info-section">
+                <app-product-info
+                  [product]="product"
+                  [customization]="productCustomization"
+                  (addToCartEvent)="onAddToCart($event)"
+                  (addToWishlistEvent)="onAddToWishlist($event)">
+                </app-product-info>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Product Reviews -->
-      <section class="product-reviews-section">
-        <div class="container">
-          <app-product-reviews 
-            [productId]="product.id"
-            [reviews]="productReviews">
-          </app-product-reviews>
-        </div>
-      </section>
-
-      <!-- Product Recommendations -->
-      <section class="product-recommendations-section">
-        <div class="container">
-          <app-product-recommendations 
-            [currentProduct]="product"
-            [relatedProducts]="relatedProducts"
-            [frequentlyBought]="frequentlyBought"
-            [recentlyViewed]="recentlyViewed"
-            [suggestedProducts]="suggestedProducts">
-          </app-product-recommendations>
-        </div>
-      </section>
-    </div>
-
+        </section>
+        <!-- Product Reviews -->
+        <section class="product-reviews-section">
+          <div class="container">
+            <app-product-reviews
+              [productId]="product.id"
+              [reviews]="productReviews">
+            </app-product-reviews>
+          </div>
+        </section>
+        <!-- Product Recommendations -->
+        <section class="product-recommendations-section">
+          <div class="container">
+            <app-product-recommendations
+              [currentProduct]="product"
+              [relatedProducts]="relatedProducts"
+              [frequentlyBought]="frequentlyBought"
+              [recentlyViewed]="recentlyViewed"
+              [suggestedProducts]="suggestedProducts">
+            </app-product-recommendations>
+          </div>
+        </section>
+      </div>
+    }
+    
     <!-- Loading State -->
-    <div *ngIf="!product && isLoading" class="loading-container">
-      <div class="loading-spinner">
-        <div class="spinner"></div>
-        <p>Carregando produto...</p>
+    @if (!product && isLoading) {
+      <div class="loading-container">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Carregando produto...</p>
+        </div>
       </div>
-    </div>
-
+    }
+    
     <!-- Error State -->
-    <div *ngIf="!product && !isLoading" class="error-container">
-      <div class="error-content">
-        <h2>🍰 Produto não encontrado</h2>
-        <p>Desculpe, não conseguimos encontrar este produto. Que tal explorar nossos outros deliciosos produtos?</p>
-        <button class="btn btn--sweet" (click)="navigateToProducts()">
-          Ver Produtos
-        </button>
+    @if (!product && !isLoading) {
+      <div class="error-container">
+        <div class="error-content">
+          <h2>🍰 Produto não encontrado</h2>
+          <p>Desculpe, não conseguimos encontrar este produto. Que tal explorar nossos outros deliciosos produtos?</p>
+          <button class="btn btn--sweet" (click)="navigateToProducts()">
+            Ver Produtos
+          </button>
+        </div>
       </div>
-    </div>
-  `,
+    }
+    `,
   styles: [`
     .product-detail-page {
       background: #f8fafc;

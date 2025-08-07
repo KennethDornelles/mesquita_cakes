@@ -1,211 +1,241 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-product-recommendations',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   template: `
     <div class="product-recommendations">
       <!-- Related Products -->
-      <div *ngIf="relatedProducts.length > 0" class="recommendation-section">
-        <h3 class="section-title">
-          <span class="title-icon">🍰</span>
-          Produtos Relacionados
-        </h3>
-        <p class="section-description">Outros sabores que você pode gostar</p>
-        
-        <div class="products-grid">
-          <div *ngFor="let product of relatedProducts" class="product-card" (click)="navigateToProduct(product.id)">
-            <div class="product-image">
-              <img [src]="product.image" [alt]="product.name" loading="lazy">
-              <div class="product-badges">
-                <span *ngIf="product.isNew" class="badge badge--new">Novo</span>
-                <span *ngIf="product.discount > 0" class="badge badge--sale">{{ product.discount }}% OFF</span>
-              </div>
-              <button class="wishlist-btn" (click)="toggleWishlist(product, $event)">
-                <span *ngIf="!isInWishlist(product.id)">🤍</span>
-                <span *ngIf="isInWishlist(product.id)">❤️</span>
-              </button>
-            </div>
-            
-            <div class="product-info">
-              <h4 class="product-name">{{ product.name }}</h4>
-              <div class="product-rating">
-                <div class="rating-stars">
-                  <span 
-                    *ngFor="let star of getStars(product.rating); let i = index"
-                    class="star"
-                    [class.filled]="star">
-                    ⭐
-                  </span>
-                </div>
-                <span class="rating-count">({{ product.reviewCount }})</span>
-              </div>
-              
-              <div class="product-pricing">
-                <span *ngIf="product.discount > 0" class="original-price">
-                  R$ {{ product.originalPrice?.toFixed(2).replace('.', ',') }}
-                </span>
-                <span class="current-price">
-                  R$ {{ getCurrentPrice(product).toFixed(2).replace('.', ',') }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Frequently Bought Together -->
-      <div *ngIf="frequentlyBought.length > 0" class="recommendation-section">
-        <h3 class="section-title">
-          <span class="title-icon">👥</span>
-          Frequentemente Comprados Juntos
-        </h3>
-        <p class="section-description">Clientes que compraram este item também levaram</p>
-        
-        <div class="bundle-container">
-          <div class="bundle-items">
-            <!-- Current Product -->
-            <div class="bundle-item current-product">
-              <img [src]="currentProduct.image" [alt]="currentProduct.name">
-              <span class="product-name">{{ currentProduct.name }}</span>
-              <span class="product-price">R$ {{ getCurrentPrice(currentProduct).toFixed(2).replace('.', ',') }}</span>
-            </div>
-            
-            <!-- Plus Icon -->
-            <div class="bundle-plus">+</div>
-            
-            <!-- Frequently Bought Products -->
-            <div *ngFor="let product of frequentlyBought; let last = last" class="bundle-group">
-              <div class="bundle-item">
-                <img [src]="product.image" [alt]="product.name">
-                <span class="product-name">{{ product.name }}</span>
-                <span class="product-price">R$ {{ getCurrentPrice(product).toFixed(2).replace('.', ',') }}</span>
-                <label class="bundle-checkbox">
-                  <input 
-                    type="checkbox" 
-                    [checked]="isBundleSelected(product.id)"
-                    (change)="toggleBundleItem(product)">
-                  <span class="checkmark"></span>
-                </label>
-              </div>
-              <div *ngIf="!last" class="bundle-plus">+</div>
-            </div>
-          </div>
-          
-          <!-- Bundle Summary -->
-          <div *ngIf="selectedBundleItems.length > 0" class="bundle-summary">
-            <div class="bundle-total">
-              <span class="total-label">Total do pacote:</span>
-              <div class="total-pricing">
-                <span class="original-total">R$ {{ getBundleOriginalTotal().toFixed(2).replace('.', ',') }}</span>
-                <span class="discounted-total">R$ {{ getBundleDiscountedTotal().toFixed(2).replace('.', ',') }}</span>
-              </div>
-              <span class="savings">Economize R$ {{ getBundleSavings().toFixed(2).replace('.', ',') }}</span>
-            </div>
-            
-            <button class="btn btn--sweet bundle-btn" (click)="addBundleToCart()">
-              🛒 Adicionar Pacote ao Carrinho
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Recently Viewed -->
-      <div *ngIf="recentlyViewed.length > 0" class="recommendation-section">
-        <h3 class="section-title">
-          <span class="title-icon">👁️</span>
-          Vistos Recentemente
-        </h3>
-        <p class="section-description">Continue de onde parou</p>
-        
-        <div class="products-carousel">
-          <div class="carousel-container" #carouselContainer>
-            <div *ngFor="let product of recentlyViewed" class="carousel-item">
-              <div class="product-card compact" (click)="navigateToProduct(product.id)">
+      @if (relatedProducts.length > 0) {
+        <div class="recommendation-section">
+          <h3 class="section-title">
+            <span class="title-icon">🍰</span>
+            Produtos Relacionados
+          </h3>
+          <p class="section-description">Outros sabores que você pode gostar</p>
+          <div class="products-grid">
+            @for (product of relatedProducts; track product) {
+              <div class="product-card" (click)="navigateToProduct(product.id)">
                 <div class="product-image">
                   <img [src]="product.image" [alt]="product.name" loading="lazy">
+                  <div class="product-badges">
+                    @if (product.isNew) {
+                      <span class="badge badge--new">Novo</span>
+                    }
+                    @if (product.discount > 0) {
+                      <span class="badge badge--sale">{{ product.discount }}% OFF</span>
+                    }
+                  </div>
+                  <button class="wishlist-btn" (click)="toggleWishlist(product, $event)">
+                    @if (!isInWishlist(product.id)) {
+                      <span>🤍</span>
+                    }
+                    @if (isInWishlist(product.id)) {
+                      <span>❤️</span>
+                    }
+                  </button>
                 </div>
                 <div class="product-info">
-                  <h5 class="product-name">{{ product.name }}</h5>
-                  <span class="product-price">R$ {{ getCurrentPrice(product).toFixed(2).replace('.', ',') }}</span>
+                  <h4 class="product-name">{{ product.name }}</h4>
+                  <div class="product-rating">
+                    <div class="rating-stars">
+                      @for (star of getStars(product.rating); track star; let i = $index) {
+                        <span
+                          class="star"
+                          [class.filled]="star">
+                          ⭐
+                        </span>
+                      }
+                    </div>
+                    <span class="rating-count">({{ product.reviewCount }})</span>
+                  </div>
+                  <div class="product-pricing">
+                    @if (product.discount > 0) {
+                      <span class="original-price">
+                        R$ {{ product.originalPrice?.toFixed(2).replace('.', ',') }}
+                      </span>
+                    }
+                    <span class="current-price">
+                      R$ {{ getCurrentPrice(product).toFixed(2).replace('.', ',') }}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            }
           </div>
-          
-          <!-- Carousel Controls -->
-          <button 
-            *ngIf="canScrollLeft" 
-            class="carousel-btn carousel-btn--prev"
-            (click)="scrollCarousel('left')">
-            ‹
-          </button>
-          <button 
-            *ngIf="canScrollRight" 
-            class="carousel-btn carousel-btn--next"
-            (click)="scrollCarousel('right')">
-            ›
-          </button>
         </div>
-      </div>
-
+      }
+    
+      <!-- Frequently Bought Together -->
+      @if (frequentlyBought.length > 0) {
+        <div class="recommendation-section">
+          <h3 class="section-title">
+            <span class="title-icon">👥</span>
+            Frequentemente Comprados Juntos
+          </h3>
+          <p class="section-description">Clientes que compraram este item também levaram</p>
+          <div class="bundle-container">
+            <div class="bundle-items">
+              <!-- Current Product -->
+              <div class="bundle-item current-product">
+                <img [src]="currentProduct.image" [alt]="currentProduct.name">
+                <span class="product-name">{{ currentProduct.name }}</span>
+                <span class="product-price">R$ {{ getCurrentPrice(currentProduct).toFixed(2).replace('.', ',') }}</span>
+              </div>
+              <!-- Plus Icon -->
+              <div class="bundle-plus">+</div>
+              <!-- Frequently Bought Products -->
+              @for (product of frequentlyBought; track product; let last = $last) {
+                <div class="bundle-group">
+                  <div class="bundle-item">
+                    <img [src]="product.image" [alt]="product.name">
+                    <span class="product-name">{{ product.name }}</span>
+                    <span class="product-price">R$ {{ getCurrentPrice(product).toFixed(2).replace('.', ',') }}</span>
+                    <label class="bundle-checkbox">
+                      <input
+                        type="checkbox"
+                        [checked]="isBundleSelected(product.id)"
+                        (change)="toggleBundleItem(product)">
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  @if (!last) {
+                    <div class="bundle-plus">+</div>
+                  }
+                </div>
+              }
+            </div>
+            <!-- Bundle Summary -->
+            @if (selectedBundleItems.length > 0) {
+              <div class="bundle-summary">
+                <div class="bundle-total">
+                  <span class="total-label">Total do pacote:</span>
+                  <div class="total-pricing">
+                    <span class="original-total">R$ {{ getBundleOriginalTotal().toFixed(2).replace('.', ',') }}</span>
+                    <span class="discounted-total">R$ {{ getBundleDiscountedTotal().toFixed(2).replace('.', ',') }}</span>
+                  </div>
+                  <span class="savings">Economize R$ {{ getBundleSavings().toFixed(2).replace('.', ',') }}</span>
+                </div>
+                <button class="btn btn--sweet bundle-btn" (click)="addBundleToCart()">
+                  🛒 Adicionar Pacote ao Carrinho
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    
+      <!-- Recently Viewed -->
+      @if (recentlyViewed.length > 0) {
+        <div class="recommendation-section">
+          <h3 class="section-title">
+            <span class="title-icon">👁️</span>
+            Vistos Recentemente
+          </h3>
+          <p class="section-description">Continue de onde parou</p>
+          <div class="products-carousel">
+            <div class="carousel-container" #carouselContainer>
+              @for (product of recentlyViewed; track product) {
+                <div class="carousel-item">
+                  <div class="product-card compact" (click)="navigateToProduct(product.id)">
+                    <div class="product-image">
+                      <img [src]="product.image" [alt]="product.name" loading="lazy">
+                    </div>
+                    <div class="product-info">
+                      <h5 class="product-name">{{ product.name }}</h5>
+                      <span class="product-price">R$ {{ getCurrentPrice(product).toFixed(2).replace('.', ',') }}</span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+            <!-- Carousel Controls -->
+            @if (canScrollLeft) {
+              <button
+                class="carousel-btn carousel-btn--prev"
+                (click)="scrollCarousel('left')">
+                ‹
+              </button>
+            }
+            @if (canScrollRight) {
+              <button
+                class="carousel-btn carousel-btn--next"
+                (click)="scrollCarousel('right')">
+                ›
+              </button>
+            }
+          </div>
+        </div>
+      }
+    
       <!-- You May Also Like -->
-      <div *ngIf="suggestedProducts.length > 0" class="recommendation-section">
-        <h3 class="section-title">
-          <span class="title-icon">✨</span>
-          Você Também Pode Gostar
-        </h3>
-        <p class="section-description">Baseado no seu histórico de navegação</p>
-        
-        <div class="products-grid">
-          <div *ngFor="let product of suggestedProducts" class="product-card" (click)="navigateToProduct(product.id)">
-            <div class="product-image">
-              <img [src]="product.image" [alt]="product.name" loading="lazy">
-              <div class="product-badges">
-                <span *ngIf="product.featured" class="badge badge--featured">⭐ Destaque</span>
-                <span *ngIf="product.isPopular" class="badge badge--popular">🔥 Popular</span>
-              </div>
-              <button class="wishlist-btn" (click)="toggleWishlist(product, $event)">
-                <span *ngIf="!isInWishlist(product.id)">🤍</span>
-                <span *ngIf="isInWishlist(product.id)">❤️</span>
-              </button>
-            </div>
-            
-            <div class="product-info">
-              <h4 class="product-name">{{ product.name }}</h4>
-              <div class="product-rating">
-                <div class="rating-stars">
-                  <span 
-                    *ngFor="let star of getStars(product.rating); let i = index"
-                    class="star"
-                    [class.filled]="star">
-                    ⭐
-                  </span>
+      @if (suggestedProducts.length > 0) {
+        <div class="recommendation-section">
+          <h3 class="section-title">
+            <span class="title-icon">✨</span>
+            Você Também Pode Gostar
+          </h3>
+          <p class="section-description">Baseado no seu histórico de navegação</p>
+          <div class="products-grid">
+            @for (product of suggestedProducts; track product) {
+              <div class="product-card" (click)="navigateToProduct(product.id)">
+                <div class="product-image">
+                  <img [src]="product.image" [alt]="product.name" loading="lazy">
+                  <div class="product-badges">
+                    @if (product.featured) {
+                      <span class="badge badge--featured">⭐ Destaque</span>
+                    }
+                    @if (product.isPopular) {
+                      <span class="badge badge--popular">🔥 Popular</span>
+                    }
+                  </div>
+                  <button class="wishlist-btn" (click)="toggleWishlist(product, $event)">
+                    @if (!isInWishlist(product.id)) {
+                      <span>🤍</span>
+                    }
+                    @if (isInWishlist(product.id)) {
+                      <span>❤️</span>
+                    }
+                  </button>
                 </div>
-                <span class="rating-count">({{ product.reviewCount }})</span>
+                <div class="product-info">
+                  <h4 class="product-name">{{ product.name }}</h4>
+                  <div class="product-rating">
+                    <div class="rating-stars">
+                      @for (star of getStars(product.rating); track star; let i = $index) {
+                        <span
+                          class="star"
+                          [class.filled]="star">
+                          ⭐
+                        </span>
+                      }
+                    </div>
+                    <span class="rating-count">({{ product.reviewCount }})</span>
+                  </div>
+                  <div class="product-pricing">
+                    @if (product.discount > 0) {
+                      <span class="original-price">
+                        R$ {{ product.originalPrice?.toFixed(2).replace('.', ',') }}
+                      </span>
+                    }
+                    <span class="current-price">
+                      R$ {{ getCurrentPrice(product).toFixed(2).replace('.', ',') }}
+                    </span>
+                  </div>
+                  <button class="btn btn--outline product-btn" (click)="quickAddToCart(product, $event)">
+                    Adicionar
+                  </button>
+                </div>
               </div>
-              
-              <div class="product-pricing">
-                <span *ngIf="product.discount > 0" class="original-price">
-                  R$ {{ product.originalPrice?.toFixed(2).replace('.', ',') }}
-                </span>
-                <span class="current-price">
-                  R$ {{ getCurrentPrice(product).toFixed(2).replace('.', ',') }}
-                </span>
-              </div>
-              
-              <button class="btn btn--outline product-btn" (click)="quickAddToCart(product, $event)">
-                Adicionar
-              </button>
-            </div>
+            }
           </div>
         </div>
-      </div>
+      }
     </div>
-  `,
+    `,
   styles: [`
     .product-recommendations {
       display: flex;

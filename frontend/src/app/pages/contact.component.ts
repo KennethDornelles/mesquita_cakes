@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface ContactInfo {
@@ -19,7 +19,7 @@ interface FAQ {
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   template: `
     <div class="contact-page">
       <div class="container">
@@ -39,31 +39,36 @@ interface FAQ {
             </div>
           </div>
         </div>
-
+    
         <div class="contact-layout">
           <!-- Contact Information -->
           <div class="contact-info-section">
             <h2 class="section-title">💬 Fale Conosco</h2>
-            
+    
             <div class="contact-cards">
-              <div *ngFor="let info of contactInfo" class="contact-card">
-                <div class="contact-icon">{{ info.icon }}</div>
-                <div class="contact-content">
-                  <h3>{{ info.title }}</h3>
-                  <p>{{ info.description }}</p>
-                  <a 
-                    *ngIf="info.link" 
-                    [href]="info.link" 
-                    class="contact-link"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    {{ info.value }}
-                  </a>
-                  <span *ngIf="!info.link" class="contact-value">{{ info.value }}</span>
+              @for (info of contactInfo; track info) {
+                <div class="contact-card">
+                  <div class="contact-icon">{{ info.icon }}</div>
+                  <div class="contact-content">
+                    <h3>{{ info.title }}</h3>
+                    <p>{{ info.description }}</p>
+                    @if (info.link) {
+                      <a
+                        [href]="info.link"
+                        class="contact-link"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        {{ info.value }}
+                      </a>
+                    }
+                    @if (!info.link) {
+                      <span class="contact-value">{{ info.value }}</span>
+                    }
+                  </div>
                 </div>
-              </div>
+              }
             </div>
-
+    
             <!-- Business Hours -->
             <div class="business-hours">
               <h3>🕒 Horário de Funcionamento</h3>
@@ -86,7 +91,7 @@ interface FAQ {
                 </div>
               </div>
             </div>
-
+    
             <!-- Location Map -->
             <div class="location-section">
               <h3>📍 Nossa Localização</h3>
@@ -102,9 +107,9 @@ interface FAQ {
                 <div class="map-content">
                   <span class="map-icon">🗺️</span>
                   <p>Mapa interativo em breve</p>
-                  <a 
-                    href="https://maps.google.com/?q=Mesquita+RJ" 
-                    target="_blank" 
+                  <a
+                    href="https://maps.google.com/?q=Mesquita+RJ"
+                    target="_blank"
                     rel="noopener noreferrer"
                     class="btn btn--outline btn--sm">
                     Ver no Google Maps
@@ -113,11 +118,11 @@ interface FAQ {
               </div>
             </div>
           </div>
-
+    
           <!-- Contact Form -->
           <div class="contact-form-section">
             <h2 class="section-title">✉️ Envie uma Mensagem</h2>
-            
+    
             <form [formGroup]="contactForm" (ngSubmit)="submitForm()" class="contact-form">
               <div class="form-row">
                 <div class="form-group">
@@ -128,12 +133,14 @@ interface FAQ {
                     formControlName="name"
                     class="form-input"
                     placeholder="Seu nome completo">
-                  <div *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched" 
-                       class="form-error">
-                    Nome é obrigatório
-                  </div>
+                  @if (contactForm.get('name')?.invalid && contactForm.get('name')?.touched) {
+                    <div
+                      class="form-error">
+                      Nome é obrigatório
+                    </div>
+                  }
                 </div>
-
+    
                 <div class="form-group">
                   <label for="email" class="form-label">E-mail *</label>
                   <input
@@ -142,13 +149,15 @@ interface FAQ {
                     formControlName="email"
                     class="form-input"
                     placeholder="seu@email.com">
-                  <div *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched" 
-                       class="form-error">
-                    E-mail válido é obrigatório
-                  </div>
+                  @if (contactForm.get('email')?.invalid && contactForm.get('email')?.touched) {
+                    <div
+                      class="form-error">
+                      E-mail válido é obrigatório
+                    </div>
+                  }
                 </div>
               </div>
-
+    
               <div class="form-row">
                 <div class="form-group">
                   <label for="phone" class="form-label">Telefone</label>
@@ -159,7 +168,7 @@ interface FAQ {
                     class="form-input"
                     placeholder="(11) 99999-9999">
                 </div>
-
+    
                 <div class="form-group">
                   <label for="subject" class="form-label">Assunto *</label>
                   <select id="subject" formControlName="subject" class="form-select">
@@ -172,13 +181,15 @@ interface FAQ {
                     <option value="reclamacao">Reclamações</option>
                     <option value="outros">Outros</option>
                   </select>
-                  <div *ngIf="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched" 
-                       class="form-error">
-                    Assunto é obrigatório
-                  </div>
+                  @if (contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched) {
+                    <div
+                      class="form-error">
+                      Assunto é obrigatório
+                    </div>
+                  }
                 </div>
               </div>
-
+    
               <div class="form-row">
                 <div class="form-group full-width">
                   <label for="message" class="form-label">Mensagem *</label>
@@ -187,14 +198,16 @@ interface FAQ {
                     formControlName="message"
                     class="form-textarea"
                     rows="6"
-                    placeholder="Escreva sua mensagem aqui..."></textarea>
-                  <div *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched" 
-                       class="form-error">
-                    Mensagem é obrigatória (mínimo 10 caracteres)
-                  </div>
+                  placeholder="Escreva sua mensagem aqui..."></textarea>
+                  @if (contactForm.get('message')?.invalid && contactForm.get('message')?.touched) {
+                    <div
+                      class="form-error">
+                      Mensagem é obrigatória (mínimo 10 caracteres)
+                    </div>
+                  }
                 </div>
               </div>
-
+    
               <div class="form-row">
                 <div class="form-group full-width">
                   <label class="form-checkbox">
@@ -204,62 +217,70 @@ interface FAQ {
                   </label>
                 </div>
               </div>
-
+    
               <div class="form-actions">
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   class="btn btn--sweet"
                   [disabled]="contactForm.invalid || isSubmitting"
                   [class.loading]="isSubmitting">
-                  <span *ngIf="!isSubmitting">✉️ Enviar Mensagem</span>
-                  <span *ngIf="isSubmitting">Enviando...</span>
+                  @if (!isSubmitting) {
+                    <span>✉️ Enviar Mensagem</span>
+                  }
+                  @if (isSubmitting) {
+                    <span>Enviando...</span>
+                  }
                 </button>
               </div>
             </form>
-
+    
             <!-- Success Message -->
-            <div *ngIf="showSuccessMessage" class="success-message">
-              <div class="success-icon">✅</div>
-              <h3>Mensagem enviada com sucesso!</h3>
-              <p>Agradecemos o seu contato. Responderemos em breve através do e-mail informado.</p>
-            </div>
+            @if (showSuccessMessage) {
+              <div class="success-message">
+                <div class="success-icon">✅</div>
+                <h3>Mensagem enviada com sucesso!</h3>
+                <p>Agradecemos o seu contato. Responderemos em breve através do e-mail informado.</p>
+              </div>
+            }
           </div>
         </div>
-
+    
         <!-- FAQ Section -->
         <div class="faq-section">
           <h2 class="section-title">❓ Perguntas Frequentes</h2>
           <p class="section-subtitle">
             Confira as respostas para as dúvidas mais comuns dos nossos clientes
           </p>
-
+    
           <div class="faq-list">
-            <div *ngFor="let faq of faqs" class="faq-item">
-              <button 
-                class="faq-question" 
-                (click)="toggleFAQ(faq)"
-                [class.expanded]="faq.isExpanded">
-                <span>{{ faq.question }}</span>
-                <span class="faq-icon">{{ faq.isExpanded ? '−' : '+' }}</span>
-              </button>
-              <div class="faq-answer" [class.expanded]="faq.isExpanded">
-                <p>{{ faq.answer }}</p>
+            @for (faq of faqs; track faq) {
+              <div class="faq-item">
+                <button
+                  class="faq-question"
+                  (click)="toggleFAQ(faq)"
+                  [class.expanded]="faq.isExpanded">
+                  <span>{{ faq.question }}</span>
+                  <span class="faq-icon">{{ faq.isExpanded ? '−' : '+' }}</span>
+                </button>
+                <div class="faq-answer" [class.expanded]="faq.isExpanded">
+                  <p>{{ faq.answer }}</p>
+                </div>
               </div>
-            </div>
+            }
           </div>
         </div>
-
+    
         <!-- Social Media -->
         <div class="social-section">
           <h2 class="section-title">📱 Redes Sociais</h2>
           <p class="section-subtitle">
             Siga-nos nas redes sociais para ficar por dentro das novidades
           </p>
-
+    
           <div class="social-links">
-            <a 
-              href="https://instagram.com/mesquitacakes" 
-              target="_blank" 
+            <a
+              href="https://instagram.com/mesquitacakes"
+              target="_blank"
               rel="noopener noreferrer"
               class="social-link instagram">
               <span class="social-icon">📷</span>
@@ -268,10 +289,10 @@ interface FAQ {
                 <p>&#64;mesquitacakes</p>
               </div>
             </a>
-
-            <a 
-              href="https://facebook.com/mesquitacakes" 
-              target="_blank" 
+    
+            <a
+              href="https://facebook.com/mesquitacakes"
+              target="_blank"
               rel="noopener noreferrer"
               class="social-link facebook">
               <span class="social-icon">📘</span>
@@ -280,10 +301,10 @@ interface FAQ {
                 <p>/mesquitacakes</p>
               </div>
             </a>
-
-            <a 
-              href="https://wa.me/5521999999999" 
-              target="_blank" 
+    
+            <a
+              href="https://wa.me/5521999999999"
+              target="_blank"
               rel="noopener noreferrer"
               class="social-link whatsapp">
               <span class="social-icon">💬</span>
@@ -292,9 +313,9 @@ interface FAQ {
                 <p>(21) 99999-9999</p>
               </div>
             </a>
-
-            <a 
-              href="mailto:contato@mesquitacakes.com" 
+    
+            <a
+              href="mailto:contato@mesquitacakes.com"
               class="social-link email">
               <span class="social-icon">✉️</span>
               <div class="social-content">
@@ -306,7 +327,7 @@ interface FAQ {
         </div>
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .contact-page {
       background: #f8fafc;

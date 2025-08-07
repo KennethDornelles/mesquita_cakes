@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Product } from '../services/product.service';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="product-card" [class]="'card-' + viewMode">
       <!-- Imagem do produto -->
@@ -13,75 +13,89 @@ import { Product } from '../services/product.service';
         <div class="product-image">
           <img [src]="product.image" [alt]="product.name" class="product-img">
         </div>
-        
+    
         <!-- Badges -->
         <div class="product-badges">
-          <span class="badge badge--new" *ngIf="product.featured">Destaque</span>
-          <span class="badge badge--popular" *ngIf="product.rating >= 4.5">Popular</span>
-          <span class="badge badge--unavailable" *ngIf="!product.inStock">Indisponível</span>
+          @if (product.featured) {
+            <span class="badge badge--new">Destaque</span>
+          }
+          @if (product.rating >= 4.5) {
+            <span class="badge badge--popular">Popular</span>
+          }
+          @if (!product.inStock) {
+            <span class="badge badge--unavailable">Indisponível</span>
+          }
         </div>
-        
+    
         <!-- Quick actions para grid view -->
-        <div class="quick-actions" *ngIf="viewMode === 'grid'">
-          <button 
-            class="quick-action-btn"
-            (click)="onViewDetails()"
-            title="Ver detalhes">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-            </svg>
-          </button>
-        </div>
+        @if (viewMode === 'grid') {
+          <div class="quick-actions">
+            <button
+              class="quick-action-btn"
+              (click)="onViewDetails()"
+              title="Ver detalhes">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </button>
+          </div>
+        }
       </div>
-      
+    
       <!-- Conteúdo do produto -->
       <div class="product-content">
         <div class="product-header">
           <div class="product-category">{{ product.category }}</div>
           <h3 class="product-title">{{ product.name }}</h3>
         </div>
-        
+    
         <p class="product-description">{{ product.description }}</p>
-        
+    
         <!-- Rating -->
         <div class="product-rating">
           <div class="stars">
-            <span 
-              *ngFor="let star of getStars(); let i = index"
-              class="star"
-              [class.filled]="star">
-              ⭐
-            </span>
+            @for (star of getStars(); track star; let i = $index) {
+              <span
+                class="star"
+                [class.filled]="star">
+                ⭐
+              </span>
+            }
           </div>
           <span class="rating-count">({{ product.reviewCount }})</span>
         </div>
-        
+    
         <!-- Preço e ações -->
         <div class="product-footer">
           <div class="product-price">
             <span class="price">R$ {{ formatPrice(product.price) }}</span>
           </div>
-          
+    
           <div class="product-actions">
-            <button 
-              class="btn btn--outline btn--sm"
-              *ngIf="viewMode === 'list'"
-              (click)="onViewDetails()">
-              Ver Detalhes
-            </button>
-            
-            <button 
+            @if (viewMode === 'list') {
+              <button
+                class="btn btn--outline btn--sm"
+                (click)="onViewDetails()">
+                Ver Detalhes
+              </button>
+            }
+    
+            <button
               class="btn btn--sweet btn--sm"
               [disabled]="!product.inStock"
               (click)="onAddToCart()">
-              <span *ngIf="product.inStock">Adicionar 🛒</span>
-              <span *ngIf="!product.inStock">Indisponível</span>
+              @if (product.inStock) {
+                <span>Adicionar 🛒</span>
+              }
+              @if (!product.inStock) {
+                <span>Indisponível</span>
+              }
             </button>
           </div>
         </div>
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .product-card {
       background: white;
