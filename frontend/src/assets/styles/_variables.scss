@@ -1,92 +1,90 @@
 // ========================================
-// MESQUITA CAKES DESIGN SYSTEM - VARIABLES
-// ATUALIZADO: Com sugestões do cliente (Fonte Organic + Ajustes de cores)
+// SECRETA FORNADA DESIGN SYSTEM - VARIABLES
+// VERSÃO: Minimalista e Elegante baseada no novo logo
 // ========================================
 
-// Color Palette - Atualizado com feedback do cliente
+// Color Palette - Minimalista Terrosa
 // ========================================
 
-// Primary Colors (Rosa - tons mais suaves e orgânicos)
-$primary-50: #fef7f7;
-$primary-100: #fdeaea;
-$primary-200: #fbdada;
-$primary-300: #f7b5b5;
-$primary-400: #f28a8a;
-$primary-500: #ec6b6b; // Rosa mais suave e orgânico
-$primary-600: #e04545;
-$primary-700: #c73333;
-$primary-800: #a52929;
-$primary-900: #862727;
+// Primary Colors (Terracota elegante)
+$primary-50: #faf7f5;
+$primary-100: #f5ebe6;
+$primary-200: #ead4c8;
+$primary-300: #d0946f; // Tom claro
+$primary-400: #c4825f; // Tom médio
+$primary-500: #b8704f; // Terracota principal
+$primary-600: #a65d42; // Tom escuro
+$primary-700: #8b4a35; // Tom mais escuro
+$primary-800: #6d3929;
+$primary-900: #502b1f;
 
-// Secondary Colors (Verde mais natural e orgânico)
-$secondary-50: #f0fdf5;
-$secondary-100: #dcfce8;
-$secondary-200: #bbf7d1;
-$secondary-300: #86efac;
-$secondary-400: #4ade80;
-$secondary-500: #22c55e; // Verde mais vibrante e natural
-$secondary-600: #16a34a;
-$secondary-700: #15803d;
-$secondary-800: #166534;
-$secondary-900: #14532d;
+// Secondary Colors (Creme artesanal)
+$secondary-50: #fefcfa;
+$secondary-100: #faf7f3;
+$secondary-200: #f5ede5;
+$secondary-300: #f9f0df; // Creme muito claro
+$secondary-400: #f7ebd9; // Creme claro
+$secondary-500: #f5e6d3; // Creme principal
+$secondary-600: #e8d4bf; // Creme escuro
+$secondary-700: #d4bfa5;
+$secondary-800: #b8a088;
+$secondary-900: #8b7962;
 
-// Accent Colors (Tons mais naturais baseados em ingredientes orgânicos)
-$accent-cream: #fffbf0; // Creme mais puro
-$accent-vanilla: #fdf4e3; // Baunilha natural
-$accent-honey: #f59e0b; // Mel dourado
-$accent-berry: #ec4899; // Frutas vermelhas
-$accent-mint: #10b981; // Menta fresca
-$accent-cocoa: #78350f; // Cacau natural
+// Neutral Colors (Refinados)
+$neutral-50: #fefcfa;  // Branco cremoso
+$neutral-100: #f8f6f3; // Branco quente
+$neutral-200: #f2f0ed; // Cinza muito claro
+$neutral-300: #e6e3df;
+$neutral-400: #8b8680; // Cinza médio terroso
+$neutral-500: #6b645f;
+$neutral-600: #4a453f; // Cinza escuro
+$neutral-700: #3a3530;
+$neutral-800: #2d2926; // Quase preto terroso
+$neutral-900: #1f1d1a;
 
-// Text Colors (Melhor legibilidade)
-$text-primary: #2d1b1b; // Marrom escuro para texto principal
-$text-secondary: #4a3737; // Marrom médio para texto secundário
-$text-muted: #6b5757; // Marrom claro para texto menos importante
-$text-accent: #c53030; // Vermelho forte para destaques
-$text-success: #065f46; // Verde escuro para sucesso
-$text-warning: #92400e; // Laranja escuro para avisos
-$text-error: #991b1b; // Vermelho escuro para erros
-$text-link: #1e40af; // Azul escuro para links
-$text-link-hover: #1e3a8a; // Azul mais escuro para hover
+// Accent Colors (Sutis e refinados)
+$accent-gold: #d4a574;   // Dourado sutil
+$accent-sage: #9caf8b;   // Verde sage
+$accent-dust: #e0d5c7;   // Poeira rosada
+$accent-warm: #f0ebe5;   // Bege quente
 
-// Neutral Colors (Tons mais quentes e naturais)
-$neutral-50: #fefefe;
-$neutral-100: #fcfcfc;
-$neutral-200: #f5f5f4;
-$neutral-300: #e7e5e4;
-$neutral-400: #a8a29e;
-$neutral-500: #78716c;
-$neutral-600: #57534e;
-$neutral-700: #44403c;
-$neutral-800: #292524;
-$neutral-900: #1c1917;
+// Functional Colors (Elegantes)
+$success: #7c9885;    // Verde suave
+$warning: #d4a574;    // Dourado
+$error: #c17b6b;      // Terracota avermelhado
+$info: #8b9dc3;       // Azul acinzentado
 
-// Background Colors (padrão mais orgânico)
-$bg-primary: #fef7f7; // Fundo rosa muito suave
-$bg-secondary: #f0fdf5; // Fundo verde muito suave
-$bg-accent: #fffbf0; // Fundo creme
-$bg-pattern: radial-gradient(circle, rgba(34, 197, 94, 0.1) 1px, transparent 1px);
+// Text Colors (Hierarquia clara)
+$text-primary: #2d2926;   // Quase preto terroso
+$text-secondary: #4a453f; // Cinza escuro
+$text-muted: #8b8680;     // Cinza médio
+$text-inverse: #fefcfa;   // Branco cremoso
 
-// Typography - Baseado no padrão Mercado Libre/E-commerce
+// Background Colors (Minimalistas)
+$bg-primary: #fefcfa;     // Branco cremoso
+$bg-secondary: #f8f6f3;   // Branco quente
+$bg-accent: #f5e6d3;      // Creme sutil
+$bg-pattern: none;        // Remove padrões decorativos
+
+// Typography - Elegante e Minimalista
 // ========================================
 
-// Font Families - Inter como alternativa profissional ao Proxima Nova
-$font-primary: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
-$font-secondary: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
-$font-accent: 'Dancing Script', 'Brush Script MT', cursive; // Mantém orgânico só para logo/destaques
-$font-script: 'Dancing Script', 'Brush Script MT', cursive; // Backup para textos cursivos especiais
+// Font Families - Hierarquia tipográfica sofisticada
+$font-primary: 'Playfair Display', 'Times New Roman', 'Times', serif;        // Para títulos e logo
+$font-secondary: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, sans-serif; // Para corpo e navegação
+$font-accent: 'Dancing Script', cursive; // Uso seletivo para assinaturas
 
-// Font Sizes - Baseados no padrão Mercado Livre
-$font-size-xs: 0.75rem;   // 12px - Para labels pequenos
-$font-size-sm: 0.875rem;  // 14px - Para textos secundários
-$font-size-base: 1rem;    // 16px - Base padrão web
-$font-size-lg: 1.125rem;  // 18px - Para textos importantes
-$font-size-xl: 1.25rem;   // 20px - Para títulos menores
-$font-size-2xl: 1.5rem;   // 24px - Para títulos médios
-$font-size-3xl: 1.875rem; // 30px - Para títulos grandes
-$font-size-4xl: 2.25rem;  // 36px - Para títulos principais
-$font-size-5xl: 3rem;     // 48px - Para displays
-$font-size-6xl: 3.75rem;  // 60px - Para hero sections
+// Font Sizes - Escala tipográfica harmoniosa
+$font-size-xs: 0.75rem;     // 12px - Legendas
+$font-size-sm: 0.875rem;    // 14px - Texto secundário
+$font-size-base: 1rem;      // 16px - Texto padrão
+$font-size-lg: 1.125rem;    // 18px - Texto destacado
+$font-size-xl: 1.25rem;     // 20px - Títulos pequenos
+$font-size-2xl: 1.5rem;     // 24px - Títulos de card
+$font-size-3xl: 1.875rem;   // 30px - Títulos de seção
+$font-size-4xl: 2.25rem;    // 36px - Títulos principais
+$font-size-5xl: 3rem;       // 48px - Hero titles
+$font-size-6xl: 4rem;       // 64px - Display
 
 // Font Weights
 $font-weight-light: 300;
@@ -100,92 +98,98 @@ $font-weight-extrabold: 800;
 $line-height-tight: 1.25;  // Para títulos
 $line-height-snug: 1.375;  // Para subtítulos
 $line-height-normal: 1.5;  // Para textos gerais
-$line-height-relaxed: 1.625; // Para textos longos
-$line-height-loose: 2;     // Para espaçamento extra
+// Font Weights - Hierarquia sutil
+$font-weight-light: 300;    // Uso seletivo
+$font-weight-normal: 400;   // Texto corpo
+$font-weight-medium: 500;   // Destaque sutil
+$font-weight-semibold: 600; // Títulos de card
+$font-weight-bold: 700;     // Títulos principais
 
-// Font Sizes Específicos para Contextos - Padrão E-commerce
-$font-size-footer: $font-size-xs;       // 12px para footer
-$font-size-nav: $font-size-base;        // 16px para navegação
-$font-size-card-title: $font-size-lg;   // 18px para títulos de cards
-$font-size-card-text: $font-size-sm;    // 14px para texto de cards
-$font-size-button: $font-size-sm;       // 14px para botões
-$font-size-price: $font-size-xl;        // 20px para preços
+// Line Heights - Legibilidade otimizada
+$line-height-tight: 1.25;     // Para títulos
+$line-height-snug: 1.375;     // Para subtítulos
+$line-height-normal: 1.5;     // Para texto corpo
+$line-height-relaxed: 1.625;  // Para texto longo
+$line-height-loose: 2;        // Para espaçamento extra
 
-// Spacing
+// Spacing - Sistema harmonioso baseado em proporção áurea
 // ========================================
 $spacing-0: 0;
-$spacing-1: 0.25rem;  // 4px
-$spacing-2: 0.5rem;   // 8px
-$spacing-3: 0.75rem;  // 12px
-$spacing-4: 1rem;     // 16px
-$spacing-5: 1.25rem;  // 20px
-$spacing-6: 1.5rem;   // 24px
-$spacing-8: 2rem;     // 32px
-$spacing-10: 2.5rem;  // 40px
-$spacing-12: 3rem;    // 48px
-$spacing-16: 4rem;    // 64px
-$spacing-20: 5rem;    // 80px
-$spacing-24: 6rem;    // 96px
-$spacing-32: 8rem;    // 128px
+$spacing-1: 0.25rem;    // 4px
+$spacing-2: 0.5rem;     // 8px
+$spacing-3: 0.75rem;    // 12px
+$spacing-4: 1rem;       // 16px
+$spacing-5: 1.25rem;    // 20px
+$spacing-6: 1.5rem;     // 24px
+$spacing-8: 2rem;       // 32px
+$spacing-10: 2.5rem;    // 40px
+$spacing-12: 3rem;      // 48px
+$spacing-16: 4rem;      // 64px
+$spacing-20: 5rem;      // 80px
+$spacing-24: 6rem;      // 96px
 
-// Border Radius
+// Border Radius - Minimalista
 // ========================================
 $radius-none: 0;
-$radius-sm: 0.125rem;   // 2px
-$radius-base: 0.25rem;  // 4px
-$radius-md: 0.375rem;   // 6px
-$radius-lg: 0.5rem;     // 8px
-$radius-xl: 0.75rem;    // 12px
-$radius-2xl: 1rem;      // 16px
-$radius-3xl: 1.5rem;    // 24px
-$radius-full: 9999px;
+$radius-sm: 0.125rem;    // 2px
+$radius-base: 0.375rem;  // 6px - Padrão para botões
+$radius-md: 0.5rem;      // 8px
+$radius-lg: 0.75rem;     // 12px - Para cards
+$radius-xl: 1rem;        // 16px
+$radius-2xl: 1.5rem;     // 24px
+$radius-full: 9999px;    // Para elementos circulares
 
-// Shadows
+// Shadows - Elegantes e sutis
 // ========================================
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-
-// Sweet-themed shadows
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+$shadow-base: 0 2px 4px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+$shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.15);
 $shadow-cake: 0 8px 32px rgba(236, 72, 153, 0.15);
 $shadow-macaron: 0 4px 16px rgba(255, 140, 200, 0.2);
-$shadow-heart: 0 2px 8px rgba(255, 105, 180, 0.3);
+// Transitions - Minimalistas
+$transition-fast: 0.15s ease;
+$transition-base: 0.2s ease;
+$transition-slow: 0.3s ease;
 
-// Breakpoints
+// Breakpoints - Mobile-first
 // ========================================
-$breakpoint-xs: 480px;
-$breakpoint-sm: 640px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 1024px;
-$breakpoint-xl: 1280px;
-$breakpoint-2xl: 1536px;
+$breakpoint-sm: 640px;   // Tablet pequeno
+$breakpoint-md: 768px;   // Tablet
+$breakpoint-lg: 1024px;  // Desktop
+$breakpoint-xl: 1280px;  // Desktop grande
 
-// Z-Index
+// Z-Index - Hierarquia limpa
 // ========================================
 $z-index-dropdown: 1000;
 $z-index-sticky: 1020;
 $z-index-fixed: 1030;
 $z-index-modal-backdrop: 1040;
 $z-index-modal: 1050;
-$z-index-popover: 1060;
 $z-index-tooltip: 1070;
 
-// Animations
+// Animations - Sutis e elegantes
 // ========================================
-$duration-75: 75ms;
-$duration-100: 100ms;
-$duration-150: 150ms;
-$duration-200: 200ms;
-$duration-300: 300ms;
-$duration-500: 500ms;
-$duration-700: 700ms;
-$duration-1000: 1000ms;
+$duration-fast: 150ms;
+$duration-base: 200ms;
+$duration-slow: 300ms;
 
 $ease-linear: linear;
 $ease-in: cubic-bezier(0.4, 0, 1, 1);
 $ease-out: cubic-bezier(0, 0, 0.2, 1);
 $ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-$ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+// Container Widths
+// ========================================
+$container-sm: 640px;
+$container-md: 768px;
+$container-lg: 1024px;
+$container-xl: 1200px;    // Max width padrão
+$container-2xl: 1400px;   // Para layouts especiais
+
+// Grid
+// ========================================
+$grid-columns: 12;
+$grid-gap: $spacing-6;     // 24px
+$grid-gap-sm: $spacing-4;  // 16px mobile

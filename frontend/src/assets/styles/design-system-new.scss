@@ -3,14 +3,14 @@
 // VERSÃO: Minimalista e Elegante
 // ========================================
 
-// Importar módulos do design system PRIMEIRO
+// Importar Google Fonts primeiro
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;500&display=swap');
+
+// Importar módulos do design system
 @use 'variables' as *;
 @use 'components' as *;
 @use 'animations' as *;
 @use 'utilities' as *;
-
-// Importar Google Fonts depois
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;500&display=swap');
 
 // Reset e Base Styles - Minimalista
 // ========================================

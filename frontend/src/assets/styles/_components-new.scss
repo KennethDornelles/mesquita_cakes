@@ -4,23 +4,6 @@
 // ========================================
 
 @use 'variables' as *;
-@use 'sass:color';
-
-// ========================================
-// NAVBAR COMPONENT - MINIMALISTA
-// ========================================
-
-.navbar {
-  &__nav {
-    display: flex;
-    gap: $spacing-8;
-    
-    @media (max-width: $breakpoint-md) {
-      display: none;
-    }
-  }
-  
-}
 
 // Logo Component - Minimalista
 // ========================================
@@ -74,7 +57,7 @@
   padding: $spacing-3 $spacing-6;
   font-family: $font-secondary;
   font-weight: $font-weight-medium;
-  font-size: $font-size-base; 
+  font-size: $font-size-base;
   line-height: $line-height-normal;
   text-decoration: none;
   border-radius: $radius-base;
@@ -83,7 +66,7 @@
   transition: all $transition-base;
   
   &:focus {
-    outline: none; 
+    outline: none;
     box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
   }
   
@@ -91,7 +74,7 @@
     opacity: 0.6;
     cursor: not-allowed;
     
-    &:hover { 
+    &:hover {
       transform: none;
     }
   }
@@ -101,7 +84,7 @@
     background-color: $primary-500;
     color: $text-inverse;
     
-    &:hover:not(:disabled) { 
+    &:hover:not(:disabled) {
       background-color: $primary-600;
       transform: translateY(-1px);
       box-shadow: $shadow-md;
@@ -112,7 +95,7 @@
     background-color: $secondary-500;
     color: $primary-700;
     
-    &:hover:not(:disabled) { 
+    &:hover:not(:disabled) {
       background-color: $secondary-600;
       transform: translateY(-1px);
     }
@@ -123,7 +106,7 @@
     color: $primary-600;
     border-color: $primary-300;
     
-    &:hover:not(:disabled) { 
+    &:hover:not(:disabled) {
       background-color: $primary-500;
       color: $text-inverse;
       border-color: $primary-500;
@@ -135,7 +118,7 @@
     color: $primary-600;
     padding: $spacing-2 $spacing-4;
     
-    &:hover:not(:disabled) { 
+    &:hover:not(:disabled) {
       background-color: rgba($primary-500, 0.1);
       color: $primary-700;
     }
@@ -200,7 +183,7 @@
     object-fit: cover;
     transition: transform $transition-slow;
     
-    .card:hover & { 
+    .card:hover & {
       transform: scale(1.05);
     }
   }
@@ -332,7 +315,7 @@
   
   &--primary {
     background-color: rgba($primary-500, 0.1);
-    color: $primary-700; 
+    color: $primary-700;
   }
   
   &--secondary {
@@ -342,17 +325,17 @@
   
   &--success {
     background-color: rgba($success, 0.1);
-    color: color.adjust($success, $lightness: -20%);
+    color: darken($success, 20%);
   }
   
   &--warning {
     background-color: rgba($warning, 0.1);
-    color: color.adjust($warning, $lightness: -20%);
+    color: darken($warning, 20%);
   }
   
   &--error {
     background-color: rgba($error, 0.1);
-    color: color.adjust($error, $lightness: -20%);
+    color: darken($error, 20%);
   }
   
   &--neutral {
@@ -390,7 +373,7 @@
   &__nav {
     display: flex;
     gap: $spacing-8;
-
+    
     @media (max-width: $breakpoint-md) {
       display: none;
     }
@@ -402,11 +385,11 @@
     font-weight: $font-weight-normal;
     color: $text-secondary;
     text-decoration: none;
-    transition: color $transition-base; 
-
+    transition: color $transition-base;
+    
     &:hover {
       color: $primary-600;
-    } 
+    }
     
     &--active {
       color: $primary-600;
@@ -537,15 +520,15 @@
   
   &__header {
     text-align: center;
-    margin-bottom: $spacing-12; 
+    margin-bottom: $spacing-12;
     
     @media (max-width: $breakpoint-md) {
       margin-bottom: $spacing-8;
     }
   }
-
+  
   &__title {
-    font-family: $font-primary; 
+    font-family: $font-primary;
     font-size: $font-size-4xl;
     font-weight: $font-weight-bold;
     color: $text-primary;
@@ -557,7 +540,7 @@
     }
   }
   
-  &__description { 
+  &__description {
     font-family: $font-secondary;
     font-size: $font-size-lg;
     color: $text-secondary;
