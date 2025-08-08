@@ -1,149 +1,20 @@
-// ========================================
-// SECRETA FORNADA DESIGN SYSTEM - MAIN
-// VERSÃO: Minimalista e Elegante
-// ========================================
+/*
+  Secreta Fornada - Design System
+  Arquivo principal que carrega e encaminha todos os outros módulos de estilo.
+  Usar `@forward` permite que outros arquivos que usem este módulo (`@use 'design-system'`)
+  tenham acesso às variáveis, mixins e funções dos módulos encaminhados.
+*/
 
-// Importar módulos do design system PRIMEIRO
-@use 'variables' as *;
-@use 'components' as *;
-@use 'animations' as *;
-@use 'utilities' as *;
+// 1. Fundamentos
+// As regras de CSS de `_typography.scss` e `_components.scss` serão incluídas no output final.
+// As variáveis de `_colors` e `_variables` serão expostas para uso em outros lugares.
+@forward 'colors';
+@forward 'variables';
+@forward 'typography';
 
-// Importar Google Fonts depois
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;500&display=swap');
+// 2. Componentes
+@forward 'components';
 
-// Reset e Base Styles - Minimalista
-// ========================================
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  font-size: 16px;
-  scroll-behavior: smooth;
-  font-family: $font-secondary;
-}
-
-body {
-  font-family: $font-secondary;
-  font-size: $font-size-base;
-  font-weight: $font-weight-normal;
-  line-height: $line-height-normal;
-  color: $text-primary;
-  background-color: $bg-primary;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-// Typography Base
-// ========================================
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: $font-primary;
-  font-weight: $font-weight-semibold;
-  line-height: $line-height-tight;
-  color: $text-primary;
-  margin: 0 0 $spacing-4 0;
-}
-
-h1 { font-size: $font-size-5xl; }
-h2 { font-size: $font-size-4xl; }
-h3 { font-size: $font-size-3xl; }
-h4 { font-size: $font-size-2xl; }
-h5 { font-size: $font-size-xl; }
-h6 { font-size: $font-size-lg; }
-
-p {
-  font-family: $font-secondary;
-  font-size: $font-size-base;
-  line-height: $line-height-relaxed;
-  color: $text-secondary;
-  margin: 0 0 $spacing-4 0;
-}
-
-a {
-  color: $primary-600;
-  text-decoration: none;
-  transition: color $transition-base;
-  
-  &:hover {
-    color: $primary-700;
-  }
-}
-
-// Lists
-ul, ol {
-  margin: 0 0 $spacing-4 0;
-  padding-left: $spacing-6;
-  
-  li {
-    margin-bottom: $spacing-1;
-  }
-}
-
-// Images
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-// Responsive Typography
-// ========================================
-
-@media (max-width: $breakpoint-md) {
-  h1 { font-size: $font-size-4xl; }
-  h2 { font-size: $font-size-3xl; }
-  h3 { font-size: $font-size-2xl; }
-  h4 { font-size: $font-size-xl; }
-}
-
-@media (max-width: $breakpoint-sm) {
-  h1 { font-size: $font-size-3xl; }
-  h2 { font-size: $font-size-2xl; }
-  h3 { font-size: $font-size-xl; }
-}
-
-// Selection styles
-// ========================================
-
-::selection {
-  background-color: rgba($primary-500, 0.2);
-  color: $text-primary;
-}
-
-::-moz-selection {
-  background-color: rgba($primary-500, 0.2);
-  color: $text-primary;
-}
-
-// Focus styles
-// ========================================
-
-:focus {
-  outline: 2px solid rgba($primary-500, 0.5);
-  outline-offset: 2px;
-}
-
-// Scrollbar styles
-// ========================================
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: $neutral-100;
-}
-
-::-webkit-scrollbar-thumb {
-  background: $primary-300;
-  border-radius: $radius-full;
-  
-  &:hover {
-    background: $primary-400;
-  }
-}
+// 3. Utilitários (se houver)
+// @forward 'utilities';
+// @forward 'animations';

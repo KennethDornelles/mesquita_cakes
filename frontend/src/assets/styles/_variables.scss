@@ -1,195 +1,45 @@
-// ========================================
-// SECRETA FORNADA DESIGN SYSTEM - VARIABLES
-// VERSÃO: Minimalista e Elegante baseada no novo logo
-// ========================================
+// docs/design/DESIGN_SYSTEM.md: Espaçamento, Layout, Padrões Visuais
 
-// Color Palette - Minimalista Terrosa
-// ========================================
-
-// Primary Colors (Terracota elegante)
-$primary-50: #faf7f5;
-$primary-100: #f5ebe6;
-$primary-200: #ead4c8;
-$primary-300: #d0946f; // Tom claro
-$primary-400: #c4825f; // Tom médio
-$primary-500: #b8704f; // Terracota principal
-$primary-600: #a65d42; // Tom escuro
-$primary-700: #8b4a35; // Tom mais escuro
-$primary-800: #6d3929;
-$primary-900: #502b1f;
-
-// Secondary Colors (Creme artesanal)
-$secondary-50: #fefcfa;
-$secondary-100: #faf7f3;
-$secondary-200: #f5ede5;
-$secondary-300: #f9f0df; // Creme muito claro
-$secondary-400: #f7ebd9; // Creme claro
-$secondary-500: #f5e6d3; // Creme principal
-$secondary-600: #e8d4bf; // Creme escuro
-$secondary-700: #d4bfa5;
-$secondary-800: #b8a088;
-$secondary-900: #8b7962;
-
-// Neutral Colors (Refinados)
-$neutral-50: #fefcfa;  // Branco cremoso
-$neutral-100: #f8f6f3; // Branco quente
-$neutral-200: #f2f0ed; // Cinza muito claro
-$neutral-300: #e6e3df;
-$neutral-400: #8b8680; // Cinza médio terroso
-$neutral-500: #6b645f;
-$neutral-600: #4a453f; // Cinza escuro
-$neutral-700: #3a3530;
-$neutral-800: #2d2926; // Quase preto terroso
-$neutral-900: #1f1d1a;
-
-// Accent Colors (Sutis e refinados)
-$accent-gold: #d4a574;   // Dourado sutil
-$accent-sage: #9caf8b;   // Verde sage
-$accent-dust: #e0d5c7;   // Poeira rosada
-$accent-warm: #f0ebe5;   // Bege quente
-
-// Functional Colors (Elegantes)
-$success: #7c9885;    // Verde suave
-$warning: #d4a574;    // Dourado
-$error: #c17b6b;      // Terracota avermelhado
-$info: #8b9dc3;       // Azul acinzentado
-
-// Text Colors (Hierarquia clara)
-$text-primary: #2d2926;   // Quase preto terroso
-$text-secondary: #4a453f; // Cinza escuro
-$text-muted: #8b8680;     // Cinza médio
-$text-inverse: #fefcfa;   // Branco cremoso
-
-// Background Colors (Minimalistas)
-$bg-primary: #fefcfa;     // Branco cremoso
-$bg-secondary: #f8f6f3;   // Branco quente
-$bg-accent: #f5e6d3;      // Creme sutil
-$bg-pattern: none;        // Remove padrões decorativos
-
-// Typography - Elegante e Minimalista
-// ========================================
-
-// Font Families - Hierarquia tipográfica sofisticada
-$font-primary: 'Playfair Display', 'Times New Roman', 'Times', serif;        // Para títulos e logo
-$font-secondary: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, sans-serif; // Para corpo e navegação
-$font-accent: 'Dancing Script', cursive; // Uso seletivo para assinaturas
-
-// Font Sizes - Escala tipográfica harmoniosa
-$font-size-xs: 0.75rem;     // 12px - Legendas
-$font-size-sm: 0.875rem;    // 14px - Texto secundário
-$font-size-base: 1rem;      // 16px - Texto padrão
-$font-size-lg: 1.125rem;    // 18px - Texto destacado
-$font-size-xl: 1.25rem;     // 20px - Títulos pequenos
-$font-size-2xl: 1.5rem;     // 24px - Títulos de card
-$font-size-3xl: 1.875rem;   // 30px - Títulos de seção
-$font-size-4xl: 2.25rem;    // 36px - Títulos principais
-$font-size-5xl: 3rem;       // 48px - Hero titles
-$font-size-6xl: 4rem;       // 64px - Display
-
-// Font Weights
-$font-weight-light: 300;
-$font-weight-normal: 400;
-$font-weight-medium: 500;
-$font-weight-semibold: 600;
-$font-weight-bold: 700;
-$font-weight-extrabold: 800;
-
-// Line Heights - Padrão Mercado Livre
-$line-height-tight: 1.25;  // Para títulos
-$line-height-snug: 1.375;  // Para subtítulos
-$line-height-normal: 1.5;  // Para textos gerais
-// Font Weights - Hierarquia sutil
-$font-weight-light: 300;    // Uso seletivo
-$font-weight-normal: 400;   // Texto corpo
-$font-weight-medium: 500;   // Destaque sutil
-$font-weight-semibold: 600; // Títulos de card
-$font-weight-bold: 700;     // Títulos principais
-
-// Line Heights - Legibilidade otimizada
-$line-height-tight: 1.25;     // Para títulos
-$line-height-snug: 1.375;     // Para subtítulos
-$line-height-normal: 1.5;     // Para texto corpo
-$line-height-relaxed: 1.625;  // Para texto longo
-$line-height-loose: 2;        // Para espaçamento extra
-
-// Spacing - Sistema harmonioso baseado em proporção áurea
-// ========================================
+// Spacing System (Base 4px)
 $spacing-0: 0;
-$spacing-1: 0.25rem;    // 4px
-$spacing-2: 0.5rem;     // 8px
-$spacing-3: 0.75rem;    // 12px
-$spacing-4: 1rem;       // 16px
-$spacing-5: 1.25rem;    // 20px
-$spacing-6: 1.5rem;     // 24px
-$spacing-8: 2rem;       // 32px
-$spacing-10: 2.5rem;    // 40px
-$spacing-12: 3rem;      // 48px
-$spacing-16: 4rem;      // 64px
-$spacing-20: 5rem;      // 80px
-$spacing-24: 6rem;      // 96px
+$spacing-1: 0.25rem;  // 4px
+$spacing-2: 0.5rem;   // 8px
+$spacing-3: 0.75rem;  // 12px
+$spacing-4: 1rem;     // 16px
+$spacing-5: 1.25rem;  // 20px
+$spacing-6: 1.5rem;   // 24px
+$spacing-8: 2rem;     // 32px
+$spacing-10: 2.5rem;  // 40px
+$spacing-12: 3rem;    // 48px
+$spacing-16: 4rem;    // 64px
+$spacing-20: 5rem;    // 80px
+$spacing-24: 6rem;    // 96px
 
-// Border Radius - Minimalista
-// ========================================
-$radius-none: 0;
-$radius-sm: 0.125rem;    // 2px
-$radius-base: 0.375rem;  // 6px - Padrão para botões
-$radius-md: 0.5rem;      // 8px
-$radius-lg: 0.75rem;     // 12px - Para cards
-$radius-xl: 1rem;        // 16px
-$radius-2xl: 1.5rem;     // 24px
-$radius-full: 9999px;    // Para elementos circulares
+// Layout
+$container-max-width: 1200px;
+$container-narrow-max-width: 800px;
+$container-wide-max-width: 1400px;
+$gutter-desktop: 24px;
+$gutter-mobile: 16px;
 
-// Shadows - Elegantes e sutis
-// ========================================
-$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-$shadow-base: 0 2px 4px rgba(0, 0, 0, 0.08);
-$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-$shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.15);
-$shadow-cake: 0 8px 32px rgba(236, 72, 153, 0.15);
-$shadow-macaron: 0 4px 16px rgba(255, 140, 200, 0.2);
-// Transitions - Minimalistas
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// Borders
+$border-radius-sm: 4px;
+$border-radius: 6px;
+$border-radius-lg: 12px;
+$border-width: 1px;
+
+// Shadows & Elevations
+$shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+$shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+$shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+
+// Transitions
 $transition-fast: 0.15s ease;
 $transition-base: 0.2s ease;
 $transition-slow: 0.3s ease;
-
-// Breakpoints - Mobile-first
-// ========================================
-$breakpoint-sm: 640px;   // Tablet pequeno
-$breakpoint-md: 768px;   // Tablet
-$breakpoint-lg: 1024px;  // Desktop
-$breakpoint-xl: 1280px;  // Desktop grande
-
-// Z-Index - Hierarquia limpa
-// ========================================
-$z-index-dropdown: 1000;
-$z-index-sticky: 1020;
-$z-index-fixed: 1030;
-$z-index-modal-backdrop: 1040;
-$z-index-modal: 1050;
-$z-index-tooltip: 1070;
-
-// Animations - Sutis e elegantes
-// ========================================
-$duration-fast: 150ms;
-$duration-base: 200ms;
-$duration-slow: 300ms;
-
-$ease-linear: linear;
-$ease-in: cubic-bezier(0.4, 0, 1, 1);
-$ease-out: cubic-bezier(0, 0, 0.2, 1);
-$ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-
-// Container Widths
-// ========================================
-$container-sm: 640px;
-$container-md: 768px;
-$container-lg: 1024px;
-$container-xl: 1200px;    // Max width padrão
-$container-2xl: 1400px;   // Para layouts especiais
-
-// Grid
-// ========================================
-$grid-columns: 12;
-$grid-gap: $spacing-6;     // 24px
-$grid-gap-sm: $spacing-4;  // 16px mobile
