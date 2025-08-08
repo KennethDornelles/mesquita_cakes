@@ -36,8 +36,8 @@ Mesquita Cakes é um **e-commerce local de doceria** com foco em delivery em Jo�
 - ✅ **GraphQL API**: 50+ endpoints disponíveis
 - ✅ **Sistema de Auditoria**: Logs de operações implementado
 
-### 🎨 **Frontend (Home Page Completa)**
-- ✅ **Design System**: Totalmente implementado
+### 🎨 **Frontend (Fundação e Home Page Completos)**
+- ✅ **Design System "Secreta Fornada"**: Totalmente implementado com uma arquitetura SCSS modular e moderna.
 - ✅ **Home Page**: Seções completas (Hero, Produtos, Sobre, etc.)
 - ✅ **Componentes**: Reutilizáveis e responsivos
 - ⚠️ **Páginas Restantes**: Checkout, Perfil, Admin (em desenvolvimento)
