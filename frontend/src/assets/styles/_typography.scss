@@ -1,0 +1,47 @@
+// docs/design/DESIGN_SYSTEM.md: Tipografia Minimalista
+
+// Importa as variáveis necessárias de outros módulos.
+@use 'colors';
+@use 'variables';
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;500&display=swap');
+
+// As definições de variáveis de fonte foram removidas daqui
+// para evitar conflitos, pois já existem em `_variables.scss`.
+
+// Base Typography
+body {
+  font-family: variables.$font-secondary;
+  font-weight: variables.$font-regular;
+  color: colors.$neutral-dark;
+  background-color: colors.$bg-primary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-family: variables.$font-primary;
+  font-weight: variables.$font-bold;
+  color: colors.$neutral-black;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+// Escala Tipográfica
+.display { font-size: 4rem; } // 64px
+.h1 { font-size: 3rem; } // 48px
+.h2 { font-size: 2.25rem; } // 36px
+.h3 { font-size: 1.875rem; } // 30px
+.h4 { font-size: 1.5rem; } // 24px
+.h5 { font-size: 1.25rem; } // 20px
+.h6 { font-size: 1.125rem; } // 18px
+
+.body-large { font-size: 1.125rem; } // 18px
+.body { font-size: 1rem; } // 16px
+.body-small { font-size: 0.875rem; } // 14px
+.caption { font-size: 0.75rem; } // 12px
+
+.text-serif { font-family: variables.$font-primary; }
+.text-sans { font-family: variables.$font-secondary; }
+.text-accent { font-family: variables.$font-accent; }

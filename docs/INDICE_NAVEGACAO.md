@@ -1,4 +1,4 @@
-# 🧭 Índice de Navegação Rápida
+# 🧭 Índice de Navegação Rápida - Secreta Fornada
 
 Acesso rápido às documentações mais importantes do projeto.
 
@@ -7,20 +7,22 @@ Acesso rápido às documentações mais importantes do projeto.
 ### Novos Desenvolvedores
 1. [README Principal](../README.md) - Visão geral do projeto
 2. [Configuração do Ambiente](backend/DOCUMENTACAO_TECNICA.md) - Setup inicial
-3. [Design System](design/DESIGN_SYSTEM.md) - Padrões visuais
+3. [Design System Minimalista](design/DESIGN_SYSTEM.md) - Padrões visuais elegantes
 
 ### Implementação de Features
 1. [Status Frontend](frontend/STATUS_FRONTEND.md) - Funcionalidades disponíveis
-2. [Exemplos de Componentes](design/EXEMPLOS_COMPONENTES.md) - Como usar componentes
+2. [Implementação do Design System](design/IMPLEMENTACAO_DESIGN_SYSTEM.md) - Como usar componentes
 3. [Logs de Desenvolvimento](development-logs/MELHORIAS_CRUD_IMPLEMENTADAS.md) - Histórico de implementações
 
-## 🎨 Design & UI/UX
+## 🎨 Design System & Identidade Visual
 
-| Documento | Descrição | Urgência |
-|-----------|-----------|----------|
-| [DESIGN_SYSTEM.md](design/DESIGN_SYSTEM.md) | Sistema de design principal | 🔴 Alta |
-| [ATUALIZACAO_LOGO.md](design/ATUALIZACAO_LOGO.md) | Processo de atualização da logo | 🟡 Média |
-| [LOGO_README.md](design/LOGO_README.md) | Instruções para gestão da logo | 🟡 Média |
+| Documento | Descrição | Status | Urgência |
+|-----------|-----------|--------|----------|
+| [DESIGN_SYSTEM.md](design/DESIGN_SYSTEM.md) | Sistema de design minimalista completo | ✅ Atualizado | 🔴 Alta |
+| [MIGRACAO_DESIGN_MINIMALISTA.md](design/MIGRACAO_DESIGN_MINIMALISTA.md) | Processo de migração para novo design | ✅ Novo | � Alta |
+| [LOGO_GUIDE.md](design/LOGO_GUIDE.md) | Diretrizes da nova identidade Secreta Fornada | ✅ Atualizado | 🟠 Alta |
+| [IMPLEMENTACAO_DESIGN_SYSTEM.md](design/IMPLEMENTACAO_DESIGN_SYSTEM.md) | Guia prático de implementação | ✅ Atualizado | 🟠 Alta |
+| [ANTES_VS_DEPOIS.md](design/ANTES_VS_DEPOIS.md) | Comparação da transformação visual | ✅ Novo | 🟡 Média |
 
 ## ⚙️ Desenvolvimento Técnico
 

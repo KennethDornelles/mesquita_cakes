@@ -1,0 +1,48 @@
+// docs/design/DESIGN_SYSTEM.md: Paleta de Cores Renovada
+
+// Cores Principais (Terracota Elegante)
+$primary-500: #b8704f;
+$primary-400: #c4825f;
+$primary-300: #d0946f;
+$primary-600: #a65d42;
+$primary-700: #8b4a35;
+
+// Cores Secundárias (Creme Artesanal)
+$secondary-500: #f5e6d3;
+$secondary-400: #f7ebd9;
+$secondary-300: #f9f0df;
+$secondary-600: #e8d4bf;
+
+// Cores Neutras Refinadas
+$neutral-warm: #f8f6f3;
+$neutral-light: #f2f0ed;
+$neutral-medium: #8b8680;
+$neutral-dark: #4a453f;
+$neutral-black: #2d2926;
+
+// Cores de Apoio Minimalistas
+$accent-gold: #d4a574;
+$accent-sage: #9caf8b;
+$accent-dust: #e0d5c7;
+$success: #7c9885;
+$warning: #d4a574;
+$error: #c17b6b;
+
+// Backgrounds Elegantes
+$bg-primary: #fefcfa;
+$bg-secondary: #f8f6f3;
+$bg-accent: #f5e6d3;
+
+// Mapa de cores para loops e utilitários
+$colors: (
+  "primary": $primary-500,
+  "secondary": $secondary-500,
+  "success": $success,
+  "warning": $warning,
+  "error": $error,
+  "neutral-dark": $neutral-dark,
+  "neutral-medium": $neutral-medium,
+  "neutral-light": $neutral-light,
+  "accent-gold": $accent-gold,
+  "accent-sage": $accent-sage
+);
