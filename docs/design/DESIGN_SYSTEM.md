@@ -1,353 +1,102 @@
-# Mesquita Cakes - Design System (Versão Orgânica)
+# 🎨 Design System — Secreta Fornada
 
-## � Visão Geral
+Este documento define os fundamentos visuais e os componentes da identidade "Secreta Fornada", garantindo consistência, elegância e uma experiência de usuário coesa.
 
-Este design system foi **atualizado** baseado no feedback do cliente para capturar a essência **orgânica, natural e artesanal** da marca Mesquita Cakes. O sistema agora utiliza a **fonte Organic** solicitada, paleta de cores mais naturais inspiradas em ingredientes orgânicos, e elementos visuais que transmitem autenticidade e sustentabilidade.
+## Visão Geral
 
-## 🎨 Paleta de Cores Atualizada
+A identidade visual é **minimalista, elegante e artesanal**, utilizando uma paleta de cores quentes e tipografia refinada para evocar uma sensação de qualidade e cuidado.
 
-### Cores Principais (Naturais)
-
-- **Primary (Rosa Orgânico)**: Inspirado em frutas vermelhas naturais
-  - `$primary-500`: #ec6b6b (rosa suave e natural)
-  - `$primary-100`: #fdeaea (tons claros)
-  - `$primary-700`: #c73333 (tons escuros)
+---
 
-- **Secondary (Verde Natural)**: Baseado em folhas e menta fresca
-  - `$secondary-500`: #22c55e (verde vibrante e natural)
-  - `$secondary-100`: #dcfce8 (tons claros)
-  - `$secondary-700`: #15803d (tons escuros)
-
-### Cores de Ingredientes Orgânicos
-
-- **Accent Cream**: #fffbf0 (creme natural puro)
-- **Accent Vanilla**: #fdf4e3 (baunilha orgânica)
-- **Accent Honey**: #f59e0b (mel dourado)
-- **Accent Berry**: #ec4899 (frutas vermelhas)
-- **Accent Mint**: #10b981 (menta fresca)
-- **Accent Cocoa**: #78350f (cacau natural)
+## 1. Paleta de Cores
 
-### Backgrounds Orgânicos
+As cores são organizadas em primárias, secundárias, neutras e de apoio para criar uma hierarquia visual clara.
 
-- **Primary Background**: #fef7f7 (rosa muito suave)
-- **Secondary Background**: #f0fdf5 (verde muito suave)
-- **Accent Background**: #fffbf0 (creme neutro)
-
-## 📝 Tipografia Orgânica
-
-### Famílias de Fonte Atualizadas
-
-1. **Primary (Organic)**: **FONTE PRINCIPAL SOLICITADA**
-   - Uso: Logo, títulos principais, elementos de destaque
-   - Característica: Orgânica, manuscrita, autêntica
-   - Fallback: 'Dancing Script', 'Brush Script MT', cursive
-
-2. **Secondary (Organic + Inter)**: Para texto geral
-   - Uso: Body text, navegação, labels
-   - Característica: Limpa, legível, com toque orgânico
-   - Fallback: 'Inter', 'Helvetica Neue', sans-serif
-
-3. **Accent (Dancing Script)**: Para textos especiais
-   - Uso: Citações, textos decorativos, assinaturas
-   - Característica: Elegante, manuscrita, cursiva
-
-### Características Orgânicas
-
-- **Font Style**: Itálico em títulos para efeito manuscrito
-- **Letter Spacing**: Ligeiramente aumentado (0.5px-1px)
-- **Line Height**: Mais relaxado (1.6-1.8) para respiração
-- **Elementos Decorativos**: Emojis de plantas (🌿🌱🍃) nos títulos
-
-- **XS**: 12px
-- **SM**: 14px
-- **Base**: 16px
-- **LG**: 18px
-- **XL**: 20px
-- **2XL**: 24px
-- **3XL**: 30px
-- **4XL**: 36px
-- **5XL**: 48px
-- **6XL**: 60px
-
-## 🧩 Componentes
-
-### Botões
-
-```scss
-// Botão primário
-<button class="btn btn--primary">Comprar Agora</button>
-
-// Botão secundário
-<button class="btn btn--secondary">Ver Mais</button>
-
-// Botão especial "doce"
-<button class="btn btn--sweet">Adicionar ao Carrinho</button>
-
-// Botão temático bolo
-<button class="btn btn--cake">Ver Cardápio</button>
-```
-
-### Cards
-
-```scss
-// Card produto
-<div class="card card--product card--hover">
-  <img src="..." class="card__image" alt="...">
-  <div class="card__header">
-    <h3 class="card__title">Nome do Bolo</h3>
-  </div>
-  <div class="card__body">
-    <p class="card__description">Descrição do produto...</p>
-    <div class="card__price">R$ 89,90</div>
-  </div>
-</div>
-
-// Card doce
-<div class="card card--sweet">
-  <!-- conteúdo -->
-</div>
-```
-
-### Formulários
-
-```scss
-<div class="form-group">
-  <label class="form-group__label">Nome</label>
-  <input type="text" class="form-group__input" placeholder="Seu nome">
-  <div class="form-group__help">Digite seu nome completo</div>
-</div>
-```
-
-### Badges
-
-```scss
-<span class="badge badge--sweet">Novo</span>
-<span class="badge badge--primary">Popular</span>
-<span class="badge badge--success">Disponível</span>
-```
-
-### Navegação
-
-```scss
-<nav class="navbar">
-  <div class="navbar__container">
-    <div class="logo">
-      <img src="..." class="logo__image" alt="Mesquita Cakes">
-      <span class="logo__text">Mesquita Cakes</span>
-    </div>
-    <div class="navbar__nav">
-      <a href="#" class="navbar__link navbar__link--active">Home</a>
-      <a href="#" class="navbar__link">Cardápio</a>
-      <a href="#" class="navbar__link">Sobre</a>
-      <a href="#" class="navbar__link">Contato</a>
-    </div>
-  </div>
-</nav>
-```
-
-## 🎭 Animações
-
-### Classes de Animação
-
-- `.animate-sweet-bounce`: Animação suave de bounce
-- `.animate-heart-beat`: Pulsação de coração
-- `.animate-cake-rotate`: Rotação lenta (para ícones)
-- `.animate-sparkle`: Efeito de brilho
-- `.animate-fade-in`: Entrada suave
-- `.hover-lift`: Elevação no hover
-- `.hover-glow`: Brilho no hover
-
-### Exemplo de Uso
-
-```scss
-<div class="card card--product hover-lift animate-fade-in">
-  <img src="..." class="animate-sweet-bounce">
-  <h3 class="sweet-text">Bolo Especial 🎂</h3>
-</div>
-```
-
-## 📐 Layout
-
-### Grid System
-
-```scss
-<!-- Grid responsivo -->
-<div class="grid grid--3">
-  <div class="card">Item 1</div>
-  <div class="card">Item 2</div>
-  <div class="card">Item 3</div>
-</div>
-
-<!-- Grid auto-fit -->
-<div class="grid grid--auto">
-  <!-- Itens se ajustam automaticamente -->
-</div>
-```
-
-### Flexbox
-
-```scss
-<div class="flex flex--between flex--align-center">
-  <div>Esquerda</div>
-  <div>Direita</div>
-</div>
-```
-
-### Containers
-
-```scss
-<div class="container">
-  <!-- Largura máxima 1200px -->
-</div>
-
-<div class="container-sm">
-  <!-- Largura máxima 768px -->
-</div>
-```
-
-## 🎯 Padrões Especiais
-
-### Background com Padrões
-
-```scss
-<!-- Fundo com bolinhas (como na logo) -->
-<div class="dots-bg">
-  <!-- Conteúdo -->
-</div>
-
-<!-- Fundo com corações -->
-<div class="hearts-bg">
-  <!-- Conteúdo -->
-</div>
-```
-
-### Borda Especial "Bolo"
-
-```scss
-<div class="sweet-border">
-  <!-- Adiciona borda temática com emoji de bolo -->
-</div>
-```
-
-### Texto Especial
-
-```scss
-<h2 class="sweet-text">Nossos Bolos Especiais ✨</h2>
-<p class="font-accent text-lg">Feitos com amor e carinho 💖</p>
-```
-
-## 🎪 Exemplos de Combinações
-
-### Hero Section
-
-```scss
-<section class="section dots-bg">
-  <div class="container text-center">
-    <h1 class="font-primary text-6xl text-primary animate-fade-in">
-      Mesquita Cakes 🎂
-    </h1>
-    <p class="text-xl text-neutral mb-8 animate-slide-in-up">
-      Bolos artesanais feitos com amor
-    </p>
-    <button class="btn btn--sweet btn--lg hover-glow">
-      Ver Cardápio ✨
-    </button>
-  </div>
-</section>
-```
-
-### Seção de Produtos
-
-```scss
-<section class="section bg-cream">
-  <div class="container">
-    <h2 class="text-center sweet-text mb-12">
-      Nossos Bolos Especiais 🎂
-    </h2>
-    <div class="grid grid--3 stagger-children">
-      <div class="card card--product card--hover">
-        <!-- Produto 1 -->
-      </div>
-      <div class="card card--product card--hover">
-        <!-- Produto 2 -->
-      </div>
-      <div class="card card--product card--hover">
-        <!-- Produto 3 -->
-      </div>
-    </div>
-  </div>
-</section>
-```
-
-## 📱 Responsividade
-
-O design system inclui breakpoints responsivos:
-
-- **XS**: 480px (mobile)
-- **SM**: 640px (tablet pequeno)
-- **MD**: 768px (tablet)
-- **LG**: 1024px (desktop)
-- **XL**: 1280px (desktop grande)
-- **2XL**: 1536px (desktop extra)
-
-### Mixins Responsivos
-
-```scss
-@include mobile-up {
-  // Estilos para mobile e acima
-}
-
-@include tablet-up {
-  // Estilos para tablet e acima
-}
-
-@include desktop-up {
-  // Estilos para desktop e acima
-}
-```
-
-## 🛠️ Como Usar
-
-1. **Importe o design system** no seu arquivo principal:
-   ```scss
-   @import 'assets/styles/design-system';
-   ```
-
-2. **Use as classes utilitárias** diretamente no HTML:
-   ```html
-   <div class="card card--sweet p-6 mb-4">
-     <h3 class="font-primary text-2xl text-primary mb-3">Título</h3>
-     <p class="text-neutral mb-4">Conteúdo...</p>
-     <button class="btn btn--primary hover-lift">Ação</button>
-   </div>
-   ```
-
-3. **Use os mixins** em seus componentes customizados:
-   ```scss
-   .meu-componente {
-     @include card-sweet;
-     @include button-primary;
-   }
-   ```
-
-## 🎨 Personalização
-
-Para personalizar cores ou espaçamentos, edite as variáveis em `_variables.scss`:
-
-```scss
-// Personalizar cor primária
-$primary-500: #your-color;
-
-// Personalizar espaçamentos
-$spacing-custom: 2.5rem;
-```
-
-## 📚 Arquivos do Sistema
-
-- `_variables.scss`: Todas as variáveis (cores, espaçamentos, tipografia)
-- `_mixins.scss`: Mixins reutilizáveis
-- `_animations.scss`: Animações e transições
-- `_components.scss`: Componentes pré-construídos
-- `design-system.scss`: Arquivo principal que importa tudo
-
-Este design system captura perfeitamente a personalidade doce e acolhedora da Mesquita Cakes, proporcionando uma base sólida para desenvolver interfaces consistentes e encantadoras! 🎂✨
+| Categoria | Nome do Token (SCSS) | Cor (HEX) | Preview |
+| :--- | :--- | :--- | :--- |
+| **Primária** | `$primary-500` | `#b8704f` | <img width="30" height="30" style="background-color:#b8704f; border-radius: 4px;"> |
+| | `$primary-600` | `#a65d42` | <img width="30" height="30" style="background-color:#a65d42; border-radius: 4px;"> |
+| **Secundária** | `$secondary-500` | `#f5e6d3` | <img width="30" height="30" style="background-color:#f5e6d3; border-radius: 4px;"> |
+| | `$secondary-600` | `#e8d4bf` | <img width="30" height="30" style="background-color:#e8d4bf; border-radius: 4px;"> |
+| **Neutra** | `$neutral-black` | `#2d2926` | <img width="30" height="30" style="background-color:#2d2926; border-radius: 4px;"> |
+| | `$neutral-dark` | `#4a453f` | <img width="30" height="30" style="background-color:#4a453f; border-radius: 4px;"> |
+| | `$neutral-medium` | `#8b8680` | <img width="30" height="30" style="background-color:#8b8680; border-radius: 4px;"> |
+| | `$neutral-light` | `#f2f0ed` | <img width="30" height="30" style="background-color:#f2f0ed; border-radius: 4px;"> |
+| **Apoio** | `$success` | `#7c9885` | <img width="30" height="30" style="background-color:#7c9885; border-radius: 4px;"> |
+| | `$warning` | `#d4a574` | <img width="30" height="30" style="background-color:#d4a574; border-radius: 4px;"> |
+| | `$error` | `#c17b6b` | <img width="30" height="30" style="background-color:#c17b6b; border-radius: 4px;"> |
+| **Background** | `$bg-primary` | `#fefcfa` | <img width="30" height="30" style="background-color:#fefcfa; border: 1px solid #eee; border-radius: 4px;"> |
+| | `$bg-secondary` | `#f8f6f3` | <img width="30" height="30" style="background-color:#f8f6f3; border: 1px solid #eee; border-radius: 4px;"> |
+
+---
+
+## 2. Tipografia
+
+A tipografia combina a elegância da `Playfair Display` para títulos com a legibilidade da `Inter` para o corpo do texto.
+
+### Famílias de Fonte
+- **Primária (Títulos):** `Playfair Display`, serif (`$font-primary`)
+- **Secundária (Corpo):** `Inter`, sans-serif (`$font-secondary`)
+- **Destaque (Acento):** `Dancing Script`, cursive (`$font-accent`)
+
+### Escala Tipográfica
+
+| Classe CSS | Tamanho (rem) | Tamanho (px) | Uso |
+| :--- | :--- | :--- | :--- |
+| `.display` | `4rem` | `64px` | Títulos de grande impacto |
+| `.h1` | `3rem` | `48px` | Título Principal (H1) |
+| `.h2` | `2.25rem` | `36px` | Título de Seção (H2) |
+| `.h3` | `1.875rem` | `30px` | Subtítulo (H3) |
+| `.h4` | `1.5rem` | `24px` | Título Menor (H4) |
+| `.h5` | `1.25rem` | `20px` | Título de Card (H5) |
+| `.h6` | `1.125rem` | `18px` | Título Pequeno (H6) |
+| `.body-large`| `1.125rem` | `18px` | Corpo de texto grande |
+| `.body` | `1rem` | `16px` | Corpo de texto padrão |
+| `.body-small`| `0.875rem` | `14px` | Texto de apoio, legendas |
+| `.caption` | `0.75rem` | `12px` | Legendas pequenas |
+
+---
+
+## 3. Espaçamento
+
+O sistema de espaçamento é baseado em um grid de **4px**. Todos os paddings, margins e gaps devem usar esses tokens para manter a consistência.
+
+| Token (SCSS) | Valor (rem) | Valor (px) |
+| :--- | :--- | :--- |
+| `$spacing-1` | `0.25rem` | `4px` |
+| `$spacing-2` | `0.5rem` | `8px` |
+| `$spacing-4` | `1rem` | `16px` |
+| `$spacing-6` | `1.5rem` | `24px` |
+| `$spacing-8` | `2rem` | `32px` |
+| `$spacing-12`| `3rem` | `48px` |
+| `$spacing-16`| `4rem` | `64px` |
+
+---
+
+## 4. Padrões Visuais
+
+### Bordas
+- **Pequena:** `4px` (`$border-radius-sm`)
+- **Padrão:** `6px` (`$border-radius`)
+- **Grande:** `12px` (`$border-radius-lg`)
+
+### Sombras (Elevação)
+- **Pequena (`$shadow-sm`):** Usada em hovers sutis.
+- **Média (`$shadow-md`):** Padrão para cards e elementos elevados.
+- **Grande (`$shadow-lg`):** Usada para destacar elementos em foco ou em hover.
+
+### Transições
+- **Rápida:** `0.15s ease` (`$transition-fast`)
+- **Padrão:** `0.2s ease` (`$transition-base`)
+- **Lenta:** `0.3s ease` (`$transition-slow`)
+
+---
+
+## 5. Componentes
+
+Os estilos base para os componentes principais foram definidos para refletir a identidade visual.
+
+- **Botões:** Variações para `primary`, `secondary`, `outline` e `text`.
+- **Cards:** Estrutura base com sombra, bordas arredondadas e efeito de `hover`.
+
+Para exemplos de uso, consulte a Documentação de Implementação e os Exemplos de Componentes.

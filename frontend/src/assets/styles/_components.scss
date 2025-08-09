@@ -1,673 +1,81 @@
-// ========================================
-// MESQUITA CAKES DESIGN SYSTEM - COMPONENTS
-// ATUALIZADO: Estilo orgânico conforme feedback do cliente
-// ========================================
+// docs/design/DESIGN_SYSTEM.md: Componentes Renovados
 
-@use 'variables' as *;
-@use 'mixins' as *;
-@use 'animations' as *;
+// Importa as variáveis necessárias de outros módulos.
+@use 'colors';
+@use 'variables';
 
-// Logo Component - Estilo Orgânico
-// ========================================
-
-.logo {
-  @include center-content;
-  font-family: $font-accent;
-  
-  &__image {
-    width: 60px;
-    height: 60px;
-    margin-right: $spacing-3;
-    border-radius: 50%;
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
-  }
-  
-  &__text {
-    @include heading-style('lg');
-    background: linear-gradient(135deg, $secondary-500 0%, $accent-mint 50%, $primary-500 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    font-style: italic;
-    letter-spacing: 1px;
-    
-    &::after {
-      content: "🌿";
-      font-style: normal;
-      margin-left: $spacing-2;
-      opacity: 0.8;
-    }
-  }
-  
-  &--small {
-    .logo__image {
-      width: 40px;
-      height: 40px;
-      margin-right: $spacing-2;
-    }
-    
-    .logo__text {
-      @include heading-style('base');
-    }
-  }
-}
-
-// Button Components - Estilo Orgânico
-// ========================================
-
+// --- Botões ---
 .btn {
-  @include button-base;
-  @include button-size('md');
-  font-family: $font-primary;
-  border-radius: 25px; // Mais arredondado para look orgânico
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-  }
-  
-  &:hover::before {
-    left: 100%;
-  }
-  
-  &--primary {
-    @include button-primary;
-    background: linear-gradient(135deg, $secondary-500 0%, $secondary-600 100%);
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-    
-    &:hover:not(:disabled) {
-      background: linear-gradient(135deg, $secondary-600 0%, $secondary-700 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
-    }
-  }
-  
-  &--secondary {
-    @include button-secondary;
-    background: linear-gradient(135deg, $primary-500 0%, $primary-600 100%);
-    box-shadow: 0 4px 12px rgba(236, 107, 107, 0.3);
-  }
-  
-  &--outline {
-    @include button-outline;
-    border: 2px solid $secondary-500;
-    color: $text-primary; // Texto mais legível
-    background: rgba(255, 255, 255, 0.9); // Fundo semi-transparente para melhor legibilidade
-    font-weight: $font-weight-semibold; // Texto mais forte
-    
-    &:hover:not(:disabled) {
-      background: $secondary-50;
-      border-color: $secondary-600;
-      color: $text-accent; // Cor de destaque no hover
-    }
-  }
-  
-  &--ghost {
-    @include button-ghost;
-    color: $secondary-600;
-    
-    &:hover:not(:disabled) {
-      background: $secondary-50;
-    }
-  }
-  
-  &--sm {
-    @include button-size('sm');
-  }
-  
-  &--lg {
-    @include button-size('lg');
-  }
-  
-  // Novos estilos orgânicos
-  &--organic {
-    background: linear-gradient(135deg, $accent-mint 0%, $secondary-500 50%, $accent-honey 100%);
-    color: white;
-    border: none;
-    font-style: italic;
-    letter-spacing: 0.5px;
-    
-    &::after {
-      content: '🌱';
-      margin-left: $spacing-2;
-    }
-    
-    &:hover:not(:disabled) {
-      background: linear-gradient(135deg, $secondary-600 0%, $accent-mint 50%, $accent-honey 100%);
-      transform: translateY(-2px) scale(1.02);
-    }
-  }
-  
-  &--natural {
-    background: linear-gradient(135deg, $accent-cream 0%, $accent-vanilla 100%);
-    color: $accent-cocoa;
-    border: 2px solid $accent-honey;
-    font-weight: 500;
-    
-    &::before {
-      content: '🍯';
-      margin-right: $spacing-2;
-    }
-    
-    &:hover:not(:disabled) {
-      background: linear-gradient(135deg, $accent-vanilla 0%, $accent-honey 20%);
-      border-color: $accent-cocoa;
-    }
-  }
-  
-  &--sweet {
-    background: linear-gradient(135deg, $accent-berry 0%, $primary-500 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(236, 107, 107, 0.3);
-    position: relative;
-    overflow: hidden;
-    
-    &::before {
-      content: '✨';
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      animation: sparkle 2s ease-in-out infinite;
-    }
-    
-    &:hover:not(:disabled) {
-      background: linear-gradient(135deg, $primary-600 0%, $accent-berry 100%);
-    }
-  }
-  
-  &--cake {
-    background: linear-gradient(135deg, $accent-cream 0%, $bg-accent 100%);
-    color: $accent-cocoa;
-    border: 2px solid $accent-honey;
-    
-    &::after {
-      content: '🎂';
-      margin-left: $spacing-2;
-    }
-    
-    &:hover:not(:disabled) {
-      background: linear-gradient(135deg, $bg-accent 0%, $accent-vanilla 100%);
-    }
-  }
-}
-
-// Card Components
-// ========================================
-
-.card {
-  @include card-base;
-  
-  &--sweet {
-    @include card-sweet;
-  }
-  
-  &--hover {
-    @include card-hover;
-  }
-  
-  &--product {
-    @include card-sweet;
-    @include card-hover;
-    position: relative;
-    overflow: hidden;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 20px;
-      height: 20px;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ec4899"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
-      background-size: contain;
-      opacity: 0.6;
-    }
-  }
-  
-  &__header {
-    padding: $spacing-6;
-    padding-bottom: $spacing-4;
-  }
-  
-  &__body {
-    padding: 0 $spacing-6 $spacing-6;
-  }
-  
-  &__footer {
-    padding: $spacing-4 $spacing-6;
-    border-top: 1px solid $neutral-200;
-    background: $neutral-50;
-  }
-  
-  &__image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: $radius-xl $radius-xl 0 0;
-  }
-  
-  &__title {
-    @include heading-style('base');
-    margin-bottom: $spacing-2;
-    color: $text-primary; // Melhor legibilidade para títulos
-    font-weight: $font-weight-bold; // Texto mais forte
-  }
-  
-  &__description {
-    @include body-text('sm');
-    color: $text-secondary; // Melhor contraste para descrições
-    margin-bottom: $spacing-4;
-    line-height: 1.6; // Melhor espaçamento entre linhas
-  }
-  
-  &__price {
-    @include heading-style('sm');
-    color: $text-accent; // Cor de destaque para preços
-    font-family: $font-secondary;
-    font-weight: $font-weight-bold; // Preços mais destacados
-    font-size: $font-size-lg; // Preços ligeiramente maiores
-  }
-}
-
-// Form Components
-// ========================================
-
-.form-group {
-  margin-bottom: $spacing-6;
-  
-  &__label {
-    @include body-text('sm', $font-weight-semibold);
-    color: $text-primary; // Melhor legibilidade para labels
-    display: block;
-    margin-bottom: $spacing-2;
-    margin-bottom: $spacing-2;
-    display: block;
-  }
-  
-  &__input {
-    @include input-base;
-    
-    &--error {
-      @include input-error;
-    }
-    
-    &--success {
-      @include input-success;
-    }
-  }
-  
-  &__textarea {
-    @include input-base;
-    min-height: 120px;
-    resize: vertical;
-  }
-  
-  &__select {
-    @include input-base;
-    cursor: pointer;
-    
-    option {
-      padding: $spacing-2;
-    }
-  }
-  
-  &__error {
-    @include body-text('xs');
-    color: #ef4444;
-    margin-top: $spacing-1;
-  }
-  
-  &__help {
-    @include body-text('xs');
-    color: $neutral-500;
-    margin-top: $spacing-1;
-  }
-}
-
-.checkbox-group {
-  @include flex-column;
-  gap: $spacing-3;
-  
-  &__item {
-    display: flex;
-    align-items: center;
-    gap: $spacing-3;
-    
-    input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      accent-color: $primary-500;
-    }
-    
-    label {
-      @include body-text('sm');
-      cursor: pointer;
-    }
-  }
-}
-
-// Badge Components
-// ========================================
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-1;
-  padding: $spacing-1 $spacing-3;
-  border-radius: $radius-full;
-  font-family: $font-secondary;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-semibold;
-  
-  &--primary {
-    background: $primary-100;
-    color: $primary-700;
-  }
-  
-  &--secondary {
-    background: $secondary-100;
-    color: $secondary-700;
-  }
-  
-  &--success {
-    background: #dcfce7;
-    color: #166534;
-  }
-  
-  &--warning {
-    background: #fef3c7;
-    color: #92400e;
-  }
-  
-  &--error {
-    background: #fee2e2;
-    color: #991b1b;
-  }
-  
-  &--sweet {
-    background: linear-gradient(135deg, $accent-berry 0%, $primary-500 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(236, 107, 107, 0.3);
-  }
-}
-
-// Navigation Components
-// ========================================
-
-.navbar {
-  background: white;
-  box-shadow: $shadow-sm;
-  padding: $spacing-4 0;
-  position: sticky;
-  top: 0;
-  z-index: $z-index-sticky;
-  
-  &__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 $spacing-6;
-    @include flex-between;
-  }
-  
-  &__nav {
-    display: flex;
-    gap: $spacing-8;
-    
-    @media (max-width: $breakpoint-md) {
-      display: none;
-    }
-  }
-  
-  &__link {
-    @include body-text('base', $font-weight-medium);
-    text-decoration: none;
-    color: $text-primary; // Texto mais legível
-    transition: color $duration-200 $ease-out;
-    position: relative;
-    font-weight: $font-weight-semibold; // Texto mais forte
-    
-    &:hover {
-      color: $text-accent; // Cor de destaque mais visível
-    }
-    
-    &--active {
-      color: $text-accent;
-      
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: $text-accent;
-        border-radius: $radius-full;
-      }
-    }
-  }
-  
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: $spacing-4;
-  }
-}
-
-// Modal Components
-// ========================================
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: $z-index-modal;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  &__backdrop {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-  }
-  
-  &__content {
-    position: relative;
-    background: white;
-    border-radius: $radius-2xl;
-    box-shadow: $shadow-2xl;
-    max-width: 500px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    animation: fadeInScale $duration-300 $ease-out;
-  }
-  
-  &__header {
-    padding: $spacing-6;
-    border-bottom: 1px solid $neutral-200;
-    @include flex-between;
-  }
-  
-  &__title {
-    @include heading-style('base');
-    margin: 0;
-  }
-  
-  &__close {
-    background: none;
-    border: none;
-    font-size: $font-size-xl;
-    cursor: pointer;
-    color: $neutral-500;
-    padding: $spacing-2;
-    
-    &:hover {
-      color: $neutral-700;
-    }
-  }
-  
-  &__body {
-    padding: $spacing-6;
-  }
-  
-  &__footer {
-    padding: $spacing-6;
-    border-top: 1px solid $neutral-200;
-    @include flex-between;
-    gap: $spacing-4;
-  }
-}
-
-// Alert Components
-// ========================================
-
-.alert {
-  padding: $spacing-4;
-  border-radius: $radius-lg;
-  border: 1px solid;
-  margin-bottom: $spacing-4;
-  
-  &__content {
-    display: flex;
-    gap: $spacing-3;
-  }
-  
-  &__icon {
-    font-size: $font-size-lg;
-    flex-shrink: 0;
-  }
-  
-  &__text {
-    @include body-text('sm');
-    flex: 1;
-  }
-  
-  &--success {
-    background: #f0fdf4;
-    border-color: #22c55e;
-    color: #166534;
-    
-    .alert__icon::before {
-      content: '✅';
-    }
-  }
-  
-  &--warning {
-    background: #fffbeb;
-    border-color: #f59e0b;
-    color: #92400e;
-    
-    .alert__icon::before {
-      content: '⚠️';
-    }
-  }
-  
-  &--error {
-    background: #fef2f2;
-    border-color: #ef4444;
-    color: #991b1b;
-    
-    .alert__icon::before {
-      content: '❌';
-    }
-  }
-  
-  &--info {
-    background: $primary-50;
-    border-color: $primary-300;
-    color: $primary-700;
-    
-    .alert__icon::before {
-      content: 'ℹ️';
-    }
-  }
-}
-
-// Loading Components
-// ========================================
-
-.loading {
-  @include center-content;
-  padding: $spacing-8;
-  
-  &__spinner {
-    @extend .loading-spinner;
-    margin-right: $spacing-3;
-  }
-  
-  &__text {
-    @include body-text('base');
-    color: $neutral-600;
-  }
-  
-  &--cake {
-    @include center-content;
-    flex-direction: column;
-    gap: $spacing-4;
-    
-    .loading__icon {
-      font-size: 48px;
-      animation: cakeRotate 2s linear infinite;
-    }
-  }
-}
-
-// Utility Classes
-// ========================================
-
-.sr-only {
-  @include visually-hidden;
-}
-
-.text-center {
+  display: inline-block;
+  padding: variables.$spacing-3 variables.$spacing-6;
+  font-family: variables.$font-secondary;
+  font-weight: variables.$font-semibold;
+  font-size: 1rem;
   text-align: center;
+  border-radius: variables.$border-radius;
+  border: variables.$border-width solid transparent;
+  cursor: pointer;
+  transition: all variables.$transition-base;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: variables.$shadow-sm;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(colors.$primary-500, 0.3);
+  }
+
+  &--primary {
+    background-color: colors.$primary-500;
+    color: colors.$bg-primary;
+    &:hover {
+      background-color: colors.$primary-600;
+    }
+  }
+
+  &--secondary {
+    background-color: colors.$secondary-500;
+    color: colors.$primary-700;
+    &:hover {
+      background-color: colors.$secondary-600;
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+    color: colors.$primary-500;
+    border-color: colors.$primary-500;
+    &:hover {
+      background-color: rgba(colors.$primary-500, 0.05);
+    }
+  }
+
+  &--text {
+    background-color: transparent;
+    color: colors.$primary-600;
+    box-shadow: none;
+    &:hover {
+      background-color: rgba(colors.$primary-500, 0.05);
+      transform: none;
+    }
+  }
 }
 
-.text-left {
-  text-align: left;
-}
+// --- Cards ---
+.card {
+  background-color: colors.$bg-primary;
+  border-radius: variables.$border-radius-lg;
+  box-shadow: variables.$shadow-md;
+  overflow: hidden;
+  transition: all variables.$transition-slow;
 
-.text-right {
-  text-align: right;
-}
+  &.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: variables.$shadow-lg;
+  }
 
-.flex-center {
-  @include center-content;
-}
-
-.flex-between {
-  @include flex-between;
-}
-
-.flex-column {
-  @include flex-column;
-}
-
-.dots-bg {
-  @include dots-pattern;
-}
-
-.hearts-bg {
-  @include hearts-pattern;
-}
-
-.sweet-border {
-  @include cake-border;
+  // ... outros estilos de card (card__image, card__content, etc.) podem ser adicionados aqui
 }
